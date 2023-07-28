@@ -44,6 +44,9 @@ export class ProductService {
   }
 
   async findBySeller(seller: string): Promise<Product[]> {
-    return await this.productRepository.findBy({ seller });
+    return await this.productRepository.find({
+      where: { seller },
+      relations: ['prices'],
+    });
   }
 }
