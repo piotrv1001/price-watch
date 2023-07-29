@@ -8,13 +8,15 @@ import { HistogramComponent } from './histogram/histogram.component';
 // PrimeNG
 import { TableModule } from 'primeng/table';
 import { ChartModule } from 'primeng/chart';
+import { ButtonModule } from 'primeng/button';
 
 @NgModule({
   imports: [
     BrowserModule,
     CommonModule,
     TableModule,
-    ChartModule
+    ChartModule,
+    ButtonModule
   ],
   declarations: [
     ProductTableComponent,

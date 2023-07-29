@@ -4,7 +4,7 @@ export interface HistogramData {
 }
 
 export interface HistogramDataset {
-  label: string;
+  label?: string;
   data: number[];
   backgroundColor: string[];
   borderColor: string[];
@@ -30,21 +30,16 @@ export interface ScalesGrid {
   drawBorder: boolean;
 }
 
-export interface ScalesY {
-  beginAtZero: boolean;
-  ticks: ScalesTicks;
-  grid: ScalesGrid;
-}
-
-export interface ScalesX {
-  ticks: ScalesTicks;
-  grid: ScalesGrid;
+export interface Scales {
+  beginAtZero?: boolean;
+  ticks?: ScalesTicks;
+  grid?: ScalesGrid;
 }
 
 export interface HistogramOptions {
-  plugins: LegendPlugins;
-  scales: {
-    y: ScalesY;
-    x: ScalesX;
+  plugins?: LegendPlugins;
+  scales?: {
+    y?: Scales;
+    x?: Scales;
   };
 }

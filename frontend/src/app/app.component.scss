@@ -2,10 +2,11 @@
   background-color: white;
   padding: 2rem;
   border-radius: 10px;
+  border: 1px solid #dfe7ef;
 }
 
 .grid-wrapper {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  grid-gap: 1rem;
+  grid-gap: 3rem;
 }
