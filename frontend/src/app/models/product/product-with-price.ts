@@ -1,5 +1,5 @@
 import { Product } from "./product";
 
-export class TableProduct extends Product {
+export class ProductWithPrice extends Product {
   currentPrice?: number;
 }

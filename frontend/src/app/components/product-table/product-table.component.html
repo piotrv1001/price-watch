@@ -13,7 +13,7 @@
       <td>{{product.name}}</td>
       <td><img [src]="product.imgSrc" alt="Product image" width="80" height="60" class="shadow-4 pd-4"></td>
       <td>{{product.currentPrice | number:'1.2-2'}} zł</td>
-      <td>{{product.seller}}</td>
+      <td><p-button label="Link" styleClass="p-button-link" (onClick)="navigateToUrl(product.link)"></p-button></td>
     </tr>
   </ng-template>
 </p-table>
