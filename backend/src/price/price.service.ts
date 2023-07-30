@@ -43,4 +43,18 @@ export class PriceService {
   async findByProductId(productId: string): Promise<Price[]> {
     return await this.priceRepository.findBy({ productId });
   }
+
+  async getPricesByProductIds(
+    productIds: string[],
+  ): Promise<Map<string, number[]>> {
+    const pricesByProductId = new Map<string, number[]>();
+    for (const productId of productIds) {
+      const prices = await this.findByProductId(productId);
+      pricesByProductId.set(
+        productId,
+        prices.map((price: Price) => price.price),
+      );
+    }
+    return pricesByProductId;
+  }
 }

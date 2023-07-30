@@ -43,4 +43,16 @@ export class PriceController {
   deleteById(@Param('id') id: number): Promise<void> {
     return this.priceService.deleteById(id);
   }
+
+  @Post('by-product-ids')
+  async getPricesByProductIds(@Body() productIds: string[]) {
+    const grouppedPrices = await this.priceService.getPricesByProductIds(
+      productIds,
+    );
+    const response = {};
+    grouppedPrices.forEach((prices: number[], productId: string) => {
+      response[productId] = prices;
+    });
+    return response;
+  }
 }
