@@ -1,50 +1,52 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { ProductWithPrice } from 'src/app/models/product/product-with-price';
-import { ProductService } from 'src/app/services/product.service';
+import { Product } from 'src/app/models/product/product';
 import { TableColumn } from 'src/app/types/table/column';
+import { ProductTableType } from 'src/app/types/table/product-table-type';
 
 @Component({
   selector: 'app-product-table',
   templateUrl: './product-table.component.html',
   styleUrls: ['./product-table.component.scss']
 })
-export class ProductTableComponent implements OnInit, OnDestroy {
+export class ProductTableComponent implements OnInit {
 
-  @Input() products: ProductWithPrice[] = [];
+  @Input() products: Product[] = [];
+  @Input() type: ProductTableType = 'new-products';
+  @Input() showPaginator = true;
+  @Input() paginatorRows = 10;
   columns: TableColumn[] = [];
-  subs: Subscription[] = [];
-
-  constructor(private productService: ProductService) {}
 
   ngOnInit(): void {
     this.columns = this.getColumns();
-    this.getProducts();
-  }
-
-  ngOnDestroy(): void {
-    this.subs.forEach((sub: Subscription) => sub.unsubscribe());
   }
 
   navigateToUrl(url: string): void {
     window.open(url, '_blank');
   }
 
-  private getProducts(): void {
-    const seller = 'SmartLED';
-    this.subs.push(
-      this.productService.getBySeller(seller).subscribe((products: ProductWithPrice[]) => {
-        this.products = products.slice(0, 8);
-      })
-    );
-  }
-
   private getColumns(): TableColumn[] {
-    return [
-      { header: 'Name', field: 'name' },
-      { header: 'Image', field: 'imgSrc' },
-      { header: 'Price', field: 'currentPrice' },
-      { header: 'Link', field: 'link' }
-    ];
+    let columns: TableColumn[] = [];
+    switch(this.type) {
+      case 'new-products':
+        columns = [
+          { header: 'Name', field: 'name', ngStyle: { width: '60%' } },
+          { header: 'Image', field: 'imgSrc', ngStyle: { width: '15%' } },
+          { header: 'Price', field: 'currentPrice', ngStyle: { width: '15%' } },
+          { header: 'Link', field: 'link', ngStyle: { width: '10%' } }
+        ];
+        break;
+      case 'price-changes':
+        columns = [
+          { header: 'Name', field: 'name', ngStyle: { width: '60%' }  },
+          { header: 'Image', field: 'imgSrc' },
+          { header: 'Old price', field: 'oldPrice' },
+          { header: 'Current price', field: 'currentPrice' },
+          { header: '+/-', field: 'priceChange' },
+          { header: '+/- [%]', field: 'priceChangePercentage' },
+          { header: 'Link', field: 'link' },
+        ];
+        break;
+    }
+    return columns;
   }
 }
