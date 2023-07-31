@@ -37,9 +37,9 @@ export class ProductTableComponent implements OnInit {
         break;
       case 'price-changes':
         columns = [
-          { header: 'Name', field: 'name', ngStyle: { width: '60%' }  },
+          { header: 'Name', field: 'name' },
           { header: 'Image', field: 'imgSrc' },
-          { header: 'Old price', field: 'oldPrice' },
+          { header: 'Old price', field: 'prevPrice' },
           { header: 'Current price', field: 'currentPrice' },
           { header: '+/-', field: 'priceChange' },
           { header: '+/- [%]', field: 'priceChangePercentage' },
