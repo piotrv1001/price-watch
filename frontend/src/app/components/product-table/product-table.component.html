@@ -1,19 +1,46 @@
 <p-table
   [value]="products"
-  [columns]="columns">
+  [columns]="columns"
+  [paginator]="showPaginator"
+  [rows]="paginatorRows"
+  [showCurrentPageReport]="false">
   <ng-template pTemplate="header" let-columns>
     <tr>
-      <th *ngFor="let col of columns">
+      <th *ngFor="let col of columns" [ngStyle]="col.ngStyle">
         {{col.header}}
       </th>
     </tr>
   </ng-template>
-  <ng-template pTemplate="body" let-product>
+  <ng-template pTemplate="body" let-rowData let-columns="columns">
     <tr>
-      <td>{{product.name}}</td>
-      <td><img [src]="product.imgSrc" alt="Product image" width="80" height="60" class="shadow-4 pd-4"></td>
-      <td>{{product.currentPrice | number:'1.2-2'}} zł</td>
-      <td><p-button icon="pi pi-external-link" styleClass="p-button-link" (onClick)="navigateToUrl(product.link)"></p-button></td>
+      <td *ngFor="let col of columns">
+        <ng-container *ngIf="col.field === 'currentPrice' || col.field === 'oldPrice'; else noPrice">
+          {{rowData[col.field] | number:'1.2-2'}} zł
+        </ng-container>
+        <ng-template #noPrice>
+          <ng-container [ngSwitch]="col.field">
+            <ng-container *ngSwitchCase="'imgSrc'">
+              <img [src]="rowData[col.field]" alt="Product image" width="80" height="60" class="shadow-4 pd-4">
+            </ng-container>
+            <ng-container *ngSwitchCase="'link'">
+              <p-button icon="pi pi-external-link" styleClass="p-button-link" (onClick)="navigateToUrl(rowData[col.field])"></p-button>
+            </ng-container>
+            <ng-container *ngSwitchCase="'priceChange'">
+              <span [ngClass]="{'text-success': rowData[col.field] > 0, 'text-danger': rowData[col.field] < 0}">
+                {{'+' ? rowData[col.field] > 0 : '-'}} {{rowData[col.field] | number:'1.2-2'}} zł
+              </span>
+            </ng-container>
+            <ng-container *ngSwitchCase="'priceChangePercentage'">
+              <span [ngClass]="{'text-success': rowData[col.field] > 0, 'text-danger': rowData[col.field] < 0}">
+                {{'+' ? rowData[col.field] > 0 : '-'}} {{rowData[col.field] | number:'1.0-0'}} %
+              </span>
+            </ng-container>
+            <ng-container *ngSwitchDefault>
+              {{rowData[col.field]}}
+            </ng-container>
+          </ng-container>
+        </ng-template>
+      </td>
     </tr>
   </ng-template>
 </p-table>

@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { ProductTableComponent } from './product-table/product-table.component';
 import { HistogramComponent } from './histogram/histogram.component';
 import { PriceChartComponent } from './price-chart/price-chart.component';
+import { NewProductsComponent } from './new-products/new-products.component';
 
 // PrimeNG
 import { TableModule } from 'primeng/table';
@@ -23,12 +24,14 @@ import { ButtonModule } from 'primeng/button';
   declarations: [
     ProductTableComponent,
     HistogramComponent,
-    PriceChartComponent
+    PriceChartComponent,
+    NewProductsComponent
   ],
   exports: [
     ProductTableComponent,
     HistogramComponent,
-    PriceChartComponent
+    PriceChartComponent,
+    NewProductsComponent
   ],
 })
 export class ComponentsModule {

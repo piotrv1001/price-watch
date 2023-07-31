@@ -9,6 +9,8 @@ import {
 } from '@nestjs/common';
 import { PriceService } from './price.service';
 import { Price } from './price.entity';
+import { NewProductDTO } from './dto/new-product.dto';
+import { PriceChangeDTO } from './dto/price-change.dto';
 
 @Controller('prices')
 export class PriceController {
@@ -27,6 +29,16 @@ export class PriceController {
   @Get(':id')
   findById(@Param('id') id: number): Promise<Price> {
     return this.priceService.findById(id);
+  }
+
+  @Get('new-products/:seller')
+  getNewProducts(@Param('seller') seller: string): Promise<NewProductDTO[]> {
+    return this.priceService.getNewProducts(seller);
+  }
+
+  @Get('price-changes/:seller')
+  getPriceChanges(@Param('seller') seller: string): Promise<PriceChangeDTO[]> {
+    return this.priceService.getPriceChanges(seller);
   }
 
   @Post()
