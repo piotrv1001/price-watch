@@ -1,7 +1,7 @@
 <p-table
   [value]="products"
   [columns]="columns"
-  [paginator]="showPaginator"
+  [paginator]="showPaginator && products.length > paginatorRows"
   [rows]="paginatorRows"
   [showCurrentPageReport]="false">
   <ng-template pTemplate="header" let-columns>
@@ -14,7 +14,7 @@
   <ng-template pTemplate="body" let-rowData let-columns="columns">
     <tr>
       <td *ngFor="let col of columns">
-        <ng-container *ngIf="col.field === 'currentPrice' || col.field === 'oldPrice'; else noPrice">
+        <ng-container *ngIf="col.field === 'currentPrice' || col.field === 'prevPrice'; else noPrice">
           {{rowData[col.field] | number:'1.2-2'}} zł
         </ng-container>
         <ng-template #noPrice>
@@ -27,12 +27,12 @@
             </ng-container>
             <ng-container *ngSwitchCase="'priceChange'">
               <span [ngClass]="{'text-success': rowData[col.field] > 0, 'text-danger': rowData[col.field] < 0}">
-                {{'+' ? rowData[col.field] > 0 : '-'}} {{rowData[col.field] | number:'1.2-2'}} zł
+                {{ (rowData[col.field] > 0 ? '+' : '') + (rowData[col.field] | number:'1.2-2') }} zł
               </span>
             </ng-container>
             <ng-container *ngSwitchCase="'priceChangePercentage'">
               <span [ngClass]="{'text-success': rowData[col.field] > 0, 'text-danger': rowData[col.field] < 0}">
-                {{'+' ? rowData[col.field] > 0 : '-'}} {{rowData[col.field] | number:'1.0-0'}} %
+                {{ (rowData[col.field] > 0 ? '+' : '') + (rowData[col.field] | number:'1.0-0') }} %
               </span>
             </ng-container>
             <ng-container *ngSwitchDefault>
