@@ -11,6 +11,7 @@ import { PriceChangesTableComponent } from './price-changes-table/price-changes-
 import { TableModule } from 'primeng/table';
 import { ChartModule } from 'primeng/chart';
 import { ButtonModule } from 'primeng/button';
+import { StripPricePipe } from '../pipes/strip-price.pipe';
 
 @NgModule({
   imports: [
@@ -24,13 +25,15 @@ import { ButtonModule } from 'primeng/button';
     ProductTableComponent,
     HistogramComponent,
     NewProductsComponent,
-    PriceChangesTableComponent
+    PriceChangesTableComponent,
+    StripPricePipe
   ],
   exports: [
     ProductTableComponent,
     HistogramComponent,
     NewProductsComponent,
-    PriceChangesTableComponent
+    PriceChangesTableComponent,
+    StripPricePipe
   ],
 })
 export class ComponentsModule {

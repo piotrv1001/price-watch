@@ -35,6 +35,9 @@
                 {{ (rowData[col.field] > 0 ? '+' : '') + (rowData[col.field] | number:'1.0-0') }} %
               </span>
             </ng-container>
+            <ng-container *ngSwitchCase="'name'">
+              {{rowData[col.field] | stripPrice}}
+            </ng-container>
             <ng-container *ngSwitchDefault>
               {{rowData[col.field]}}
             </ng-container>
