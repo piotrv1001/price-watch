@@ -37,6 +37,8 @@ export interface Scales {
 }
 
 export interface HistogramOptions {
+  responsive?: boolean;
+  maintainAspectRatio?: boolean;
   plugins?: LegendPlugins;
   scales?: {
     y?: Scales;

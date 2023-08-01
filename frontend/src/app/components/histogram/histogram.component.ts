@@ -92,6 +92,8 @@ export class HistogramComponent implements OnInit, OnDestroy {
     };
 
     this.basicOptions = {
+      responsive: false,
+      maintainAspectRatio: false,
       plugins: {
         legend: {
           labels: {
