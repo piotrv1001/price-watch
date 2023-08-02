@@ -1,7 +1,9 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { PriceService } from 'src/app/services/price.service';
-import { DateUtil } from 'src/app/utils/date.util';
+import { DateRangeDropdownOption } from 'src/app/types/price-chart/price-chart';
+import { DateRange, DateRangeType } from 'src/app/utils/date/date-range/date-range';
+import { DateUtil } from 'src/app/utils/date/date.util';
 
 @Component({
   selector: 'app-price-chart',
@@ -15,15 +17,34 @@ export class PriceChartComponent implements OnInit, OnDestroy {
   data: any;
   options: any;
   subs: Subscription[] = [];
+  dateRange: DateRange | null = null;
+  startDate?: Date;
+  endDate?: Date;
+  dateRangeDropdownOptions: DateRangeDropdownOption[] = [];
+  selectedDropdownOption: DateRangeType | null = null;
 
-  constructor(private priceService: PriceService) {}
+  constructor(private priceService: PriceService) {
+    this.dateRange = new DateRange();
+    this.dateRange.setDateRangeStrategy('last-week');
+    this.updateDates();
+  }
 
   ngOnInit() {
+    this.initDropdownOptions();
     this.getGrouppedProducts();
   }
 
   ngOnDestroy(): void {
     this.subs.forEach((sub: Subscription) => sub.unsubscribe());
+  }
+
+  handleDropdownChange(): void {
+    if(this.selectedDropdownOption === null) {
+      return;
+    }
+    this.dateRange?.setDateRangeStrategy(this.selectedDropdownOption);
+    this.updateDates();
+    this.getGrouppedProducts();
   }
 
   private getGrouppedProducts(): void {
@@ -35,6 +56,14 @@ export class PriceChartComponent implements OnInit, OnDestroy {
     );
   }
 
+  private initDropdownOptions(): void {
+    this.dateRangeDropdownOptions = [
+      { label: 'Last week', value: 'last-week' },
+      { label: 'Last month', value: 'last-month' },
+      { label: 'Last year',  value: 'last-year' }
+    ];
+  }
+
   private initChart(): void {
     const documentStyle = getComputedStyle(document.documentElement);
     const textColor = documentStyle.getPropertyValue('--text-color');
@@ -44,7 +73,7 @@ export class PriceChartComponent implements OnInit, OnDestroy {
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
     this.data = {
-      labels: DateUtil.MONTHS,
+      labels: this.dateRange?.getChartLabels() ?? DateUtil.WEEK_DAYS,
       datasets: Array.from(this.grouppedProducts).map((entry: [string, number[]], index: number) => ({
         label: entry[0],
         data: entry[1],
@@ -85,5 +114,10 @@ export class PriceChartComponent implements OnInit, OnDestroy {
         },
       },
     };
+  }
+
+  private updateDates(): void {
+    this.startDate = this.dateRange?.getStartDate();
+    this.endDate = this.dateRange?.getEndDate();
   }
 }

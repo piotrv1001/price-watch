@@ -15,6 +15,10 @@ export class PriceService {
 
   constructor(private http: HttpClient) {}
 
+  getPricesByProductIds(productIds: string[]): Observable<Record<string, number[]>> {
+    return this.http.post<Record<string, number[]>>(`${this.priceResourceUrl}/by-product-ids`, productIds);
+  }
+
   getNewProducts(seller: string): Observable<NewProductDTO[]> {
     return this.http.get<NewProductDTO[]>(`${this.priceResourceUrl}/new-products/${seller}`);
   }

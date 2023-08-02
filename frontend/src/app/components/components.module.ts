@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms'
 
 // Components
 import { ProductTableComponent } from './product-table/product-table.component';
@@ -14,6 +15,7 @@ import { StripPricePipe } from '../pipes/strip-price.pipe';
 import { TableModule } from 'primeng/table';
 import { ChartModule } from 'primeng/chart';
 import { ButtonModule } from 'primeng/button';
+import { DropdownModule } from 'primeng/dropdown';
 
 @NgModule({
   imports: [
@@ -21,7 +23,9 @@ import { ButtonModule } from 'primeng/button';
     CommonModule,
     TableModule,
     ChartModule,
-    ButtonModule
+    ButtonModule,
+    DropdownModule,
+    FormsModule
   ],
   declarations: [
     ProductTableComponent,

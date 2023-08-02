@@ -75,18 +75,25 @@ export class HistogramComponent implements OnInit, OnDestroy {
           label: 'Products',
           data: this.grouppedProducts,
           backgroundColor: [
-            'rgba(255, 159, 64, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(153, 102, 255, 0.2)',
+            'rgba(106, 191, 105, 0.2)',
+            'rgba(31, 120, 180, 0.2)',
+            'rgba(255, 127, 0, 0.2)',
+            'rgba(128, 0, 128, 0.2)',
           ],
           borderColor: [
-            'rgb(255, 159, 64)',
-            'rgb(75, 192, 192)',
-            'rgb(54, 162, 235)',
-            'rgb(153, 102, 255)',
+            'rgb(106, 191, 105)',
+            'rgb(31, 120, 180)',
+            'rgb(255, 127, 0)',
+            'rgb(128, 0, 128)',
+          ],
+          hoverBackgroundColor: [
+            'rgba(106, 191, 105, 0.4)',
+            'rgba(31, 120, 180, 0.4)',
+            'rgba(255, 127, 0, 0.4)',
+            'rgba(128, 0, 128, 0.4)',
           ],
           borderWidth: 1,
+          borderRadius: 10
         },
       ],
     };

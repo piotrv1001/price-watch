@@ -1,1 +1,12 @@
-<p-chart type="line" [data]="data" [options]="options"></p-chart>
+<p-dropdown
+  [options]="dateRangeDropdownOptions"
+  [optionLabel]="'label'"
+  [optionValue]="'value'"
+  [(ngModel)]="selectedDropdownOption"
+  (ngModelChange)="handleDropdownChange()">
+</p-dropdown>
+<p-chart
+  type="line"
+  [data]="data"
+  [options]="options">
+</p-chart>
