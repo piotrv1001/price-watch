@@ -33,7 +33,8 @@ import { StripPricePipe } from '../pipes/strip-price.pipe';
     HistogramComponent,
     NewProductsComponent,
     PriceChangesTableComponent,
-    StripPricePipe
+    StripPricePipe,
+    ButtonModule
   ],
 })
 export class ComponentsModule {
