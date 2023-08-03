@@ -1,0 +1,8 @@
+<p-dropdown
+  [options]="sellers"
+  [optionLabel]="'name'"
+  [(ngModel)]="currentSeller"
+  (ngModelChange)="handleSellerChange()"
+  placeholder="Select a seller"
+  [showClear]="false">
+</p-dropdown>

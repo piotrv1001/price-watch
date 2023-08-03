@@ -16,6 +16,7 @@ import { TableModule } from 'primeng/table';
 import { ChartModule } from 'primeng/chart';
 import { ButtonModule } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
+import { ChooseSellerComponent } from './choose-seller/choose-seller.component';
 
 @NgModule({
   imports: [
@@ -33,7 +34,8 @@ import { DropdownModule } from 'primeng/dropdown';
     PriceChartComponent,
     NewProductsComponent,
     PriceChangesTableComponent,
-    StripPricePipe
+    StripPricePipe,
+    ChooseSellerComponent
   ],
   exports: [
     ProductTableComponent,
@@ -42,7 +44,8 @@ import { DropdownModule } from 'primeng/dropdown';
     NewProductsComponent,
     PriceChangesTableComponent,
     StripPricePipe,
-    ButtonModule
+    ButtonModule,
+    ChooseSellerComponent
   ],
 })
 export class ComponentsModule {
