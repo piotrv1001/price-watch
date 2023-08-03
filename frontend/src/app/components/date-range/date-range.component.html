@@ -1,0 +1,13 @@
+<div class="flex align-items-center">
+  <p-calendar
+    [(ngModel)]="startDate"
+    (ngModelChange)="handleStartDateChange()"
+    [dateFormat]="dateFormat">
+  </p-calendar>
+  <span class="m-2">-</span>
+    <p-calendar
+    [(ngModel)]="endDate"
+    (ngModelChange)="handleEndDateChange()"
+    [dateFormat]="dateFormat">
+  </p-calendar>
+</div>
