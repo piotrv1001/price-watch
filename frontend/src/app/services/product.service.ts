@@ -23,7 +23,7 @@ export class ProductService {
   }
 
   private getCurrentPrice(prices: Price[] | undefined): number | undefined {
-    if(!prices) {
+    if(!prices || prices.length === 0) {
       return undefined;
     }
     const pricesSortedByDate = prices.sort((a, b) => {

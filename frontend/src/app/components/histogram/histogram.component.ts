@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ProductWithPrice } from 'src/app/models/product/product-with-price';
+import { ChosenSellerService } from 'src/app/services/chosen-seller.service';
 import { ProductService } from 'src/app/services/product.service';
 import { Bucket } from 'src/app/types/histogram/bucket';
 import { HistogramData, HistogramOptions } from 'src/app/types/histogram/histogram';
@@ -15,21 +16,34 @@ export class HistogramComponent implements OnInit, OnDestroy {
   basicOptions?: HistogramOptions;
   grouppedProducts: number[] = [0, 0, 0, 0];
   subs: Subscription[] = [];
+  currentSellerName = 'SmartLED';
 
-  constructor(private productService: ProductService) {}
+  constructor(
+    private productService: ProductService,
+    private chosenSellerService: ChosenSellerService
+  ) {}
 
   ngOnInit() {
     this.getPrices();
+    this.handleSellerChange();
   }
 
   ngOnDestroy(): void {
     this.subs.forEach((sub: Subscription) => sub.unsubscribe());
   }
 
-  private getPrices(): void {
-    const seller = 'SmartLED';
+  handleSellerChange(): void {
     this.subs.push(
-      this.productService.getBySeller(seller).subscribe((products) => {
+      this.chosenSellerService.getCurrentSeller().subscribe((sellerName) => {
+        this.currentSellerName = sellerName;
+        this.getPrices();
+      })
+    );
+  }
+
+  private getPrices(): void {
+    this.subs.push(
+      this.productService.getBySeller(this.currentSellerName).subscribe((products) => {
         this.grouppedProducts = this.groupProducts(products);
         this.initChart();
       })
