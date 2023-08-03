@@ -4,7 +4,7 @@ import { HttpClient } from "@angular/common/http";
 import { Product } from "../models/product/product";
 import { Observable, map } from "rxjs";
 import { Price } from "../models/price/price";
-import { DateUtil } from "../utils/date.util";
+import { DateUtil } from "../utils/date/date.util";
 import { ProductWithPrice } from "../models/product/product-with-price";
 
 @Injectable({

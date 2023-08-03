@@ -58,10 +58,15 @@ export class HistogramComponent implements OnInit, OnDestroy {
   private initChart(): void {
     const documentStyle = getComputedStyle(document.documentElement);
     const textColor = documentStyle.getPropertyValue('--text-color');
-    const textColorSecondary = documentStyle.getPropertyValue(
-      '--text-color-secondary'
-    );
+    const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
+    const bgColors = [
+      'rgba(255, 159, 64, 1)',
+      'rgba(75, 192, 192, 1)',
+      'rgba(54, 162, 235, 1)',
+      'rgba(153, 102, 255, 1)'
+    ];
+    const borderColors = bgColors;
 
     this.basicData = {
       labels: [
@@ -74,19 +79,10 @@ export class HistogramComponent implements OnInit, OnDestroy {
         {
           label: 'Products',
           data: this.grouppedProducts,
-          backgroundColor: [
-            'rgba(255, 159, 64, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(153, 102, 255, 1)',
-          ],
-          borderColor: [
-            'rgb(255, 159, 64)',
-            'rgb(75, 192, 192)',
-            'rgb(54, 162, 235)',
-            'rgb(153, 102, 255)',
-          ],
+          backgroundColor: bgColors,
+          borderColor: borderColors,
           borderWidth: 1,
+          borderRadius: 10
         },
       ],
     };

@@ -37,13 +37,13 @@ export class ProductTableComponent implements OnInit {
         break;
       case 'price-changes':
         columns = [
-          { header: 'Name', field: 'name' },
-          { header: 'Image', field: 'imgSrc' },
-          { header: 'Old price', field: 'prevPrice' },
-          { header: 'Current price', field: 'currentPrice' },
-          { header: '+/-', field: 'priceChange' },
-          { header: '+/- [%]', field: 'priceChangePercentage' },
-          { header: 'Link', field: 'link' },
+          { header: 'Name', field: 'name', ngStyle: { width: '35%' } },
+          { header: 'Image', field: 'imgSrc', ngStyle: { width: '15%' } },
+          { header: 'Old price', field: 'prevPrice', ngStyle: { width: '15%' } },
+          { header: 'Current price', field: 'currentPrice', ngStyle: { width: '15%' } },
+          // { header: '+/-', field: 'priceChange', ngStyle: { width: '10%' } },
+          { header: '+/- [%]', field: 'priceChangePercentage', ngStyle: { width: '15%' } },
+          { header: 'Link', field: 'link', ngStyle: { width: '5%' } }
         ];
         break;
     }

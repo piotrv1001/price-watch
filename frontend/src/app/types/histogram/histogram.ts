@@ -6,9 +6,11 @@ export interface HistogramData {
 export interface HistogramDataset {
   label?: string;
   data: number[];
-  backgroundColor: string[];
-  borderColor: string[];
-  borderWidth: number;
+  backgroundColor?: string[];
+  hoverBackgroundColor?: string[];
+  borderColor?: string | string[];
+  borderWidth?: number;
+  borderRadius?: number;
 }
 
 export interface LegendLabels {
@@ -39,6 +41,7 @@ export interface Scales {
 export interface HistogramOptions {
   responsive?: boolean;
   maintainAspectRatio?: boolean;
+  aspectRatio?: number;
   plugins?: LegendPlugins;
   scales?: {
     y?: Scales;
