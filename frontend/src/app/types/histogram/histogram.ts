@@ -8,7 +8,7 @@ export interface HistogramDataset {
   data: number[];
   backgroundColor?: string[];
   hoverBackgroundColor?: string[];
-  borderColor?: string[];
+  borderColor?: string | string[];
   borderWidth?: number;
   borderRadius?: number;
 }
@@ -41,6 +41,7 @@ export interface Scales {
 export interface HistogramOptions {
   responsive?: boolean;
   maintainAspectRatio?: boolean;
+  aspectRatio?: number;
   plugins?: LegendPlugins;
   scales?: {
     y?: Scales;

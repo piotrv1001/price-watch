@@ -1,10 +1,12 @@
-<p-dropdown
-  [options]="dateRangeDropdownOptions"
-  [optionLabel]="'label'"
-  [optionValue]="'value'"
-  [(ngModel)]="selectedDropdownOption"
-  (ngModelChange)="handleDropdownChange()">
-</p-dropdown>
+<div class="flex justify-content-end mb-5">
+  <p-dropdown
+    [options]="dateRangeDropdownOptions"
+    [optionLabel]="'label'"
+    [optionValue]="'value'"
+    [(ngModel)]="selectedDropdownOption"
+    (ngModelChange)="handleDropdownChange()">
+  </p-dropdown>
+</div>
 <p-chart
   type="line"
   [data]="data"

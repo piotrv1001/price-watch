@@ -1,6 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { PriceService } from 'src/app/services/price.service';
+import { HistogramData, HistogramOptions } from 'src/app/types/histogram/histogram';
 import { DateRangeDropdownOption } from 'src/app/types/price-chart/price-chart';
 import { DateRange, DateRangeType } from 'src/app/utils/date/date-range/date-range';
 import { DateUtil } from 'src/app/utils/date/date.util';
@@ -14,8 +15,8 @@ export class PriceChartComponent implements OnInit, OnDestroy {
   @Input() productIdArray: string[] = ['10034334650', '10147698713'];
   grouppedProducts: Map<string, number[]> = new Map<string, number[]>();
   colors: string[] = ['--blue-500', '--pink-500', '--green-500', '--yellow-500', '--purple-500', '--red-500'];
-  data: any;
-  options: any;
+  data?: HistogramData;
+  options?: HistogramOptions;
   subs: Subscription[] = [];
   dateRange: DateRange | null = null;
   startDate?: Date;
@@ -67,9 +68,7 @@ export class PriceChartComponent implements OnInit, OnDestroy {
   private initChart(): void {
     const documentStyle = getComputedStyle(document.documentElement);
     const textColor = documentStyle.getPropertyValue('--text-color');
-    const textColorSecondary = documentStyle.getPropertyValue(
-      '--text-color-secondary'
-    );
+    const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
     this.data = {
