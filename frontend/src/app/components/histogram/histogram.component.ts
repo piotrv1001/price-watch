@@ -24,6 +24,7 @@ export class HistogramComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.getChartOptions();
     this.getPrices();
     this.handleSellerChange();
   }
@@ -45,7 +46,7 @@ export class HistogramComponent implements OnInit, OnDestroy {
     this.subs.push(
       this.productService.getBySeller(this.currentSellerName).subscribe((products) => {
         this.grouppedProducts = this.groupProducts(products);
-        this.initChart();
+        this.getChartData();
       })
     );
   }
@@ -69,11 +70,7 @@ export class HistogramComponent implements OnInit, OnDestroy {
     return grouppedProducts;
   }
 
-  private initChart(): void {
-    const documentStyle = getComputedStyle(document.documentElement);
-    const textColor = documentStyle.getPropertyValue('--text-color');
-    const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
-    const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
+  private getChartData(): void {
     const bgColors = [
       'rgba(255, 159, 64, 1)',
       'rgba(75, 192, 192, 1)',
@@ -100,6 +97,13 @@ export class HistogramComponent implements OnInit, OnDestroy {
         },
       ],
     };
+  }
+
+  private getChartOptions(): void {
+    const documentStyle = getComputedStyle(document.documentElement);
+    const textColor = documentStyle.getPropertyValue('--text-color');
+    const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
+    const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
     this.basicOptions = {
       responsive: false,
