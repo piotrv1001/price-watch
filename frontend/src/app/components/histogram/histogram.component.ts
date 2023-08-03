@@ -75,10 +75,10 @@ export class HistogramComponent implements OnInit, OnDestroy {
           label: 'Products',
           data: this.grouppedProducts,
           backgroundColor: [
-            'rgba(106, 191, 105, 0.2)',
-            'rgba(31, 120, 180, 0.2)',
-            'rgba(255, 127, 0, 0.2)',
-            'rgba(128, 0, 128, 0.2)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(153, 102, 255, 1)',
           ],
           borderColor: [
             'rgb(106, 191, 105)',

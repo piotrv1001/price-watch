@@ -41,7 +41,8 @@ import { DropdownModule } from 'primeng/dropdown';
     PriceChartComponent,
     NewProductsComponent,
     PriceChangesTableComponent,
-    StripPricePipe
+    StripPricePipe,
+    ButtonModule
   ],
 })
 export class ComponentsModule {
