@@ -2,7 +2,9 @@
   <span class="mr-2">
     <app-date-range
       [startDate]="startDate"
-      [endDate]="endDate">
+      [endDate]="endDate"
+      (startDateChange)="handleStartDateChange($event)"
+      (endDateChange)="handleEndDateChange($event)">
     </app-date-range>
   </span>
   <p-dropdown

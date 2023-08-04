@@ -1,13 +1,17 @@
 <div class="flex align-items-center">
   <p-calendar
     [(ngModel)]="startDate"
-    (ngModelChange)="handleStartDateChange()"
-    [dateFormat]="dateFormat">
+    (onSelect)="handleStartDateChange($event)"
+    [dateFormat]="dateFormat"
+    [maxDate]="endDate!"
+    [showIcon]="true">
   </p-calendar>
   <span class="m-2">-</span>
-    <p-calendar
+  <p-calendar
     [(ngModel)]="endDate"
-    (ngModelChange)="handleEndDateChange()"
-    [dateFormat]="dateFormat">
+    (onSelect)="handleEndDateChange($event)"
+    [dateFormat]="dateFormat"
+    [minDate]="startDate!"
+    [showIcon]="true">
   </p-calendar>
 </div>

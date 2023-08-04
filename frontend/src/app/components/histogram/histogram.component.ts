@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { ProductWithPrice } from 'src/app/models/product/product-with-price';
 import { ChosenSellerService } from 'src/app/services/chosen-seller.service';
 import { ProductService } from 'src/app/services/product.service';
+import { ThemeService } from 'src/app/services/theme.service';
 import { Bucket } from 'src/app/types/histogram/bucket';
 import { HistogramData, HistogramOptions } from 'src/app/types/histogram/histogram';
 
@@ -20,17 +21,27 @@ export class HistogramComponent implements OnInit, OnDestroy {
 
   constructor(
     private productService: ProductService,
-    private chosenSellerService: ChosenSellerService
+    private chosenSellerService: ChosenSellerService,
+    private themeService: ThemeService
   ) {}
 
   ngOnInit() {
     this.getChartOptions();
     this.getPrices();
     this.handleSellerChange();
+    this.getThemeChange();
   }
 
   ngOnDestroy(): void {
     this.subs.forEach((sub: Subscription) => sub.unsubscribe());
+  }
+
+  getThemeChange(): void {
+    this.subs.push(
+      this.themeService.getTheme().subscribe(() => {
+        this.getChartOptions();
+      })
+    );
   }
 
   handleSellerChange(): void {
@@ -47,6 +58,7 @@ export class HistogramComponent implements OnInit, OnDestroy {
       this.productService.getBySeller(this.currentSellerName).subscribe((products) => {
         this.grouppedProducts = this.groupProducts(products);
         this.getChartData();
+        this.getChartOptions();
       })
     );
   }
