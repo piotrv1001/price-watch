@@ -10,21 +10,32 @@ export class ThemeService {
   constructor(@Inject(DOCUMENT) private document: Document) {}
 
   switchTheme(theme: string) {
-    const themeLink = this.document.getElementById(
-      'app-theme'
-    ) as HTMLLinkElement;
-
-    if (themeLink) {
-      themeLink.href = theme + '.css';
-      if(theme === 'lara-light-blue') {
+    const newHref = theme + '.css';
+    this.replaceThemeLink(newHref, () => {
+      console.log('theme loaded');
+      if (theme === 'lara-light-blue') {
         this.themeSub.next(false);
-      } else if(theme === 'lara-dark-blue') {
+      } else if (theme === 'lara-dark-blue') {
         this.themeSub.next(true);
       }
-    }
+    });
   }
 
   getTheme(): Observable<boolean> {
     return this.themeSub.asObservable();
+  }
+
+  private replaceThemeLink(href: string, onComplete: Function) {
+    const id = 'app-theme';
+    const themeLink = <HTMLLinkElement>this.document.getElementById(id);
+    const cloneLinkElement = <HTMLLinkElement>themeLink.cloneNode(true);
+    cloneLinkElement.setAttribute('href', href);
+    cloneLinkElement.setAttribute('id', id + '-clone');
+    themeLink.parentNode!.insertBefore(cloneLinkElement, themeLink.nextSibling);
+    cloneLinkElement.addEventListener('load', () => {
+      themeLink.remove();
+      cloneLinkElement.setAttribute('id', id);
+      onComplete();
+    });
   }
 }

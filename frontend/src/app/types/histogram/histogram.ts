@@ -14,7 +14,7 @@ export interface HistogramDataset {
 }
 
 export interface LegendLabels {
-  color: string;
+  color?: string;
 }
 
 export interface LegendPlugins {
@@ -24,11 +24,11 @@ export interface LegendPlugins {
 }
 
 export interface ScalesTicks {
-  color: string;
+  color?: string;
 }
 
 export interface ScalesGrid {
-  color: string;
+  color?: string;
   drawBorder: boolean;
 }
 
