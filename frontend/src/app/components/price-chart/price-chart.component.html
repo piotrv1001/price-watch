@@ -1,4 +1,12 @@
 <div class="flex justify-content-end mb-5">
+  <span class="mr-2">
+    <app-date-range
+      [startDate]="startDate"
+      [endDate]="endDate"
+      (startDateChange)="handleStartDateChange($event)"
+      (endDateChange)="handleEndDateChange($event)">
+    </app-date-range>
+  </span>
   <p-dropdown
     [options]="dateRangeDropdownOptions"
     [optionLabel]="'label'"

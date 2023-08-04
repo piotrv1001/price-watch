@@ -1,9 +1,11 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { PriceService } from 'src/app/services/price.service';
+import { ThemeService } from 'src/app/services/theme.service';
 import { HistogramData, HistogramOptions } from 'src/app/types/histogram/histogram';
 import { DateRangeDropdownOption } from 'src/app/types/price-chart/price-chart';
 import { DateRange, DateRangeType } from 'src/app/utils/date/date-range/date-range';
+import { CustomDateRangeStrategy } from 'src/app/utils/date/date-range/strategy/custom.strategy';
 import { DateUtil } from 'src/app/utils/date/date.util';
 
 @Component({
@@ -24,7 +26,10 @@ export class PriceChartComponent implements OnInit, OnDestroy {
   dateRangeDropdownOptions: DateRangeDropdownOption[] = [];
   selectedDropdownOption: DateRangeType | null = null;
 
-  constructor(private priceService: PriceService) {
+  constructor(
+    private priceService: PriceService,
+    private themeService: ThemeService
+  ) {
     this.dateRange = new DateRange();
     this.dateRange.setDateRangeStrategy('last-week');
     this.updateDates();
@@ -32,11 +37,21 @@ export class PriceChartComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.initDropdownOptions();
+    this.getChartOptions();
     this.getGrouppedProducts();
+    this.getThemeChange();
   }
 
   ngOnDestroy(): void {
     this.subs.forEach((sub: Subscription) => sub.unsubscribe());
+  }
+
+  getThemeChange(): void {
+    this.subs.push(
+      this.themeService.getTheme().subscribe(() => {
+        this.getChartOptions();
+      })
+    );
   }
 
   handleDropdownChange(): void {
@@ -48,39 +63,29 @@ export class PriceChartComponent implements OnInit, OnDestroy {
     this.getGrouppedProducts();
   }
 
-  private getGrouppedProducts(): void {
-    this.subs.push(
-      this.priceService.getPricesByProductIds(this.productIdArray).subscribe((response: Record<string, number[]>) => {
-        this.grouppedProducts = new Map<string, number[]>(Object.entries(response));
-        this.initChart();
-      })
-    );
+  handleStartDateChange(startDate: Date): void {
+    this.startDate = startDate;
+    this.dateRange?.setDateRangeStrategy('custom');
+    if(this.dateRange?.dateRangeStrategy instanceof CustomDateRangeStrategy && startDate) {
+      this.dateRange.dateRangeStrategy.setStartDate(startDate);
+      this.getGrouppedProducts();
+    }
   }
 
-  private initDropdownOptions(): void {
-    this.dateRangeDropdownOptions = [
-      { label: 'Last week', value: 'last-week' },
-      { label: 'Last month', value: 'last-month' },
-      { label: 'Last year',  value: 'last-year' }
-    ];
+  handleEndDateChange(endDate: Date): void {
+    this.endDate = endDate;
+    this.dateRange?.setDateRangeStrategy('custom');
+    if(this.dateRange?.dateRangeStrategy instanceof CustomDateRangeStrategy && endDate) {
+      this.dateRange.dateRangeStrategy.setEndDate(endDate);
+      this.getGrouppedProducts();
+    }
   }
 
-  private initChart(): void {
+  private getChartOptions(): void {
     const documentStyle = getComputedStyle(document.documentElement);
     const textColor = documentStyle.getPropertyValue('--text-color');
     const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
-
-    this.data = {
-      labels: this.dateRange?.getChartLabels() ?? DateUtil.WEEK_DAYS,
-      datasets: Array.from(this.grouppedProducts).map((entry: [string, number[]], index: number) => ({
-        label: entry[0],
-        data: entry[1],
-        fill: false,
-        borderColor: documentStyle.getPropertyValue(this.colors[index]),
-        tension: 0.4
-      }))
-    };
 
     this.options = {
       maintainAspectRatio: false,
@@ -112,6 +117,47 @@ export class PriceChartComponent implements OnInit, OnDestroy {
           },
         },
       },
+    };
+  }
+
+  private getGrouppedProducts(): void {
+    this.subs.push(
+      this.priceService.getPricesByProductIds(this.productIdArray).subscribe((response: Record<string, number[]>) => {
+        this.grouppedProducts = new Map<string, number[]>(Object.entries(response));
+        this.getChartData();
+      })
+    );
+  }
+
+  private initDropdownOptions(): void {
+    this.dateRangeDropdownOptions = [
+      { label: 'Last week', value: 'last-week' },
+      { label: 'Last month', value: 'last-month' },
+      { label: 'Last year',  value: 'last-year' }
+    ];
+  }
+
+  private getFakeData(length: number): number[] {
+    const data: number[] = [];
+    for (let i = 0; i < length; i++) {
+      data.push(Math.floor(Math.random() * 100));
+    }
+    return data;
+  }
+
+  private getChartData(): void {
+    const documentStyle = getComputedStyle(document.documentElement);
+    const labels = this.dateRange?.getChartLabels() ?? DateUtil.WEEK_DAYS;
+    this.data = {
+      labels,
+      datasets: Array.from(this.grouppedProducts).map((entry: [string, number[]], index: number) => ({
+        label: entry[0],
+        // data: entry[1],
+        data: this.getFakeData(labels.length),
+        fill: false,
+        borderColor: documentStyle.getPropertyValue(this.colors[index]),
+        tension: 0.4
+      }))
     };
   }
 
