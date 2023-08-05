@@ -1,4 +1,5 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { CustomTemplate } from 'src/app/models/dto/column.dto';
 import { ExportDataDTO } from 'src/app/models/dto/export-data.dto';
 import { Product } from 'src/app/models/product/product';
 import { TableColumn } from 'src/app/types/table/column';
@@ -51,7 +52,7 @@ export class ProductTableComponent implements OnInit, OnChanges {
         columns = [
           { header: 'Name', field: 'name', ngStyle: { width: '60%' }, filter: true },
           { header: 'Image', field: 'imgSrc', ngStyle: { width: '15%' }, filter: false },
-          { header: 'Price', field: 'currentPrice', ngStyle: { width: '15%' }, filter: false },
+          { header: 'Price', field: 'currentPrice', ngStyle: { width: '15%' }, filter: false, formatOptions: { suffix: ' zł' } },
           { header: 'Link', field: 'link', ngStyle: { width: '10%' }, filter: false }
         ];
         this.exportData = {
@@ -79,9 +80,9 @@ export class ProductTableComponent implements OnInit, OnChanges {
           columns: [
             { header: '', key: 'imgSrc', isImage: true },
             { header: 'Name', key: 'name', width: 64 },
-            { header: 'Old price', key: 'prevPrice', width: 16 },
-            { header: 'Current price', key: 'currentPrice', width: 16 },
-            { header: '+/- [%]', key: 'priceChangePercentage', width: 12 },
+            { header: 'Old price', key: 'prevPrice', width: 16, formatOptions: { suffix: ' zł' } },
+            { header: 'Current price', key: 'currentPrice', width: 16, formatOptions: { suffix: ' zł' } },
+            { header: '+/- [%]', key: 'priceChangePercentage', width: 12, formatOptions: { suffix: ' %' }, customTemplate: CustomTemplate.PriceChange },
             { header: 'Link', key: 'link', width: 10, isLink: true }
           ],
           data: this.products

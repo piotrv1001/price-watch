@@ -4,7 +4,7 @@ import axios from 'axios';
 import * as fs from 'fs';
 import * as util from 'util';
 import * as path from 'path';
-import { ColumnDTO } from '../dto/column.dto';
+import { ColumnDTO, CustomTemplate } from '../dto/column.dto';
 
 export class ExcelExporter {
   workbook: ExcelJS.Workbook | null = null;
@@ -57,8 +57,10 @@ export class ExcelExporter {
       for (const item of data) {
         let currentCol = 0;
         for (const col of columns) {
+          const value = item[col.key];
           const cell = this.worksheet.getCell(currentRow, currentCol);
-          cell.value = item[col.key];
+          this.addCellFormatting(col, cell, value);
+          cell.value = value;
           currentCol++;
         }
         currentRow++;
@@ -104,7 +106,44 @@ export class ExcelExporter {
       cell.value = value;
     }
     cell.alignment = { vertical: 'middle', horizontal: 'center' };
+    this.addCellFormatting(col, cell, value);
     this.worksheet.mergeCells(startRow, startCol, endRow, endCol);
+  }
+
+  addCellFormatting(col: ColumnDTO, cell: ExcelJS.Cell, value: any): void {
+    const { formatOptions } = col;
+    if (formatOptions?.textColor) {
+      cell.font = { color: { argb: formatOptions.textColor } };
+    }
+    if (formatOptions?.bgColor) {
+      cell.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: formatOptions.bgColor },
+      };
+    }
+    if (formatOptions?.prefix) {
+      cell.value = `${formatOptions.prefix}${cell.value}`;
+    }
+    if (formatOptions?.suffix) {
+      cell.value = `${cell.value}${formatOptions.suffix}`;
+    }
+    if (col.customTemplate !== undefined) {
+      switch (col.customTemplate) {
+        case CustomTemplate.PriceChange:
+          if (typeof value !== 'number') {
+            return;
+          }
+          if (value > 0) {
+            const green = '00B050';
+            cell.font = { color: { argb: green } };
+          } else if (value < 0) {
+            const red = 'FF0000';
+            cell.font = { color: { argb: red } };
+          }
+          break;
+      }
+    }
   }
 
   private async downloadImage(
