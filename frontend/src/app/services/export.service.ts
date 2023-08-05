@@ -21,4 +21,10 @@ export class ExportService {
       observe: 'events'
     });
   }
+
+  downloadPdf(exportDataDTO: ExportDataDTO): Observable<Blob> {
+    return this.http.post(`${this.exportResourceUrl}/pdf`, exportDataDTO, {
+      responseType: 'blob'
+    });
+  }
 }

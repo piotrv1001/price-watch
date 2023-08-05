@@ -13,6 +13,7 @@ import { ChooseSellerComponent } from './choose-seller/choose-seller.component';
 import { StripPricePipe } from '../pipes/strip-price.pipe';
 import { ExcelExportBtnComponent } from './excel-export-btn/excel-export-btn.component';
 import { DateRangeComponent } from './date-range/date-range.component';
+import { PdfExportBtnComponent } from './pdf-export-btn/pdf-export-btn.component';
 
 // PrimeNG
 import { TableModule } from 'primeng/table';
@@ -47,7 +48,8 @@ import { ProgressBarModule } from 'primeng/progressbar';
     StripPricePipe,
     ChooseSellerComponent,
     DateRangeComponent,
-    ExcelExportBtnComponent
+    ExcelExportBtnComponent,
+    PdfExportBtnComponent
   ],
   exports: [
     ProductTableComponent,
@@ -61,7 +63,8 @@ import { ProgressBarModule } from 'primeng/progressbar';
     ExcelExportBtnComponent,
     TooltipModule,
     InputTextModule,
-    ProgressBarModule
+    ProgressBarModule,
+    PdfExportBtnComponent
   ],
 })
 export class ComponentsModule {

@@ -22,4 +22,14 @@ export class ExportController {
     });
     res.send(buffer);
   }
+
+  @Post('pdf')
+  async exportTableToPdf(
+    @Body() exportDataDTO: ExportDataDTO,
+    @Res() res: Response,
+  ) {
+    await this.exportService.exportTableToPdf(exportDataDTO, res);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename=table.pdf');
+  }
 }
