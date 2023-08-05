@@ -1,4 +1,5 @@
-import { Component, OnDestroy } from "@angular/core";
+import { HttpEvent, HttpEventType } from "@angular/common/http";
+import { Component, EventEmitter, OnDestroy, Output } from "@angular/core";
 import { Subscription } from "rxjs";
 import { ExportService } from "src/app/services/export.service";
 
@@ -9,6 +10,7 @@ import { ExportService } from "src/app/services/export.service";
 })
 export class ExcelExportBtnComponent implements OnDestroy {
 
+  @Output() downloadProgressChange: EventEmitter<number> = new EventEmitter<number>();
   subs: Subscription[] = [];
 
   constructor(private exportService: ExportService) { }
@@ -18,24 +20,51 @@ export class ExcelExportBtnComponent implements OnDestroy {
   }
 
   downloadExcel(): void {
+    const imgSrc = 'https://a.allegroimg.com/s180/11d2e3/12a8d9bb4373a6b9e41e04225b06/Zasilacz-do-tasm-LED-12V-30W-dopuszkowy-do-puszki';
     const exportDataDTO = {
-      title: 'Example',
+      title: 'New products',
       columns: [
-        { header: 'Header 1', key: 'header1', width: 12 },
-        { header: 'Header 2', key: 'header2', width: 12 },
-        { header: 'Header 3', key: 'header3', width: 12 },
-        { header: 'Header 4', key: 'header4', width: 12 }
+        { header: '' },
+        { header: 'Nazwa', key: 'name', width: 64 },
+        { header: 'Cena', key: 'currPrice', width: 16 },
+        { header: 'Link', key: 'link', width: 10 }
       ],
-      data: [],
+      data: [
+        { name: 'Test 1', currPrice: 100, link: 'https://www.google.com/', imgSrc },
+        { name: 'Test 2', currPrice: 120, link: 'https://www.google.com/', imgSrc },
+        { name: 'Test 3', currPrice: 140, link: 'https://www.google.com/', imgSrc },
+        { name: 'Test 4', currPrice: 160, link: 'https://www.google.com/', imgSrc },
+      ],
       seller: 'Seller'
     };
+    this.downloadProgressChange.emit(0);
     this.subs.push(
-      this.exportService.downloadExcel(exportDataDTO).subscribe((blob: Blob) => {
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = 'exported_data.xlsx';
-        link.click();
-        URL.revokeObjectURL(link.href);
+      this.exportService.downloadExcel(exportDataDTO).subscribe({
+        next: (event: HttpEvent<Blob>) => {
+          switch (event.type) {
+            case HttpEventType.DownloadProgress:
+              if(event.total) {
+                const progress = Math.round((100 * event.loaded) / event.total);
+                this.downloadProgressChange.emit(progress);
+              }
+              break;
+            case HttpEventType.Response:
+              const blob = event.body;
+              if(!blob) {
+                console.error('Error while downloading file');
+                return;
+              }
+              const link = document.createElement('a');
+              link.href = URL.createObjectURL(blob);
+              link.download = 'exported_data.xlsx';
+              link.click();
+              URL.revokeObjectURL(link.href);
+              break;
+          }
+        },
+        error: (err) => {
+          console.error(err);
+        },
       })
     );
   }

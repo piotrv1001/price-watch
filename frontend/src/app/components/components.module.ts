@@ -21,6 +21,8 @@ import { ButtonModule } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
 import { CalendarModule } from 'primeng/calendar';
 import { TooltipModule } from 'primeng/tooltip';
+import { InputTextModule } from 'primeng/inputtext';
+import { ProgressBarModule } from 'primeng/progressbar';
 
 @NgModule({
   imports: [
@@ -32,7 +34,9 @@ import { TooltipModule } from 'primeng/tooltip';
     DropdownModule,
     FormsModule,
     CalendarModule,
-    TooltipModule
+    TooltipModule,
+    InputTextModule,
+    ProgressBarModule
   ],
   declarations: [
     ProductTableComponent,
@@ -55,7 +59,9 @@ import { TooltipModule } from 'primeng/tooltip';
     ButtonModule,
     ChooseSellerComponent,
     ExcelExportBtnComponent,
-    TooltipModule
+    TooltipModule,
+    InputTextModule,
+    ProgressBarModule
   ],
 })
 export class ComponentsModule {

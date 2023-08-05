@@ -1,12 +1,43 @@
 <p-table
+  #table
   [value]="products"
   [columns]="columns"
   [paginator]="showPaginator && products.length > paginatorRows"
   [rows]="paginatorRows"
-  [showCurrentPageReport]="false">
+  [showCurrentPageReport]="false"
+  [globalFilterFields]="getFilterFields()">
   <ng-template pTemplate="caption">
     <div class="flex">
-      <app-excel-export-btn></app-excel-export-btn>
+      <button
+        type="button"
+        pButton
+        icon="pi pi-file"
+        (click)="table.exportCSV()"
+        class="mr-2"
+        pTooltip="CSV"
+        tooltipPosition="bottom">
+      </button>
+      <app-excel-export-btn (downloadProgressChange)="handleDownloadProgressChange($event)"></app-excel-export-btn>
+      <div class="w-10rem flex flex-column justify-content-around mr-2" *ngIf="downloadProgress > -1">
+        <span *ngIf="downloadProgress < 100" class="font-semibold text-sm">Downloading...</span>
+        <div *ngIf="downloadProgress === 100" class="flex align-items-center">
+          <span class="mr-1 font-semibold text-sm text-green-600">Done</span>
+          <i class="pi pi-check text-sm font-semibold text-green-500"></i>
+        </div>
+        <p-progressBar
+          [value]="downloadProgress"
+          [showValue]="false"
+          [style]="{'height': '6px'}">
+        </p-progressBar>
+      </div>
+      <span class="p-input-icon-left ml-auto">
+        <i class="pi pi-search"></i>
+        <input
+          pInputText
+          type="text"
+          (input)="table.filterGlobal($any($event.target).value, 'contains')"
+          placeholder="Search"/>
+      </span>
     </div>
   </ng-template>
   <ng-template pTemplate="header" let-columns>

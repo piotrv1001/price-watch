@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { SERVER_API_URL } from "../app.constants";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpEvent } from "@angular/common/http";
 import { ExportDataDTO } from "../models/dto/export-data.dto";
 import { Observable } from "rxjs";
 
@@ -14,9 +14,11 @@ export class ExportService {
 
   constructor(private http: HttpClient) {}
 
-  downloadExcel(exportDataDTO: ExportDataDTO): Observable<Blob> {
+  downloadExcel(exportDataDTO: ExportDataDTO): Observable<HttpEvent<Blob>> {
     return this.http.post(this.excelResourceUrl, exportDataDTO, {
+      reportProgress: true,
       responseType: 'blob',
+      observe: 'events'
     });
   }
 }

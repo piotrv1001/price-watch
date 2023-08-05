@@ -18,6 +18,7 @@ export class ExportController {
       'Content-Type':
         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       'Content-Disposition': `attachment; filename=${filename}.xlsx`,
+      'Content-Length': Buffer.byteLength(buffer),
     });
     res.send(buffer);
   }
