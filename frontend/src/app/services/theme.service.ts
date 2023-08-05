@@ -12,7 +12,6 @@ export class ThemeService {
   switchTheme(theme: string) {
     const newHref = theme + '.css';
     this.replaceThemeLink(newHref, () => {
-      console.log('theme loaded');
       if (theme === 'lara-light-blue') {
         this.themeSub.next(false);
       } else if (theme === 'lara-dark-blue') {

@@ -4,6 +4,11 @@
   [paginator]="showPaginator && products.length > paginatorRows"
   [rows]="paginatorRows"
   [showCurrentPageReport]="false">
+  <ng-template pTemplate="caption">
+    <div class="flex">
+      <app-excel-export-btn></app-excel-export-btn>
+    </div>
+  </ng-template>
   <ng-template pTemplate="header" let-columns>
     <tr>
       <th *ngFor="let col of columns" [ngStyle]="col.ngStyle">
