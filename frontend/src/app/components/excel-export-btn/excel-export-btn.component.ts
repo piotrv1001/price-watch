@@ -1,6 +1,7 @@
 import { HttpEvent, HttpEventType } from "@angular/common/http";
-import { Component, EventEmitter, OnDestroy, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnDestroy, Output } from "@angular/core";
 import { Subscription } from "rxjs";
+import { ExportDataDTO } from "src/app/models/dto/export-data.dto";
 import { ExportService } from "src/app/services/export.service";
 
 @Component({
@@ -10,6 +11,7 @@ import { ExportService } from "src/app/services/export.service";
 })
 export class ExcelExportBtnComponent implements OnDestroy {
 
+  @Input() exportData: ExportDataDTO | null = null;
   @Output() downloadProgressChange: EventEmitter<number> = new EventEmitter<number>();
   subs: Subscription[] = [];
 
@@ -20,26 +22,13 @@ export class ExcelExportBtnComponent implements OnDestroy {
   }
 
   downloadExcel(): void {
-    const imgSrc = 'https://a.allegroimg.com/s180/11d2e3/12a8d9bb4373a6b9e41e04225b06/Zasilacz-do-tasm-LED-12V-30W-dopuszkowy-do-puszki';
-    const exportDataDTO = {
-      title: 'New products',
-      columns: [
-        { header: '' },
-        { header: 'Nazwa', key: 'name', width: 64 },
-        { header: 'Cena', key: 'currPrice', width: 16 },
-        { header: 'Link', key: 'link', width: 10 }
-      ],
-      data: [
-        { name: 'Test 1', currPrice: 100, link: 'https://www.google.com/', imgSrc },
-        { name: 'Test 2', currPrice: 120, link: 'https://www.google.com/', imgSrc },
-        { name: 'Test 3', currPrice: 140, link: 'https://www.google.com/', imgSrc },
-        { name: 'Test 4', currPrice: 160, link: 'https://www.google.com/', imgSrc },
-      ],
-      seller: 'Seller'
-    };
+    if(!this.exportData) {
+      console.error('Export data is empty');
+      return;
+    }
     this.downloadProgressChange.emit(0);
     this.subs.push(
-      this.exportService.downloadExcel(exportDataDTO).subscribe({
+      this.exportService.downloadExcel(this.exportData).subscribe({
         next: (event: HttpEvent<Blob>) => {
           switch (event.type) {
             case HttpEventType.DownloadProgress:

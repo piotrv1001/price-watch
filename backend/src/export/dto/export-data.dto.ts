@@ -5,4 +5,5 @@ export class ExportDataDTO {
   columns?: ColumnDTO[];
   data?: any[];
   seller?: string;
+  noDataText?: string;
 }

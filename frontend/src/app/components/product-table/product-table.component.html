@@ -17,7 +17,18 @@
         pTooltip="CSV"
         tooltipPosition="bottom">
       </button>
-      <app-excel-export-btn (downloadProgressChange)="handleDownloadProgressChange($event)"></app-excel-export-btn>
+      <app-excel-export-btn
+        [exportData]="exportData"
+        (downloadProgressChange)="handleDownloadProgressChange($event)">
+      </app-excel-export-btn>
+      <button
+        type="button"
+        pButton
+        icon="pi pi-file-pdf"
+        class="p-button-danger mr-2"
+        pTooltip="PDF"
+        tooltipPosition="bottom">
+      </button>
       <div class="w-10rem flex flex-column justify-content-around mr-2" *ngIf="downloadProgress > -1">
         <span *ngIf="downloadProgress < 100" class="font-semibold text-sm">Downloading...</span>
         <div *ngIf="downloadProgress === 100" class="flex align-items-center">
