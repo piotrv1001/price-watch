@@ -1,34 +1,26 @@
-<!-- <div class="grid"> -->
-  <!-- <div class="flex justify-content-end mb-2">
-    <p-button
-      [icon]="isDarkTheme ? 'pi pi-sun' : 'pi pi-moon'"
-      (onClick)="changeTheme(!isDarkTheme)">
-    </p-button>
-  </div> -->
-  <div class="grid">
-    <div class="col-12 xl:col-6">
-      <div class="card">
-        <h5>Sellers</h5>
-        <app-choose-seller></app-choose-seller>
-      </div>
-      <div class="card">
-        <h5>New products</h5>
-        <app-new-products></app-new-products>
-      </div>
-      <div class="card">
-        <h5>Price changes</h5>
-        <app-price-changes-table></app-price-changes-table>
-      </div>
+<div class="grid">
+  <div class="col-12 xl:col-6 p-3">
+    <div class="card">
+      <h5>Sellers</h5>
+      <app-choose-seller></app-choose-seller>
     </div>
-    <div class="col-12 xl:col-6">
-      <div class="card">
-        <h5>Price buckets</h5>
-        <app-histogram></app-histogram>
-      </div>
-      <div class="card">
-        <h5>Price chart</h5>
-        <app-price-chart></app-price-chart>
-      </div>
+    <div class="card">
+      <h5>New products</h5>
+      <app-new-products></app-new-products>
+    </div>
+    <div class="card">
+      <h5>Price changes</h5>
+      <app-price-changes-table></app-price-changes-table>
     </div>
   </div>
-<!-- </div> -->
+  <div class="col-12 xl:col-6 p-3">
+    <div class="card">
+      <h5>Price buckets</h5>
+      <app-histogram></app-histogram>
+    </div>
+    <div class="card">
+      <h5>Price chart</h5>
+      <app-price-chart></app-price-chart>
+    </div>
+  </div>
+</div>
