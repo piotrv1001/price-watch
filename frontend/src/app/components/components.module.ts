@@ -11,6 +11,9 @@ import { NewProductsComponent } from './new-products/new-products.component';
 import { PriceChangesTableComponent } from './price-changes-table/price-changes-table.component';
 import { ChooseSellerComponent } from './choose-seller/choose-seller.component';
 import { StripPricePipe } from '../pipes/strip-price.pipe';
+import { ExcelExportBtnComponent } from './excel-export-btn/excel-export-btn.component';
+import { DateRangeComponent } from './date-range/date-range.component';
+import { PdfExportBtnComponent } from './pdf-export-btn/pdf-export-btn.component';
 
 // PrimeNG
 import { TableModule } from 'primeng/table';
@@ -18,7 +21,9 @@ import { ChartModule } from 'primeng/chart';
 import { ButtonModule } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
 import { CalendarModule } from 'primeng/calendar';
-import { DateRangeComponent } from './date-range/date-range.component';
+import { TooltipModule } from 'primeng/tooltip';
+import { InputTextModule } from 'primeng/inputtext';
+import { ProgressBarModule } from 'primeng/progressbar';
 
 @NgModule({
   imports: [
@@ -29,7 +34,10 @@ import { DateRangeComponent } from './date-range/date-range.component';
     ButtonModule,
     DropdownModule,
     FormsModule,
-    CalendarModule
+    CalendarModule,
+    TooltipModule,
+    InputTextModule,
+    ProgressBarModule
   ],
   declarations: [
     ProductTableComponent,
@@ -39,7 +47,9 @@ import { DateRangeComponent } from './date-range/date-range.component';
     PriceChangesTableComponent,
     StripPricePipe,
     ChooseSellerComponent,
-    DateRangeComponent
+    DateRangeComponent,
+    ExcelExportBtnComponent,
+    PdfExportBtnComponent
   ],
   exports: [
     ProductTableComponent,
@@ -49,7 +59,12 @@ import { DateRangeComponent } from './date-range/date-range.component';
     PriceChangesTableComponent,
     StripPricePipe,
     ButtonModule,
-    ChooseSellerComponent
+    ChooseSellerComponent,
+    ExcelExportBtnComponent,
+    TooltipModule,
+    InputTextModule,
+    ProgressBarModule,
+    PdfExportBtnComponent
   ],
 })
 export class ComponentsModule {

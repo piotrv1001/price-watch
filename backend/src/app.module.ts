@@ -7,6 +7,7 @@ import { ProductModule } from './product/product.module';
 import { Product } from './product/product.entity';
 import { PriceModule } from './price/price.module';
 import { Price } from './price/price.entity';
+import { ExportModule } from './export/export.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { Price } from './price/price.entity';
     }),
     ProductModule,
     PriceModule,
+    ExportModule,
   ],
   controllers: [AppController],
   providers: [AppService],
