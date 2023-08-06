@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms'
+import { FormsModule } from '@angular/forms';
 
 // Components
 import { ProductTableComponent } from './product-table/product-table.component';
@@ -27,13 +26,12 @@ import { ProgressBarModule } from 'primeng/progressbar';
 
 @NgModule({
   imports: [
-    BrowserModule,
     CommonModule,
+    FormsModule,
     TableModule,
     ChartModule,
     ButtonModule,
     DropdownModule,
-    FormsModule,
     CalendarModule,
     TooltipModule,
     InputTextModule,

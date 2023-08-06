@@ -1,13 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
+@import "assets/layout/styles/layout/layout.scss";
 
 @import "primeng/resources/primeng.css";
 @import "primeflex/primeflex.scss";
 @import "primeicons/primeicons.css";
-
-body {
-  background-color: var(--surface-ground);
-  color: var(--text-color);
-  font-family: var(--font-family);
-  padding: 0;
-  margin: 0;
-}

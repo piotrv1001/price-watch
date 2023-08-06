@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { ThemeService } from './services/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -8,12 +7,4 @@ import { ThemeService } from './services/theme.service';
 })
 export class AppComponent {
 
-  isDarkTheme: boolean = false;
-
-  constructor(private themeService: ThemeService) {}
-
-  changeTheme(isDark: boolean) {
-    this.isDarkTheme = isDark;
-    this.themeService.switchTheme(isDark ? 'lara-dark-blue' : 'lara-light-blue');
-  }
 }
