@@ -23,6 +23,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { TooltipModule } from 'primeng/tooltip';
 import { InputTextModule } from 'primeng/inputtext';
 import { ProgressBarModule } from 'primeng/progressbar';
+import { ChartExportPngBtnComponent } from './chart-export-png-btn/chart-export-png-btn.component';
 
 @NgModule({
   imports: [
@@ -47,7 +48,8 @@ import { ProgressBarModule } from 'primeng/progressbar';
     ChooseSellerComponent,
     DateRangeComponent,
     ExcelExportBtnComponent,
-    PdfExportBtnComponent
+    PdfExportBtnComponent,
+    ChartExportPngBtnComponent
   ],
   exports: [
     ProductTableComponent,
@@ -62,7 +64,8 @@ import { ProgressBarModule } from 'primeng/progressbar';
     TooltipModule,
     InputTextModule,
     ProgressBarModule,
-    PdfExportBtnComponent
+    PdfExportBtnComponent,
+    ChartExportPngBtnComponent
   ],
 })
 export class ComponentsModule {

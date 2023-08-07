@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ProductWithPrice } from 'src/app/models/product/product-with-price';
 import { ChosenSellerService } from 'src/app/services/chosen-seller.service';
