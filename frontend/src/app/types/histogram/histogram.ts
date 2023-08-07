@@ -17,10 +17,11 @@ export interface LegendLabels {
   color?: string;
 }
 
-export interface LegendPlugins {
+export interface Plugins {
   legend: {
     labels: LegendLabels;
   };
+  datalabels?: any
 }
 
 export interface ScalesTicks {
@@ -42,7 +43,7 @@ export interface HistogramOptions {
   responsive?: boolean;
   maintainAspectRatio?: boolean;
   aspectRatio?: number;
-  plugins?: LegendPlugins;
+  plugins?: Plugins;
   scales?: {
     y?: Scales;
     x?: Scales;
