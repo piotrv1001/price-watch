@@ -1,4 +1,10 @@
-<div class="flex justify-content-end mb-5">
+<div class="flex justify-content-end mb-4">
+  <app-chart-export-png-btn
+    [chartComponent]="chart"
+    [filename]="'prices'">
+  </app-chart-export-png-btn>
+</div>
+<div class="flex justify-content-end mb-6">
   <span class="mr-2">
     <app-date-range
       [startDate]="startDate"
@@ -16,6 +22,7 @@
   </p-dropdown>
 </div>
 <p-chart
+  #chart
   type="line"
   [data]="data"
   [options]="options">

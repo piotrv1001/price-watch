@@ -1,4 +1,11 @@
+<div class="flex justify-content-end">
+  <app-chart-export-png-btn
+    [chartComponent]="chart"
+    [filename]="'price_buckets'">
+  </app-chart-export-png-btn>
+</div>
 <p-chart
+  #chart
   type="bar"
   [data]="basicData"
   [options]="basicOptions"
