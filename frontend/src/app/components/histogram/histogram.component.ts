@@ -1,11 +1,13 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription, of } from 'rxjs';
 import { ProductWithPrice } from 'src/app/models/product/product-with-price';
 import { ChosenSellerService } from 'src/app/services/chosen-seller.service';
 import { ProductService } from 'src/app/services/product.service';
 import { ThemeService } from 'src/app/services/theme.service';
 import { Bucket } from 'src/app/types/histogram/bucket';
 import { HistogramData, HistogramOptions } from 'src/app/types/histogram/histogram';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 @Component({
   selector: 'app-histogram',
@@ -18,6 +20,7 @@ export class HistogramComponent implements OnInit, OnDestroy {
   grouppedProducts: number[] = [0, 0, 0, 0];
   subs: Subscription[] = [];
   currentSellerName = 'SmartLED';
+  plugins: any[] = [ChartDataLabels];
 
   constructor(
     private productService: ProductService,
@@ -107,7 +110,7 @@ export class HistogramComponent implements OnInit, OnDestroy {
           borderWidth: 1,
           borderRadius: 10
         },
-      ],
+      ]
     };
   }
 
@@ -126,6 +129,16 @@ export class HistogramComponent implements OnInit, OnDestroy {
             color: textColor,
           },
         },
+        datalabels: {
+          display: true,
+          color: textColor,
+          font: {
+            weight: 'bold'
+          },
+          formatter: Math.round,
+          align: 'end',
+          anchor: 'end'
+        }
       },
       scales: {
         y: {
