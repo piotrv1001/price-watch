@@ -1,4 +1,3 @@
-import { Observable } from 'rxjs';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription, of } from 'rxjs';
 import { ProductWithPrice } from 'src/app/models/product/product-with-price';

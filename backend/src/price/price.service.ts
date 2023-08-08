@@ -46,12 +46,20 @@ export class PriceService {
     return await this.priceRepository.findBy({ productId });
   }
 
-  async getNewProducts(seller: string): Promise<NewProductDTO[]> {
-    return await this.analyzePriceChanges(seller, true);
+  async getNewProducts(
+    seller: string,
+    fromDate: Date,
+    toDate: Date,
+  ): Promise<NewProductDTO[]> {
+    return await this.analyzePriceChanges(seller, fromDate, toDate, true);
   }
 
-  async getPriceChanges(seller: string): Promise<PriceChangeDTO[]> {
-    return await this.analyzePriceChanges(seller, false);
+  async getPriceChanges(
+    seller: string,
+    fromDate: Date,
+    toDate: Date,
+  ): Promise<PriceChangeDTO[]> {
+    return await this.analyzePriceChanges(seller, fromDate, toDate, false);
   }
 
   async getPricesByProductIds(
@@ -70,6 +78,8 @@ export class PriceService {
 
   private async analyzePriceChanges(
     seller: string,
+    fromDate: Date,
+    toDate: Date,
     returnNewProducts: boolean,
   ): Promise<PriceChangeDTO[] | NewProductDTO[]> {
     const query = this.priceRepository
@@ -79,19 +89,12 @@ export class PriceService {
       .addSelect('pr.imgSrc as imgSrc')
       .addSelect('pr.link as link')
       .innerJoin('p.product', 'pr')
-      .innerJoin(
-        (subQuery) =>
-          subQuery
-            .select('DISTINCT date')
-            .from(Price, 'price')
-            .orderBy('date', 'DESC')
-            .limit(2),
-        'subquery',
-        'p.date = subquery.date',
-      )
       .where('pr.seller = :seller', { seller })
-      .orderBy('p.productId')
-      .addOrderBy('p.date', 'DESC');
+      .andWhere('p.date >= :fromDate', { fromDate })
+      .andWhere('p.date <= :toDate', { toDate })
+      .orderBy('p.date', 'DESC')
+      .orderBy('p.id', 'DESC')
+      .addOrderBy('p.productId');
 
     const results = await query.getRawMany();
     const products = results.reduce((acc, curr) => {
@@ -132,16 +135,17 @@ export class PriceService {
           priceChangePercentage: null,
         };
       } else {
-        const priceChange = prices[0].price - prices[1].price;
+        const lastIndex = prices.length - 1;
+        const priceChange = prices[0].price - prices[lastIndex].price;
         return {
           productId: product.productId,
           name: product.name,
           imgSrc: product.imgSrc,
           link: product.link,
-          prevPrice: prices[1].price,
+          prevPrice: prices[lastIndex].price,
           currentPrice: prices[0].price,
           priceChange,
-          priceChangePercentage: (priceChange / prices[1].price) * 100,
+          priceChangePercentage: (priceChange / prices[lastIndex].price) * 100,
         };
       }
     });
