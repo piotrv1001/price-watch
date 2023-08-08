@@ -24,6 +24,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { InputTextModule } from 'primeng/inputtext';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { ChartExportPngBtnComponent } from './chart-export-png-btn/chart-export-png-btn.component';
+import { DateRangeWithOptionsComponent } from './date-range-with-options/date-range-with-options.component';
 
 @NgModule({
   imports: [
@@ -49,7 +50,8 @@ import { ChartExportPngBtnComponent } from './chart-export-png-btn/chart-export-
     DateRangeComponent,
     ExcelExportBtnComponent,
     PdfExportBtnComponent,
-    ChartExportPngBtnComponent
+    ChartExportPngBtnComponent,
+    DateRangeWithOptionsComponent
   ],
   exports: [
     ProductTableComponent,
@@ -65,7 +67,8 @@ import { ChartExportPngBtnComponent } from './chart-export-png-btn/chart-export-
     InputTextModule,
     ProgressBarModule,
     PdfExportBtnComponent,
-    ChartExportPngBtnComponent
+    ChartExportPngBtnComponent,
+    DateRangeWithOptionsComponent
   ],
 })
 export class ComponentsModule {

@@ -26,7 +26,10 @@ export class PriceService {
     return this.http.get<NewProductDTO[]>(`${this.priceResourceUrl}/new-products/${seller}?fromDate=${fromDate}&toDate=${toDate}`);
   }
 
-  getPriceChanges(seller: string): Observable<PriceChangeDTO[]> {
-    return this.http.get<PriceChangeDTO[]>(`${this.priceResourceUrl}/price-changes/${seller}`);
+  getPriceChanges(seller: string, fromDate?: string, toDate?: string): Observable<PriceChangeDTO[]> {
+    if(!fromDate || !toDate) {
+      return this.http.get<PriceChangeDTO[]>(`${this.priceResourceUrl}/price-changes/${seller}`);
+    }
+    return this.http.get<PriceChangeDTO[]>(`${this.priceResourceUrl}/price-changes/${seller}?fromDate=${fromDate}&toDate=${toDate}`);
   }
 }

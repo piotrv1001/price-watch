@@ -3,7 +3,6 @@ import { Subscription } from 'rxjs';
 import { PriceService } from 'src/app/services/price.service';
 import { ThemeService } from 'src/app/services/theme.service';
 import { HistogramData, HistogramOptions } from 'src/app/types/histogram/histogram';
-import { DateRangeDropdownOption } from 'src/app/types/price-chart/price-chart';
 import { DateRange, DateRangeType } from 'src/app/utils/date/date-range/date-range';
 import { CustomDateRangeStrategy } from 'src/app/utils/date/date-range/strategy/custom.strategy';
 import { DateUtil } from 'src/app/utils/date/date.util';
@@ -23,7 +22,6 @@ export class PriceChartComponent implements OnInit, OnDestroy {
   dateRange: DateRange | null = null;
   startDate?: Date;
   endDate?: Date;
-  dateRangeDropdownOptions: DateRangeDropdownOption[] = [];
   selectedDropdownOption: DateRangeType | null = null;
 
   constructor(
@@ -36,7 +34,6 @@ export class PriceChartComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.initDropdownOptions();
     this.getChartOptions();
     this.getGrouppedProducts();
     this.getThemeChange();
@@ -54,10 +51,8 @@ export class PriceChartComponent implements OnInit, OnDestroy {
     );
   }
 
-  handleDropdownChange(): void {
-    if(this.selectedDropdownOption === null) {
-      return;
-    }
+  handleDropdownChange(dropdownOption: DateRangeType): void {
+    this.selectedDropdownOption = dropdownOption;
     this.dateRange?.setDateRangeStrategy(this.selectedDropdownOption);
     this.updateDates();
     this.getGrouppedProducts();
@@ -127,14 +122,6 @@ export class PriceChartComponent implements OnInit, OnDestroy {
         this.getChartData();
       })
     );
-  }
-
-  private initDropdownOptions(): void {
-    this.dateRangeDropdownOptions = [
-      { label: 'Last week', value: 'last-week' },
-      { label: 'Last month', value: 'last-month' },
-      { label: 'Last year',  value: 'last-year' }
-    ];
   }
 
   private getFakeData(length: number): number[] {

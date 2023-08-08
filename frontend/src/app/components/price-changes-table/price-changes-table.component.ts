@@ -3,6 +3,8 @@ import { Subscription } from "rxjs";
 import { PriceChangeDTO } from "src/app/models/dto/price-change.dto";
 import { ChosenSellerService } from "src/app/services/chosen-seller.service";
 import { PriceService } from "src/app/services/price.service";
+import { DateRange, DateRangeType } from "src/app/utils/date/date-range/date-range";
+import { CustomDateRangeStrategy } from "src/app/utils/date/date-range/strategy/custom.strategy";
 
 @Component({
   selector: 'app-price-changes-table',
@@ -13,11 +15,19 @@ export class PriceChangesTableComponent implements OnInit, OnDestroy {
   products: PriceChangeDTO[] = [];
   subs: Subscription[] = [];
   currentSellerName = 'SmartLED';
+  dateRange: DateRange | null = null;
+  startDate?: Date;
+  endDate?: Date;
+  selectedDropdownOption: DateRangeType | null = null;
 
   constructor(
     private priceService: PriceService,
     private chosenSellerService: ChosenSellerService
-  ) {}
+  ) {
+    this.dateRange = new DateRange();
+    this.dateRange.setDateRangeStrategy('last-week');
+    this.updateDates();
+  }
 
   ngOnInit(): void {
     this.getPriceChanges();
@@ -26,6 +36,13 @@ export class PriceChangesTableComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subs.forEach((sub: Subscription) => sub.unsubscribe());
+  }
+
+  handleDropdownChange(dropdownOption: DateRangeType): void {
+    this.selectedDropdownOption = dropdownOption;
+    this.dateRange?.setDateRangeStrategy(this.selectedDropdownOption);
+    this.updateDates();
+    this.getPriceChanges();
   }
 
   handleSellerChange(): void {
@@ -37,22 +54,34 @@ export class PriceChangesTableComponent implements OnInit, OnDestroy {
     );
   }
 
+  handleDateChange(type: 'start' | 'end', date: Date): void {
+    if(type === 'start') {
+      this.startDate = date;
+    } else {
+      this.endDate = date;
+    }
+    this.dateRange?.setDateRangeStrategy('custom');
+    if(this.dateRange?.dateRangeStrategy instanceof CustomDateRangeStrategy && date) {
+      if(type === 'start') {
+        this.dateRange.dateRangeStrategy.setStartDate(date);
+      } else {
+        this.dateRange.dateRangeStrategy.setEndDate(date);
+      }
+      this.getPriceChanges();
+    }
+  }
+
   private getPriceChanges(): void {
     this.subs.push(
-      this.priceService.getPriceChanges(this.currentSellerName).subscribe((products: PriceChangeDTO[]) => {
-        // this.products = products;
-        this.products = this.getFakeData();
+      this.priceService.getPriceChanges(this.currentSellerName, this.startDate?.toISOString(), this.endDate?.toISOString()).subscribe((products: PriceChangeDTO[]) => {
+        this.products = products;
       })
     );
   }
 
-  private getFakeData(): PriceChangeDTO[] {
-    const imgSrc = 'https://a.allegroimg.com/s180/11d2e3/12a8d9bb4373a6b9e41e04225b06/Zasilacz-do-tasm-LED-12V-30W-dopuszkowy-do-puszki';
-    const imgSrc2 = 'https://a.allegroimg.com/s180/1103ec/0ddc0d994a8fa4d7d3babde5018d/ZASILACZ-MEBLOWY-12V-8-25A-100W-DO-TASMA-LED';
-    const exampleData = [
-      { id: 1, name: 'Zasilacz do taśm LED 12V 30W dopuszkowy do puszki, 28,71 zł', imgSrc, prevPrice: 100, currentPrice: 105, priceChange: 5, priceChangePercentage: 5, link: 'https://google.com/' },
-      { id: 2, name: 'ZASILACZ MEBLOWY 12V 8,25A 100W DO TAŚMA LED, 64,90 zł', imgSrc: imgSrc2, prevPrice: 100, currentPrice: 95, priceChange: -5, priceChangePercentage: -5, link: 'https://google.com/' }
-    ];
-    return exampleData;
+  private updateDates(): void {
+    this.startDate = this.dateRange?.getStartDate();
+    this.endDate = this.dateRange?.getEndDate();
   }
+
 }

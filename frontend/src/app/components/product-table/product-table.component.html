@@ -88,4 +88,9 @@
       </td>
     </tr>
   </ng-template>
+  <ng-template pTemplate="footer">
+    <tr *ngIf="products.length === 0">
+      <td [attr.colspan]="columns.length" style="text-align: center; font-weight: normal;">No data</td>
+    </tr>
+  </ng-template>
 </p-table>
