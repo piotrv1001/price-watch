@@ -6,6 +6,7 @@ import {
   Delete,
   Param,
   Body,
+  Query,
 } from '@nestjs/common';
 import { PriceService } from './price.service';
 import { Price } from './price.entity';
@@ -32,13 +33,31 @@ export class PriceController {
   }
 
   @Get('new-products/:seller')
-  getNewProducts(@Param('seller') seller: string): Promise<NewProductDTO[]> {
-    return this.priceService.getNewProducts(seller);
+  getNewProducts(
+    @Param('seller') seller: string,
+    @Query('fromDate') fromDate?: string,
+    @Query('toDate') toDate?: string,
+  ): Promise<NewProductDTO[]> {
+    const { fromDateParsed, toDateParsed } = this.parseDates(fromDate, toDate);
+    return this.priceService.getNewProducts(
+      seller,
+      fromDateParsed,
+      toDateParsed,
+    );
   }
 
   @Get('price-changes/:seller')
-  getPriceChanges(@Param('seller') seller: string): Promise<PriceChangeDTO[]> {
-    return this.priceService.getPriceChanges(seller);
+  getPriceChanges(
+    @Param('seller') seller: string,
+    @Query('fromDate') fromDate?: string,
+    @Query('toDate') toDate?: string,
+  ): Promise<PriceChangeDTO[]> {
+    const { fromDateParsed, toDateParsed } = this.parseDates(fromDate, toDate);
+    return this.priceService.getPriceChanges(
+      seller,
+      fromDateParsed,
+      toDateParsed,
+    );
   }
 
   @Post()
@@ -66,5 +85,21 @@ export class PriceController {
       response[productId] = prices;
     });
     return response;
+  }
+
+  private parseDates(
+    fromDate: string,
+    toDate: string,
+  ): { fromDateParsed: Date; toDateParsed: Date } {
+    const today = new Date();
+    let toDateParsed = today;
+    if (toDate) {
+      toDateParsed = new Date(toDate);
+    }
+    let fromDateParsed = new Date(today.getTime() - 8 * 24 * 60 * 60 * 1000);
+    if (fromDate) {
+      fromDateParsed = new Date(fromDate);
+    }
+    return { fromDateParsed, toDateParsed };
   }
 }

@@ -38,8 +38,10 @@ export class NewProductsComponent implements OnInit, OnDestroy {
   }
 
   private getNewProducts(): void {
+    const today = new Date();
+    const oneWeekAgo = new Date(today.getTime() - 8 * 24 * 60 * 60 * 1000);
     this.subs.push(
-      this.priceService.getNewProducts(this.currentSellerName).subscribe((products: NewProductDTO[]) => {
+      this.priceService.getNewProducts(this.currentSellerName, oneWeekAgo.toISOString(), today.toISOString()).subscribe((products: NewProductDTO[]) => {
         this.products = products;
       })
     );
