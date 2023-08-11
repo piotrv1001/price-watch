@@ -6,5 +6,6 @@ export class Product {
   seller?: string;
   link?: string;
   imgSrc?: string;
+  promo?: boolean;
   prices?: Price[];
 }

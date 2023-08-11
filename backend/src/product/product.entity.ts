@@ -18,6 +18,9 @@ export class Product {
   @Column({ nullable: true })
   imgSrc?: string;
 
+  @Column({ type: 'tinyint', width: 1, default: 0, nullable: true })
+  promo?: boolean;
+
   @OneToMany(() => Price, (price) => price.product, {
     nullable: true,
   })

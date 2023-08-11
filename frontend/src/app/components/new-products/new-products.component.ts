@@ -1,7 +1,6 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from "@angular/core";
 import { Subscription } from "rxjs";
 import { NewProductDTO } from "src/app/models/dto/new-product.dto";
-import { ChosenSellerService } from "src/app/services/chosen-seller.service";
 import { PriceService } from "src/app/services/price.service";
 import { DateRange, DateRangeType } from "src/app/utils/date/date-range/date-range";
 import { CustomDateRangeStrategy } from "src/app/utils/date/date-range/strategy/custom.strategy";
@@ -11,9 +10,9 @@ import { CustomDateRangeStrategy } from "src/app/utils/date/date-range/strategy/
   templateUrl: './new-products.component.html',
   styleUrls: ['./new-products.component.scss']
 })
-export class NewProductsComponent implements OnInit, OnDestroy {
+export class NewProductsComponent implements OnInit, OnChanges, OnDestroy {
+  @Input() currentSellerName?: string;
   products: NewProductDTO[] = [];
-  currentSellerName = 'SmartLED';
   subs: Subscription[] = [];
   dateRange: DateRange | null = null;
   startDate?: Date;
@@ -21,8 +20,7 @@ export class NewProductsComponent implements OnInit, OnDestroy {
   selectedDropdownOption: DateRangeType | null = null;
 
   constructor(
-    private priceService: PriceService,
-    private chosenSellerService: ChosenSellerService
+    private priceService: PriceService
   ) {
     this.dateRange = new DateRange();
     this.dateRange.setDateRangeStrategy('last-week');
@@ -31,7 +29,12 @@ export class NewProductsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getNewProducts();
-    this.handleSellerChange();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if(changes['currentSellerName']?.currentValue !== changes['currentSellerName']?.previousValue) {
+      this.getNewProducts();
+    }
   }
 
   ngOnDestroy(): void {
@@ -43,15 +46,6 @@ export class NewProductsComponent implements OnInit, OnDestroy {
     this.dateRange?.setDateRangeStrategy(this.selectedDropdownOption);
     this.updateDates();
     this.getNewProducts();
-  }
-
-  handleSellerChange(): void {
-    this.subs.push(
-      this.chosenSellerService.getCurrentSeller().subscribe((sellerName) => {
-        this.currentSellerName = sellerName;
-        this.getNewProducts();
-      })
-    );
   }
 
   handleDateChange(type: 'start' | 'end', date: Date): void {
@@ -72,6 +66,9 @@ export class NewProductsComponent implements OnInit, OnDestroy {
   }
 
   private getNewProducts(): void {
+    if(!this.currentSellerName) {
+      return;
+    }
     this.subs.push(
       this.priceService.getNewProducts(this.currentSellerName, this.startDate?.toISOString(), this.endDate?.toISOString()).subscribe((products: NewProductDTO[]) => {
         this.products = products;
