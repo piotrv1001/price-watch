@@ -20,12 +20,12 @@ export class AppMenuComponent implements OnInit {
         ],
       },
       {
-        label: 'UI Components',
+        label: 'Products',
         items: [
           {
-            label: 'Form Layout',
-            icon: 'pi pi-fw pi-id-card',
-            routerLink: ['/uikit/formlayout'],
+            label: 'New Products',
+            icon: 'pi pi-shopping-cart',
+            routerLink: ['/new-products'],
           },
           {
             label: 'Input',

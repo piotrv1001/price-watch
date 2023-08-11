@@ -3,5 +3,6 @@ export class NewProductDTO {
   name?: string;
   imgSrc?: string;
   link?: string;
+  promo?: boolean;
   currentPrice?: number;
 }

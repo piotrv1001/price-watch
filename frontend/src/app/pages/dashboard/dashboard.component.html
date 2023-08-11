@@ -2,11 +2,11 @@
   <div class="col-12 xl:col-6 p-3">
     <div class="card">
       <h5>Sellers</h5>
-      <app-choose-seller></app-choose-seller>
+      <app-choose-seller (sellerChange)="handleSellerChange($event)"></app-choose-seller>
     </div>
     <div class="card">
       <h5>New products</h5>
-      <app-new-products></app-new-products>
+      <app-new-products [currentSellerName]="currentSeller?.name"></app-new-products>
     </div>
     <div class="card">
       <h5>Price changes</h5>

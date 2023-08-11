@@ -15,7 +15,8 @@
         (click)="table.exportCSV()"
         class="mr-2"
         pTooltip="CSV"
-        tooltipPosition="bottom">
+        tooltipPosition="bottom"
+        [disabled]="products.length === 0">
       </button>
       <app-excel-export-btn
         [exportData]="exportData"
@@ -66,6 +67,14 @@
             </ng-container>
             <ng-container *ngSwitchCase="'link'">
               <p-button icon="pi pi-external-link" styleClass="p-button-link" (onClick)="navigateToUrl(rowData[col.field])"></p-button>
+            </ng-container>
+            <ng-container *ngSwitchCase="'promo'">
+              <ng-container *ngIf="rowData[col.field]; else noPromoTemplate">
+                <i class="pi pi-check-circle pi-button pi-button-success" style="color: green;"></i>
+              </ng-container>
+              <ng-template #noPromoTemplate>
+                <i class="pi pi-minus-circle" style="color: darkred;"></i>
+              </ng-template>
             </ng-container>
             <ng-container *ngSwitchCase="'priceChange'">
               <span [ngClass]="{'text-success': rowData[col.field] > 0, 'text-danger': rowData[col.field] < 0}">

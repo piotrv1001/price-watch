@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, EventEmitter, OnInit, Output } from "@angular/core";
 import { Seller } from "src/app/models/seller/seller";
 import { ChosenSellerService } from "src/app/services/chosen-seller.service";
 
@@ -10,6 +10,7 @@ import { ChosenSellerService } from "src/app/services/chosen-seller.service";
 export class ChooseSellerComponent implements OnInit {
   sellers: Seller[] = [];
   currentSeller: Seller | null = null;
+  @Output() sellerChange = new EventEmitter<Seller>();
 
   constructor(private chosenSellerService: ChosenSellerService) {}
 
@@ -25,12 +26,17 @@ export class ChooseSellerComponent implements OnInit {
     this.sellers = [
       { id: 1, name: 'SmartLED' },
       { id: 2, name: 'LEDLUX' },
-      { id: 3, name: 'KanluxSA' }
+      { id: 3, name: 'KanluxSA' },
+      { id: 4, name: 'ledhouse_pl' },
     ];
     this.currentSeller = this.sellers[0];
   }
 
   private updateCurrentSeller(): void {
+    if(!this.currentSeller) {
+      return;
+    }
+    this.sellerChange.emit(this.currentSeller);
     if (this.currentSeller?.name) {
       this.chosenSellerService.setCurrentSeller(this.currentSeller.name);
     }

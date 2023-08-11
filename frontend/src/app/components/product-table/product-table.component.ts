@@ -53,6 +53,7 @@ export class ProductTableComponent implements OnInit, OnChanges {
           { header: 'Name', field: 'name', ngStyle: { width: '60%' }, filter: true },
           { header: 'Image', field: 'imgSrc', ngStyle: { width: '15%' }, filter: false },
           { header: 'Price', field: 'currentPrice', ngStyle: { width: '15%' }, filter: false, formatOptions: { suffix: ' zł' } },
+          { header: 'Promo', field: 'promo', ngStyle: { width: '10%' }, filter: false },
           { header: 'Link', field: 'link', ngStyle: { width: '10%' }, filter: false }
         ];
         this.exportData = {
