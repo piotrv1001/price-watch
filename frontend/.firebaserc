@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "allegro-3012a": {
+      "hosting": {
+        "frontend": [
+          "allegro-3012a"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "allegro-3012a"
+  }
+}
