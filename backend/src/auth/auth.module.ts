@@ -6,6 +6,8 @@ import { jwtConstants } from './constants';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { UsersModule } from 'src/user/user.module';
+import * as admin from 'firebase-admin';
+import { readFileSync } from 'fs';
 
 @Module({
   imports: [
@@ -16,7 +18,23 @@ import { UsersModule } from 'src/user/user.module';
       signOptions: { expiresIn: '15m' }, // 15 minutes
     }),
   ],
-  providers: [AuthService, LocalStrategy, JwtStrategy],
+  providers: [
+    AuthService,
+    LocalStrategy,
+    JwtStrategy,
+    {
+      provide: 'FirebaseAdmin',
+      useFactory: async () => {
+        const serviceAccount = JSON.parse(
+          readFileSync('firebase/firebase-admin-sdk.json', 'utf-8'),
+        );
+        admin.initializeApp({
+          credential: admin.credential.cert(serviceAccount),
+        });
+        return admin;
+      },
+    },
+  ],
   exports: [AuthService],
 })
 export class AuthModule {}
