@@ -8,6 +8,8 @@ import { Product } from './product/product.entity';
 import { PriceModule } from './price/price.module';
 import { Price } from './price/price.entity';
 import { ExportModule } from './export/export.module';
+import { AuthModule } from './auth/auth.module';
+import { User } from './user/user.entity';
 
 @Module({
   imports: [
@@ -23,13 +25,14 @@ import { ExportModule } from './export/export.module';
         username: configService.get<string>('DB_USERNAME'),
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_NAME'),
-        entities: [Product, Price],
+        entities: [Product, Price, User],
         synchronize: false,
       }),
     }),
     ProductModule,
     PriceModule,
     ExportModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
