@@ -13,6 +13,8 @@ import { StripPricePipe } from '../pipes/strip-price.pipe';
 import { ExcelExportBtnComponent } from './excel-export-btn/excel-export-btn.component';
 import { DateRangeComponent } from './date-range/date-range.component';
 import { PdfExportBtnComponent } from './pdf-export-btn/pdf-export-btn.component';
+import { ChartExportPngBtnComponent } from './chart-export-png-btn/chart-export-png-btn.component';
+import { DateRangeWithOptionsComponent } from './date-range-with-options/date-range-with-options.component';
 
 // PrimeNG
 import { TableModule } from 'primeng/table';
@@ -23,8 +25,6 @@ import { CalendarModule } from 'primeng/calendar';
 import { TooltipModule } from 'primeng/tooltip';
 import { InputTextModule } from 'primeng/inputtext';
 import { ProgressBarModule } from 'primeng/progressbar';
-import { ChartExportPngBtnComponent } from './chart-export-png-btn/chart-export-png-btn.component';
-import { DateRangeWithOptionsComponent } from './date-range-with-options/date-range-with-options.component';
 
 @NgModule({
   imports: [
