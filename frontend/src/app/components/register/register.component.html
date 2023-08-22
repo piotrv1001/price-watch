@@ -1,0 +1,42 @@
+<div class="px-5 min-h-screen flex justify-content-center align-items-center">
+  <div class="border-1 surface-border surface-card border-round py-7 px-4 md:px-7 z-1">
+    <div class="mb-4">
+      <div class="text-900 text-xl font-bold mb-2">Create new account</div>
+      <span class="text-600 font-medium">Please enter your details</span>
+    </div>
+    <form [formGroup]="formGroup!" (ngSubmit)="register()">
+      <div class="flex flex-column">
+        <span class="p-input-icon-left w-full mb-4">
+          <i class="pi pi-envelope"></i>
+          <input id="email" type="text" pinputtext="" placeholder="Email" class="p-inputtext p-component p-element w-full md:w-25rem" formControlName="email">
+        </span>
+        <span class="p-input-icon-left w-full mb-4">
+          <i class="pi pi-lock"></i>
+          <input id="password" type="password" pinputtext="" placeholder="Password" class="p-inputtext p-component p-element w-full md:w-25rem" formControlName="password">
+        </span>
+        <span class="p-input-icon-left w-full mb-4">
+          <i class="pi pi-lock"></i>
+          <input id="repeatPassword" type="password" pinputtext="" placeholder="Confirm password" class="p-inputtext p-component p-element w-full md:w-25rem" formControlName="repeatPassword">
+        </span>
+        <span class="p-input-icon-left w-full mb-4">
+          <i class="pi pi-lock"></i>
+          <input id="displayName" type="text" pinputtext="" placeholder="Username (optional)" class="p-inputtext p-component p-element w-full md:w-25rem" formControlName="displayName">
+        </span>
+        <button pbutton="" pripple="" label="Create new account" class="p-element w-full p-button p-component mt-4" tabindex="0" [disabled]="!formGroup?.valid || !checkIfPasswordsMatch()" type="submit">
+          <span class="p-button-label">Create new account</span>
+        </button>
+        <div class="flex flex-row justify-content-between align-items-center mt-4">
+          <span class="thin-gray-line"></span>
+          <span class="or-text">or</span>
+          <span class="thin-gray-line"></span>
+        </div>
+        <button type="button" class="google-sign-in-button mt-4 flex align-items-center justify-content-center gap-4" (click)="signInWithGoogle()">
+          <img src="../../../assets/img/Google.png" height="20">Sign in with Google
+        </button>
+        <button pbutton="" pripple="" label="Already have an account? Sign in" class="p-element w-full p-button p-button-link p-component mt-4" tabindex="0" type="button" (click)="loginBtnClicked()">
+          <span class="p-button-label">Already have an account? Sign in</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,1 +1,10 @@
-<router-outlet></router-outlet>
+<ng-container *ngIf="isAuthenticated; else authTemplate">
+  <router-outlet></router-outlet>
+</ng-container>
+<ng-template #authTemplate>
+  <ng-container *ngIf="!createNewAccount; else registerTemplate">
+    <app-login (registerBtnClick)="handleRegisterBtnClick()"></app-login>
+  </ng-container>
+  <ng-template #registerTemplate>
+    <app-register (loginBtnClick)="handleLoginBtnClick()"></app-register>
+</ng-template>
