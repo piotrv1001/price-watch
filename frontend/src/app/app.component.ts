@@ -54,7 +54,9 @@ export class AppComponent implements OnInit, OnDestroy {
           this.isAuthenticated = true;
         },
         error: () => {
-          this.isAuthenticated = false;
+          if(!this.isFirebaseUser) {
+            this.isAuthenticated = false;
+          }
         }
       })
     );

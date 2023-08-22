@@ -15,8 +15,8 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(username: string, pass: string): Promise<any> {
-    const user = await this.userService.getByUsername(username);
+  async validateUser(email: string, pass: string): Promise<any> {
+    const user = await this.userService.getByEmail(email);
     if (user && (await bcrypt.compare(pass, user.password))) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...result } = user;
@@ -52,14 +52,20 @@ export class AuthService {
   async findOrCreateUser(
     decodedToken: admin.auth.DecodedIdToken,
   ): Promise<User> {
-    const { uid, email } = decodedToken;
+    const { uid, email, picture, name } = decodedToken;
     const user = await this.userService.getByUId(uid);
     if (!user) {
       const newUser = new CreateUserDto();
       newUser.u_id = uid;
-      newUser.username = email;
+      newUser.email = email;
+      newUser.profilePic = picture;
+      newUser.displayName = name;
       return await this.userService.create(newUser);
+    } else {
+      user.email = email;
+      user.profilePic = picture;
+      user.displayName = name;
+      return await this.userService.partialUpdate(user);
     }
-    return user;
   }
 }

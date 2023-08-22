@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
 import { Auth, GoogleAuthProvider, signInWithPopup } from '@angular/fire/auth';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription, switchMap } from 'rxjs';
+import { User } from 'src/app/models/user/user';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -35,16 +36,24 @@ export class RegisterComponent implements OnInit, OnDestroy {
     return this.formGroup?.get('repeatPassword')?.value;
   }
 
+  get displayName(): string | null {
+    return this.formGroup?.get('displayName')?.value;
+  }
+
   ngOnInit(): void {
     this.formGroup = this.formBuilder.group({
       email: ['', Validators.required],
       password: ['', Validators.required],
-      repeatPassword: ['', Validators.required]
+      repeatPassword: ['', Validators.required],
+      displayName: [null]
     });
   }
 
   register(): void {
-    const user = { username: this.email, password: this.password };
+    const user: User = { email: this.email, password: this.password };
+    if(this.displayName) {
+      user.displayName = this.displayName;
+    }
     this.subs.push(
       this.authService.register(user).pipe(
         switchMap(() => this.authService.login(user))

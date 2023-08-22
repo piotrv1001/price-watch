@@ -15,7 +15,7 @@ export class UserService {
   async create(createUserDTO: CreateUserDto): Promise<User> {
     const user = new User();
     user.u_id = createUserDTO.u_id;
-    user.username = createUserDTO.username;
+    user.email = createUserDTO.email;
     if (createUserDTO.password == null) {
       user.password = null;
     } else {
@@ -23,16 +23,23 @@ export class UserService {
       const hashedPassword = await bcrypt.hash(createUserDTO.password, salt);
       user.password = hashedPassword;
     }
+    if (createUserDTO.displayName) {
+      user.displayName = createUserDTO.displayName;
+    }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...newUser } = await this.userRepository.save(user);
     return newUser;
   }
 
-  async getByUsername(username: string): Promise<User> {
-    return this.userRepository.findOneBy({ username: username });
+  async getByEmail(email: string): Promise<User> {
+    return this.userRepository.findOneBy({ email: email });
   }
 
   async getByUId(u_id: string): Promise<User> {
     return this.userRepository.findOneBy({ u_id: u_id });
+  }
+
+  async partialUpdate(user: User): Promise<User> {
+    return this.userRepository.save(user);
   }
 }

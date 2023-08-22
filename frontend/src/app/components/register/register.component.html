@@ -18,6 +18,10 @@
           <i class="pi pi-lock"></i>
           <input id="repeatPassword" type="password" pinputtext="" placeholder="Confirm password" class="p-inputtext p-component p-element w-full md:w-25rem" formControlName="repeatPassword">
         </span>
+        <span class="p-input-icon-left w-full mb-4">
+          <i class="pi pi-lock"></i>
+          <input id="displayName" type="text" pinputtext="" placeholder="Username (optional)" class="p-inputtext p-component p-element w-full md:w-25rem" formControlName="displayName">
+        </span>
         <button pbutton="" pripple="" label="Create new account" class="p-element w-full p-button p-component mt-4" tabindex="0" [disabled]="!formGroup?.valid || !checkIfPasswordsMatch()" type="submit">
           <span class="p-button-label">Create new account</span>
         </button>

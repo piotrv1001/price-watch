@@ -2,6 +2,7 @@ import { Component, EventEmitter, OnDestroy, OnInit, Output, inject } from "@ang
 import { Auth, GoogleAuthProvider, signInWithPopup } from "@angular/fire/auth";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Subscription } from "rxjs";
+import { User } from "src/app/models/user/user";
 import { AuthService } from "src/app/services/auth.service";
 
 @Component({
@@ -37,7 +38,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   login(): void {
-    const user = { username: this.email, password: this.password };
+    const user: User = { email: this.email, password: this.password };
     this.subs.push(
       this.authService.login(user).subscribe({
         next: () => {
