@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject } from "@angular/core";
+import { Component, EventEmitter, OnDestroy, OnInit, Output, inject } from "@angular/core";
 import { Auth, GoogleAuthProvider, signInWithPopup } from "@angular/fire/auth";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Subscription } from "rxjs";
@@ -12,9 +12,18 @@ import { AuthService } from "src/app/services/auth.service";
 export class LoginComponent implements OnInit, OnDestroy {
   formGroup?: FormGroup;
   subs: Subscription[] = [];
+  @Output() registerBtnClick: EventEmitter<void> = new EventEmitter<void>();
   private auth: Auth = inject(Auth);
 
   constructor(private formBuilder: FormBuilder, private authService: AuthService) {}
+
+  get email(): string {
+    return this.formGroup?.get('email')?.value;
+  }
+
+  get password(): string {
+    return this.formGroup?.get('password')?.value;
+  }
 
   ngOnInit(): void {
     this.formGroup = this.formBuilder.group({
@@ -27,8 +36,18 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.subs.forEach(sub => sub.unsubscribe());
   }
 
-  onSubmit(): void {
-    console.log(this.formGroup?.value);
+  login(): void {
+    const user = { username: this.email, password: this.password };
+    this.subs.push(
+      this.authService.login(user).subscribe({
+        next: () => {
+          this.authService.authenticate();
+        },
+        error: (error) => {
+          console.log(error);
+        }
+      })
+    );
   }
 
   async signInWithGoogle(): Promise<void> {
@@ -38,16 +57,20 @@ export class LoginComponent implements OnInit, OnDestroy {
       const idToken = await userCredential.user.getIdToken();
       this.subs.push(
         this.authService.verifyFirebaseToken(idToken).subscribe({
-          next: (response) => {
-            this.authService.authenticateSuccess(response);
+          next: () => {
+            this.authService.authenticate();
           },
           error: (error) => {
-            console.log('Error: ', error);
+            console.log(error);
           }
         })
       );
     } catch(error) {
       console.log('Google sign in error: ', error);
     }
+  }
+
+  registerBtnClicked(): void {
+    this.registerBtnClick.emit();
   }
 }

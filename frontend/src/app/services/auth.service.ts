@@ -42,7 +42,7 @@ export class AuthService {
 
   login(userDTO: User): Observable<void> {
     return this.http.post<JwtToken>(`${SERVER_API_URL}/${this.LOGIN_ROUTE}`, userDTO)
-      .pipe(map(response => this.authenticateSuccess(response)));
+      .pipe(map(response => this.saveTokenToLocalStorage(response)));
   }
 
   logout(): Promise<void> {
@@ -52,11 +52,12 @@ export class AuthService {
     });
   }
 
-  verifyFirebaseToken(idToken: string): Observable<JwtToken> {
-    return this.http.post<JwtToken>(`${SERVER_API_URL}/${this.VERIFY_FIREBASE_TOKEN_ROUTE}`, { idToken });
+  verifyFirebaseToken(idToken: string): Observable<void> {
+    return this.http.post<JwtToken>(`${SERVER_API_URL}/${this.VERIFY_FIREBASE_TOKEN_ROUTE}`, { idToken })
+    .pipe(map(response => this.saveTokenToLocalStorage(response)));
   }
 
-  authenticateSuccess(response: JwtToken): void {
+  saveTokenToLocalStorage(response: JwtToken): void {
     const { access_token } = response;
     localStorage.setItem('token', access_token);
   }
