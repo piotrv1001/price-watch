@@ -30,6 +30,7 @@ export class ChooseSellerComponent implements OnInit {
       { id: 4, name: 'ledhouse_pl' },
     ];
     this.currentSeller = this.sellers[0];
+    this.sellerChange.emit(this.currentSeller);
   }
 
   private updateCurrentSeller(): void {
