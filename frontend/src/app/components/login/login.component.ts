@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Subscription } from "rxjs";
 import { User } from "src/app/models/user/user";
 import { AuthService } from "src/app/services/auth.service";
+import { ToastService } from "src/app/services/toast.service";
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,11 @@ export class LoginComponent implements OnInit, OnDestroy {
   @Output() registerBtnClick: EventEmitter<void> = new EventEmitter<void>();
   private auth: Auth = inject(Auth);
 
-  constructor(private formBuilder: FormBuilder, private authService: AuthService) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private authService: AuthService,
+    private toastService: ToastService
+  ) {}
 
   get email(): string {
     return this.formGroup?.get('email')?.value;
@@ -45,7 +50,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.authService.authenticate();
         },
         error: (error) => {
-          console.log(error);
+          this.toastService.handleError(error);
         }
       })
     );
@@ -62,12 +67,12 @@ export class LoginComponent implements OnInit, OnDestroy {
             this.authService.authenticate();
           },
           error: (error) => {
-            console.log(error);
+            this.toastService.handleError(error);
           }
         })
       );
     } catch(error) {
-      console.log('Google sign in error: ', error);
+      this.toastService.errorMessage('Google sign in error');
     }
   }
 

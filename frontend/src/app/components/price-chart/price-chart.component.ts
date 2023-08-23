@@ -2,6 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { PriceService } from 'src/app/services/price.service';
 import { ThemeService } from 'src/app/services/theme.service';
+import { ToastService } from 'src/app/services/toast.service';
 import { HistogramData, HistogramOptions } from 'src/app/types/histogram/histogram';
 import { DateRange, DateRangeType } from 'src/app/utils/date/date-range/date-range';
 import { CustomDateRangeStrategy } from 'src/app/utils/date/date-range/strategy/custom.strategy';
@@ -26,7 +27,8 @@ export class PriceChartComponent implements OnInit, OnDestroy {
 
   constructor(
     private priceService: PriceService,
-    private themeService: ThemeService
+    private themeService: ThemeService,
+    private toastService: ToastService
   ) {
     this.dateRange = new DateRange();
     this.dateRange.setDateRangeStrategy('last-week');
@@ -117,9 +119,14 @@ export class PriceChartComponent implements OnInit, OnDestroy {
 
   private getGrouppedProducts(): void {
     this.subs.push(
-      this.priceService.getPricesByProductIds(this.productIdArray).subscribe((response: Record<string, number[]>) => {
-        this.grouppedProducts = new Map<string, number[]>(Object.entries(response));
-        this.getChartData();
+      this.priceService.getPricesByProductIds(this.productIdArray).subscribe({
+        next: (response: Record<string, number[]>) => {
+          this.grouppedProducts = new Map<string, number[]>(Object.entries(response));
+          this.getChartData();
+        },
+        error: (error) => {
+          this.toastService.handleError(error);
+        }
       })
     );
   }

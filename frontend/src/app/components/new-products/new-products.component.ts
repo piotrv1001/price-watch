@@ -2,6 +2,7 @@ import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from "@
 import { Subscription } from "rxjs";
 import { NewProductDTO } from "src/app/models/dto/new-product.dto";
 import { PriceService } from "src/app/services/price.service";
+import { ToastService } from "src/app/services/toast.service";
 import { DateRange, DateRangeType } from "src/app/utils/date/date-range/date-range";
 import { CustomDateRangeStrategy } from "src/app/utils/date/date-range/strategy/custom.strategy";
 
@@ -20,7 +21,8 @@ export class NewProductsComponent implements OnInit, OnChanges, OnDestroy {
   selectedDropdownOption: DateRangeType | null = null;
 
   constructor(
-    private priceService: PriceService
+    private priceService: PriceService,
+    private toastService: ToastService
   ) {
     this.dateRange = new DateRange();
     this.dateRange.setDateRangeStrategy('last-week');
@@ -70,8 +72,13 @@ export class NewProductsComponent implements OnInit, OnChanges, OnDestroy {
       return;
     }
     this.subs.push(
-      this.priceService.getNewProducts(this.currentSellerName, this.startDate?.toISOString(), this.endDate?.toISOString()).subscribe((products: NewProductDTO[]) => {
-        this.products = products;
+      this.priceService.getNewProducts(this.currentSellerName, this.startDate?.toISOString(), this.endDate?.toISOString()).subscribe({
+        next: (products: NewProductDTO[]) => {
+          this.products = products;
+        },
+        error: (error) => {
+          this.toastService.handleError(error);
+        }
       })
     );
   }

@@ -69,7 +69,7 @@ import { ProgressBarModule } from 'primeng/progressbar';
     PdfExportBtnComponent,
     ChartExportPngBtnComponent,
     DateRangeWithOptionsComponent
-  ],
+  ]
 })
 export class ComponentsModule {
 

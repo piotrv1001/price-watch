@@ -7,6 +7,7 @@ import { ThemeService } from 'src/app/services/theme.service';
 import { Bucket } from 'src/app/types/histogram/bucket';
 import { HistogramData, HistogramOptions } from 'src/app/types/histogram/histogram';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-histogram',
@@ -24,7 +25,8 @@ export class HistogramComponent implements OnInit, OnDestroy {
   constructor(
     private productService: ProductService,
     private chosenSellerService: ChosenSellerService,
-    private themeService: ThemeService
+    private themeService: ThemeService,
+    private toastService: ToastService
   ) {}
 
   ngOnInit() {
@@ -57,10 +59,15 @@ export class HistogramComponent implements OnInit, OnDestroy {
 
   private getPrices(): void {
     this.subs.push(
-      this.productService.getBySeller(this.currentSellerName).subscribe((products) => {
-        this.grouppedProducts = this.groupProducts(products);
-        this.getChartData();
-        this.getChartOptions();
+      this.productService.getBySeller(this.currentSellerName).subscribe({
+        next: (products) => {
+          this.grouppedProducts = this.groupProducts(products);
+          this.getChartData();
+          this.getChartOptions();
+        },
+        error: (error) => {
+          this.toastService.handleError(error);
+        }
       })
     );
   }

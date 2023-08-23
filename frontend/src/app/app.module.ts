@@ -12,6 +12,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { httpInterceptorProviders } from './interceptors';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 @NgModule({
   declarations: [
@@ -24,12 +26,13 @@ import { httpInterceptorProviders } from './interceptors';
     BrowserModule,
     ReactiveFormsModule,
     InputTextModule,
+    ToastModule,
     AppRoutingModule,
     AppLayoutModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
   ],
-  providers: [httpInterceptorProviders],
+  providers: [httpInterceptorProviders, MessageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
