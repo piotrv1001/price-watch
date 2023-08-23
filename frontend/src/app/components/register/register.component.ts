@@ -6,6 +6,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription, switchMap } from 'rxjs';
 import { User } from 'src/app/models/user/user';
 import { AuthService } from 'src/app/services/auth.service';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-register',
@@ -18,7 +19,11 @@ export class RegisterComponent implements OnInit, OnDestroy {
   subs: Subscription[] = [];
   @Output() loginBtnClick: EventEmitter<void> = new EventEmitter<void>();
 
-  constructor(private formBuilder: FormBuilder, private authService: AuthService) { }
+  constructor(
+    private formBuilder: FormBuilder,
+    private authService: AuthService,
+    private toastService: ToastService
+  ) { }
 
   ngOnDestroy(): void {
     this.subs.forEach(sub => sub.unsubscribe());
@@ -62,7 +67,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
           this.authService.authenticate();
         },
         error: (error) => {
-          console.log(error);
+          this.toastService.handleError(error);
         }
       })
     );
@@ -79,12 +84,12 @@ export class RegisterComponent implements OnInit, OnDestroy {
             this.authService.authenticate();
           },
           error: (error) => {
-            console.log(error);
+            this.toastService.handleError(error);
           }
         })
       );
     } catch(error) {
-      console.log('Google sign in error: ', error);
+      this.toastService.errorMessage('Google sign in error');
     }
   }
 

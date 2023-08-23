@@ -3,6 +3,7 @@ import { Component, EventEmitter, Input, OnDestroy, Output } from "@angular/core
 import { Subscription } from "rxjs";
 import { ExportDataDTO } from "src/app/models/dto/export-data.dto";
 import { ExportService } from "src/app/services/export.service";
+import { ToastService } from "src/app/services/toast.service";
 
 @Component({
   selector: 'app-excel-export-btn',
@@ -15,7 +16,10 @@ export class ExcelExportBtnComponent implements OnDestroy {
   @Output() downloadProgressChange: EventEmitter<number> = new EventEmitter<number>();
   subs: Subscription[] = [];
 
-  constructor(private exportService: ExportService) { }
+  constructor(
+    private exportService: ExportService,
+    private toastService: ToastService
+  ) { }
 
   ngOnDestroy(): void {
     this.subs.forEach(sub => sub.unsubscribe());
@@ -51,8 +55,8 @@ export class ExcelExportBtnComponent implements OnDestroy {
               break;
           }
         },
-        error: (err) => {
-          console.error(err);
+        error: (error) => {
+          this.toastService.handleError(error);
         },
       })
     );

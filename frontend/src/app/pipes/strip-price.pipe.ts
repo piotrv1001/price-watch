@@ -1,4 +1,4 @@
-import { StringUtil } from './../utils/string.util';
+import { StringUtil } from '../utils/string/string.util';
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
