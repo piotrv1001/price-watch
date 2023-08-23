@@ -1,0 +1,11 @@
+<div class="grid">
+  <div class="col">
+    <div class="card">
+      <h5>Price buckets</h5>
+      <div class="mt-6">
+        <app-choose-seller (sellerChange)="handleSellerChange($event)"></app-choose-seller>
+      </div>
+      <app-histogram [currentSellerName]="currentSeller?.name"></app-histogram>
+    </div>
+  </div>
+</div>

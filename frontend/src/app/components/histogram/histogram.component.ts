@@ -1,7 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription, of } from 'rxjs';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { ProductWithPrice } from 'src/app/models/product/product-with-price';
-import { ChosenSellerService } from 'src/app/services/chosen-seller.service';
 import { ProductService } from 'src/app/services/product.service';
 import { ThemeService } from 'src/app/services/theme.service';
 import { Bucket } from 'src/app/types/histogram/bucket';
@@ -14,17 +13,16 @@ import { ToastService } from 'src/app/services/toast.service';
   templateUrl: './histogram.component.html',
   styleUrls: ['./histogram.component.scss'],
 })
-export class HistogramComponent implements OnInit, OnDestroy {
+export class HistogramComponent implements OnInit, OnChanges, OnDestroy {
+  @Input() currentSellerName?: string;
   basicData?: HistogramData;
   basicOptions?: HistogramOptions;
   grouppedProducts: number[] = [0, 0, 0, 0];
   subs: Subscription[] = [];
-  currentSellerName = 'SmartLED';
   plugins: any[] = [ChartDataLabels];
 
   constructor(
     private productService: ProductService,
-    private chosenSellerService: ChosenSellerService,
     private themeService: ThemeService,
     private toastService: ToastService
   ) {}
@@ -32,8 +30,13 @@ export class HistogramComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.getChartOptions();
     this.getPrices();
-    this.handleSellerChange();
     this.getThemeChange();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if(changes['currentSellerName']?.currentValue !== changes['currentSellerName']?.previousValue) {
+      this.getPrices();
+    }
   }
 
   ngOnDestroy(): void {
@@ -48,16 +51,10 @@ export class HistogramComponent implements OnInit, OnDestroy {
     );
   }
 
-  handleSellerChange(): void {
-    this.subs.push(
-      this.chosenSellerService.getCurrentSeller().subscribe((sellerName) => {
-        this.currentSellerName = sellerName;
-        this.getPrices();
-      })
-    );
-  }
-
   private getPrices(): void {
+    if(!this.currentSellerName) {
+      return;
+    }
     this.subs.push(
       this.productService.getBySeller(this.currentSellerName).subscribe({
         next: (products) => {
