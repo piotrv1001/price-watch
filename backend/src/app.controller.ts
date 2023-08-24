@@ -28,7 +28,7 @@ export class AppController {
   @UseGuards(JwtAuthGuard)
   @Get('authenticate')
   getProfile(@Request() req) {
-    return req.user;
+    return req.user.userId;
   }
 
   @Post('auth/verify-token')

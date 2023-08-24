@@ -18,6 +18,7 @@ import { AppSidebarComponent } from './app.sidebar.component';
 import { AppLayoutComponent } from './app.layout.component';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { ProfilePictureComponent } from '../components/profile-picture/profile-picture.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { MessageService } from 'primeng/api';
     AppMenuComponent,
     AppSidebarComponent,
     AppLayoutComponent,
+    ProfilePictureComponent
   ],
   imports: [
     BrowserModule,

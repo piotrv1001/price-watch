@@ -1,0 +1,6 @@
+<ng-container *ngIf="profilePic; else bigLetterTemplate">
+  <img class="profile-picture" [src]="profilePic" alt="Profile Picture" />
+</ng-container>
+<ng-template #bigLetterTemplate>
+  <span class="big-letter">{{ bigLetter }}</span>
+</ng-template>
