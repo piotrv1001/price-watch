@@ -1,7 +1,6 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from "@angular/core";
 import { Subscription } from "rxjs";
 import { PriceChangeDTO } from "src/app/models/dto/price-change.dto";
-import { ChosenSellerService } from "src/app/services/chosen-seller.service";
 import { PriceService } from "src/app/services/price.service";
 import { DateRange, DateRangeType } from "src/app/utils/date/date-range/date-range";
 import { CustomDateRangeStrategy } from "src/app/utils/date/date-range/strategy/custom.strategy";
@@ -11,18 +10,17 @@ import { CustomDateRangeStrategy } from "src/app/utils/date/date-range/strategy/
   templateUrl: './price-changes-table.component.html',
   styleUrls: ['./price-changes-table.component.scss']
 })
-export class PriceChangesTableComponent implements OnInit, OnDestroy {
+export class PriceChangesTableComponent implements OnInit, OnChanges, OnDestroy {
+  @Input() currentSellerName?: string;
   products: PriceChangeDTO[] = [];
   subs: Subscription[] = [];
-  currentSellerName = 'SmartLED';
   dateRange: DateRange | null = null;
   startDate?: Date;
   endDate?: Date;
   selectedDropdownOption: DateRangeType | null = null;
 
   constructor(
-    private priceService: PriceService,
-    private chosenSellerService: ChosenSellerService
+    private priceService: PriceService
   ) {
     this.dateRange = new DateRange();
     this.dateRange.setDateRangeStrategy('last-week');
@@ -31,7 +29,12 @@ export class PriceChangesTableComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getPriceChanges();
-    this.handleSellerChange();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if(changes['currentSellerName']?.currentValue !== changes['currentSellerName']?.previousValue) {
+      this.getPriceChanges();
+    }
   }
 
   ngOnDestroy(): void {
@@ -43,15 +46,6 @@ export class PriceChangesTableComponent implements OnInit, OnDestroy {
     this.dateRange?.setDateRangeStrategy(this.selectedDropdownOption);
     this.updateDates();
     this.getPriceChanges();
-  }
-
-  handleSellerChange(): void {
-    this.subs.push(
-      this.chosenSellerService.getCurrentSeller().subscribe((sellerName) => {
-        this.currentSellerName = sellerName;
-        this.getPriceChanges();
-      })
-    );
   }
 
   handleDateChange(type: 'start' | 'end', date: Date): void {
@@ -72,6 +66,9 @@ export class PriceChangesTableComponent implements OnInit, OnDestroy {
   }
 
   private getPriceChanges(): void {
+    if(!this.currentSellerName) {
+      return;
+    }
     this.subs.push(
       this.priceService.getPriceChanges(this.currentSellerName, this.startDate?.toISOString(), this.endDate?.toISOString()).subscribe((products: PriceChangeDTO[]) => {
         this.products = products;

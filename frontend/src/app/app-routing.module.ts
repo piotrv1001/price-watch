@@ -8,7 +8,8 @@ const routes: Routes = [
     children: [
       { path: '', loadChildren: () => import('./pages/dashboard/dashboard.module').then(m => m.DashboardModule) },
       { path: 'new-products', loadChildren: () => import('./pages/new-products-page/new-products-page.module').then(m => m.NewProductsPageModule) },
-      { path: 'price-buckets', loadChildren: () => import('./pages/price-buckets-page/price-buckets-page.module').then(m => m.PriceBucketsPageModule) }
+      { path: 'price-buckets', loadChildren: () => import('./pages/price-buckets-page/price-buckets-page.module').then(m => m.PriceBucketsPageModule) },
+      { path: 'price-changes', loadChildren: () => import('./pages/price-changes-page/price-changes-page.module').then(m => m.PriceChangesPageModule) }
     ]
   }
 ];
