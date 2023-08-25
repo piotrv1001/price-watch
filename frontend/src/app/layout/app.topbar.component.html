@@ -22,7 +22,8 @@
     <button class="p-link layout-topbar-button" (click)="signOut()">
       <i class="pi pi-power-off"></i>
     </button>
-    <span class="ml-3">
+    <p-menu #menu [model]="accountMenuItems" [popup]="true"></p-menu>
+    <span class="ml-3" (click)="menu.toggle($event)">
       <app-profile-picture></app-profile-picture>
     </span>
   </div>

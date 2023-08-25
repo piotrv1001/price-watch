@@ -1,6 +1,11 @@
 <ng-container *ngIf="profilePic; else bigLetterTemplate">
-  <img class="profile-picture" [src]="profilePic" alt="Profile Picture" />
+  <img class="profile-picture"
+    [ngStyle]="{ 'width': picSize + 'px', 'height': picSize + 'px' }" [src]="profilePic"
+    [ngClass]="{'hover-enabled' : hover}"
+    alt="Profile Picture" />
 </ng-container>
 <ng-template #bigLetterTemplate>
-  <span class="big-letter">{{ bigLetter }}</span>
+  <span class="big-letter"
+    [ngStyle]="{ 'width': picSize + 'px', 'height': picSize + 'px', 'font-size': fontSize + 'px' }"
+    [ngClass]="{'hover-enabled' : hover}">{{ bigLetter }}</span>
 </ng-template>

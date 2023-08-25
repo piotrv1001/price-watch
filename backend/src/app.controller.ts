@@ -39,7 +39,7 @@ export class AppController {
       );
       const user = await this.authService.findOrCreateUser(decodedToken);
       const customJwtToken = await this.authService.login(user);
-      return { token: customJwtToken };
+      return customJwtToken;
     } catch (error) {
       console.log(error);
     }
