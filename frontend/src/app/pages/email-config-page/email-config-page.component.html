@@ -1,0 +1,42 @@
+<div class="grid">
+  <div class="col">
+    <div class="card">
+      <h5>Email options</h5>
+      <div class="mt-6">
+        <div class="flex flex-column gap-2 mb-6">
+          <label htmlFor="email">Email for product reports</label>
+          <input pInputText type="text" id="email" [(ngModel)]="email"/>
+        </div>
+        <div class="flex flex-column">
+          <div class="flex flex-row gap-2 mb-3 w-20rem justify-content-between">
+            <span class="text-lg font-bold">New products report</span>
+            <p-inputSwitch [(ngModel)]="newProductReportConfig.enabled"></p-inputSwitch>
+          </div>
+          <div class="flex flex-column gap-2">
+            <label htmlFor="day-of-week" [ngStyle]="{'opacity' : newProductReportConfig.enabled ? '1' : '0.6'}">Day of week</label>
+            <p-dropdown id="day-of-week" [style]="{'width': '20rem'}" [options]="weekDays" [(ngModel)]="newProductReportConfig.dayOfWeek" [disabled]="!newProductReportConfig.enabled"></p-dropdown>
+          </div>
+          <div class="flex flex-column mt-3">
+            <span class="mb-1" [ngStyle]="{'opacity' : newProductReportConfig.enabled ? '1' : '0.6'}">Time</span>
+            <app-hours-minutes id="time" [disabled]="!newProductReportConfig.enabled"></app-hours-minutes>
+          </div>
+          <div class="divider"></div>
+          <div class="flex flex-row gap-2 mb-3 w-20rem justify-content-between">
+            <span class="text-lg font-bold">Price change report</span>
+            <p-inputSwitch [(ngModel)]="priceChangeReportConfig.enabled"></p-inputSwitch>
+          </div>
+          <div class="flex flex-column gap-2">
+            <label htmlFor="day-of-week" [ngStyle]="{'opacity' : priceChangeReportConfig.enabled ? '1' : '0.6'}">Day of week</label>
+            <p-dropdown id="day-of-week" [style]="{'width': '20rem'}" [options]="weekDays" [(ngModel)]="priceChangeReportConfig.dayOfWeek" [disabled]="!priceChangeReportConfig.enabled"></p-dropdown>
+          </div>
+          <div class="flex flex-column mt-3">
+            <span class="mb-1" [ngStyle]="{'opacity' : priceChangeReportConfig.enabled ? '1' : '0.6'}">Time</span>
+            <app-hours-minutes id="time" [disabled]="!priceChangeReportConfig.enabled"></app-hours-minutes>
+          </div>
+      </div>
+      <div class="mt-6">
+        <p-button label="Save changes" [disabled]="!changesMade()"></p-button>
+      </div>
+    </div>
+  </div>
+</div>

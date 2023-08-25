@@ -1,0 +1,41 @@
+<div class="flex flex-row gap-2 align-items-center">
+  <div class="flex flex-column justify-content-center align-items-center">
+    <p-button
+      icon="pi pi-chevron-up"
+      styleClass="p-button-rounded p-button-secondary p-button-text shadow-none"
+      [disabled]="disabled"
+      (mousedown)="onHoursMouseDown($event, true)"
+      (mouseup)="onHoursMouseUp($event)"
+      (click)="changeHours($event, true)">
+    </p-button>
+    <span [ngStyle]="{'opacity' : !disabled ? '1' : '0.6'}" class="text-xl">{{ hours | padStart }}</span>
+    <p-button
+      icon="pi pi-chevron-down"
+      styleClass="p-button-rounded p-button-secondary p-button-text shadow-none"
+      [disabled]="disabled"
+      (mousedown)="onHoursMouseDown($event, false)"
+      (mouseup)="onHoursMouseUp($event)"
+      (click)="changeHours($event, false)">
+    </p-button>
+  </div>
+  <span class="mr-1 ml-1">:</span>
+  <div class="flex flex-column justify-content-center align-items-center">
+    <p-button
+      icon="pi pi-chevron-up"
+      styleClass="p-button-rounded p-button-secondary p-button-text shadow-none"
+      [disabled]="disabled"
+      (mousedown)="onMinutesMouseDown($event, true)"
+      (mouseup)="onMinutesMouseUp($event)"
+      (click)="changeMinutes($event, true)">
+    </p-button>
+    <span [ngStyle]="{'opacity' : !disabled ? '1' : '0.6'}" class="text-xl">{{ minutes | padStart }}</span>
+    <p-button
+      icon="pi pi-chevron-down"
+      styleClass="p-button-rounded p-button-secondary p-button-text shadow-none"
+      [disabled]="disabled"
+      (mousedown)="onMinutesMouseDown($event, false)"
+      (mouseup)="onMinutesMouseUp($event)"
+      (click)="changeMinutes($event, false)">
+    </p-button>
+  </div>
+</div>
