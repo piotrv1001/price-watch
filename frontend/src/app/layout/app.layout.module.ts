@@ -18,6 +18,8 @@ import { AppSidebarComponent } from './app.sidebar.component';
 import { AppLayoutComponent } from './app.layout.component';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { MenuModule } from 'primeng/menu';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -40,7 +42,9 @@ import { MessageService } from 'primeng/api';
     InputSwitchModule,
     RippleModule,
     RouterModule,
-    ToastModule
+    ToastModule,
+    MenuModule,
+    SharedModule
   ],
   exports: [AppLayoutComponent],
   providers: [

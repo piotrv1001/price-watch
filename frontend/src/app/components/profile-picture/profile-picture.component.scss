@@ -1,0 +1,17 @@
+.profile-picture {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.big-letter {
+  border-radius: 50%;
+  background-color: #3498db;
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hover-enabled:hover {
+  cursor: pointer;
+}
