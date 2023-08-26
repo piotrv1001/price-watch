@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth/auth.service';
 import { LocalAuthGuard } from './auth/guards/local-auth.guard';
-import { CombinedAuthGuard } from './auth/guards/combined-auth.guard';
+import { AuthGuard } from './auth/guards/auth.guard';
 
 @Controller()
 export class AppController {
@@ -26,7 +26,7 @@ export class AppController {
     return this.authService.login(req.user);
   }
 
-  @UseGuards(CombinedAuthGuard)
+  @UseGuards(AuthGuard)
   @Get('authenticate')
   authenticate(@Request() req) {
     return req.user;

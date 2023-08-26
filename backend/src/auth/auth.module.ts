@@ -8,14 +8,13 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { UsersModule } from 'src/user/user.module';
 import * as admin from 'firebase-admin';
 import { readFileSync } from 'fs';
-import { CombinedAuthGuard } from './guards/combined-auth.guard';
-import { FirebaseAuthGuard } from './guards/firebase-auth.guard';
 
 @Module({
   imports: [
     UsersModule,
     PassportModule,
     JwtModule.register({
+      global: true,
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '60m' }, // 60 minutes
     }),
@@ -24,8 +23,6 @@ import { FirebaseAuthGuard } from './guards/firebase-auth.guard';
     AuthService,
     LocalStrategy,
     JwtStrategy,
-    FirebaseAuthGuard,
-    CombinedAuthGuard,
     {
       provide: 'FirebaseAdmin',
       useFactory: async () => {
