@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { EmailConfig } from 'src/email-config/email-config.entity';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'user' })
 export class User {
@@ -19,4 +20,7 @@ export class User {
 
   @Column({ nullable: true })
   displayName?: string;
+
+  @OneToOne(() => EmailConfig, { nullable: true })
+  emailConfig?: EmailConfig;
 }

@@ -71,4 +71,8 @@ export class AuthService {
     this.firebaseToken = token;
   }
 
+  removeFirebaseToken(): void {
+    this.firebaseToken = undefined;
+  }
+
 }

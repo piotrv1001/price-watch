@@ -4,6 +4,7 @@ import { Auth, user } from '@angular/fire/auth';
 import { Subscription } from 'rxjs';
 import { AuthService } from './services/auth.service';
 import { SharedService } from './services/shared.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -20,7 +21,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   constructor(
     private authService: AuthService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -45,8 +47,10 @@ export class AppComponent implements OnInit, OnDestroy {
   private async signOut(): Promise<void> {
     if(this.isFirebaseUser) {
       await this.auth.signOut();
+      this.authService.removeFirebaseToken();
     }
     await this.authService.logout();
+    this.router.navigate(['/']);
   }
 
   private validateJWT(): void {
@@ -81,7 +85,9 @@ export class AppComponent implements OnInit, OnDestroy {
         })
       ).subscribe((verificationResult) => {
         this.isFirebaseUser = verificationResult;
-        this.isAuthenticated = verificationResult;
+        if(verificationResult) {
+          this.isAuthenticated = true;
+        }
       })
     );
   }

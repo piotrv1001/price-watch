@@ -10,6 +10,8 @@ import { Price } from './price/price.entity';
 import { ExportModule } from './export/export.module';
 import { AuthModule } from './auth/auth.module';
 import { User } from './user/user.entity';
+import { EmailConfig } from './email-config/email-config.entity';
+import { EmailConfigModule } from './email-config/email-config.module';
 
 @Module({
   imports: [
@@ -25,12 +27,13 @@ import { User } from './user/user.entity';
         username: configService.get<string>('DB_USERNAME'),
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_NAME'),
-        entities: [Product, Price, User],
+        entities: [Product, Price, User, EmailConfig],
         synchronize: false,
       }),
     }),
     ProductModule,
     PriceModule,
+    EmailConfigModule,
     ExportModule,
     AuthModule,
   ],

@@ -9,7 +9,7 @@ export class UserController {
   @UseGuards(AuthGuard)
   @Get('profile')
   async getProfile(@Request() req, @Res() res) {
-    const user = await this.userService.getUser(req.user);
+    const user = await this.userService.getUserFromRequest(req.user);
     if (user == null) {
       res.status(404).send();
     } else {
@@ -27,7 +27,7 @@ export class UserController {
   @UseGuards(AuthGuard)
   @Get('profile-picture')
   async getProfilePicture(@Request() req, @Res() res) {
-    const user = await this.userService.getUser(req.user);
+    const user = await this.userService.getUserFromRequest(req.user);
     if (user == null) {
       res.status(404).send();
     } else {
@@ -39,7 +39,7 @@ export class UserController {
   @UseGuards(AuthGuard)
   @Put('profile')
   async updateProfile(@Request() req, @Res() res) {
-    const user = await this.userService.getUser(req.user);
+    const user = await this.userService.getUserFromRequest(req.user);
     if (user == null) {
       res.status(404).send();
     } else {

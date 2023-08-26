@@ -12,7 +12,7 @@ export class UserService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async getUser(user: any): Promise<User | null> {
+  async getUserFromRequest(user: any): Promise<User | null> {
     const uId = user?.uid;
     if (uId != null) {
       return await this.getByUId(uId);
