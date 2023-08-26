@@ -64,6 +64,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.subs.push(
         this.authService.verifyFirebaseToken(idToken).subscribe({
           next: () => {
+            this.authService.setFirebaseToken(idToken);
             this.authService.authenticate();
           },
           error: (error) => {

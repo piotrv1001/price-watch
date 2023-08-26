@@ -19,7 +19,8 @@ import { ButtonModule } from "primeng/button";
     ProfilePictureComponent,
     InputTextModule,
     ButtonModule,
-    FormsModule
+    FormsModule,
+    CommonModule
   ]
 })
 export class SharedModule {

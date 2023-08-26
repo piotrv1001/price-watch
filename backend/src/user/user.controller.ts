@@ -1,40 +1,62 @@
-import { Controller, Get, UseGuards, Request, Put } from '@nestjs/common';
+import { Controller, Get, UseGuards, Request, Put, Res } from '@nestjs/common';
 import { UserService } from './user.service';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { CombinedAuthGuard } from 'src/auth/guards/combined-auth.guard';
+import { User } from './user.entity';
 
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(CombinedAuthGuard)
   @Get('profile')
-  async getProfile(@Request() req) {
-    const userId = req.user.userId;
+  async getProfile(@Request() req, @Res() res) {
+    const user = await this.getUser(req.user);
+    if (user == null) {
+      res.status(404).send();
+    }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { id, u_id, password, ...user } = await this.userService.getById(
-      userId,
-    );
-    return user;
+    const { id, u_id, password, ...strippedUser } = user;
+    let isGoogleAccount = false;
+    if (u_id != null) {
+      isGoogleAccount = true;
+    }
+    return { ...strippedUser, isGoogleAccount };
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(CombinedAuthGuard)
   @Get('profile-picture')
-  async getProfilePicture(@Request() req) {
-    const userId = req.user.userId;
-    const user = await this.userService.getById(userId);
+  async getProfilePicture(@Request() req, @Res() res) {
+    const user = await this.getUser(req.user);
+    if (user == null) {
+      res.status(404).send();
+    }
     return { profilePic: user.profilePic, email: user.email };
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(CombinedAuthGuard)
   @Put('profile')
-  async updateProfile(@Request() req) {
-    const userId = req.user.userId;
-    const user = await this.userService.getById(userId);
+  async updateProfile(@Request() req, @Res() res) {
+    const user = await this.getUser(req.user);
+    if (user == null) {
+      res.status(404).send();
+    }
     user.displayName = req.body.displayName;
     user.email = req.body.email;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { id, u_id, password, ...updatedUser } =
       await this.userService.partialUpdate(user);
     return updatedUser;
+  }
+
+  private async getUser(user: any): Promise<User | null> {
+    const uId = user?.uid;
+    if (uId != null) {
+      return await this.userService.getByUId(uId);
+    }
+    const id = user?.userId;
+    if (id != null) {
+      return await this.userService.getById(id);
+    }
+    return null;
   }
 }

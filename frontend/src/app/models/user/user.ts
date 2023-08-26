@@ -5,4 +5,5 @@ export class User {
   u_id?: string;
   profilePic?: string;
   displayName?: string;
+  isGoogleAccount?: boolean;
 }

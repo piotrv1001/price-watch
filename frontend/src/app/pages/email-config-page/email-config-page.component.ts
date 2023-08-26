@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { DateUtil } from 'src/app/utils/date/date.util';
 
 interface EmailConfig {
   dayOfWeek: string;
@@ -12,15 +13,7 @@ interface EmailConfig {
   styleUrls: ['./email-config-page.component.scss'],
 })
 export class EmailConfigPageComponent {
-  weekDays: string[] = [
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
-    'Sunday',
-  ];
+  weekDays: string[] = DateUtil.WEEK_DAYS;
   newProductReportConfig: EmailConfig = {
     dayOfWeek: 'Monday',
     enabled: true,

@@ -18,7 +18,7 @@
       (click)="changeHours($event, false)">
     </p-button>
   </div>
-  <span class="mr-1 ml-1">:</span>
+  <span class="mr-1 ml-1 text-xl" [ngStyle]="{'opacity' : !disabled ? '1' : '0.6'}">:</span>
   <div class="flex flex-column justify-content-center align-items-center">
     <p-button
       icon="pi pi-chevron-up"

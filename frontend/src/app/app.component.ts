@@ -69,9 +69,11 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private observeFirebaseUser(): void {
     this.subs.push(
-      this.user$.subscribe(user => {
+      this.user$.subscribe(async (user) => {
+        console.log(user);
         this.isFirebaseUser = user != null;
         if(this.isFirebaseUser) {
+          this.authService.setFirebaseToken(await user?.getIdToken());
           this.isAuthenticated = true;
         }
       })
