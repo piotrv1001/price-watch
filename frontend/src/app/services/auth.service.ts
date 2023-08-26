@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Subject, Observable, map } from "rxjs";
+import { Subject, Observable, map, catchError, of } from "rxjs";
 import { User } from "../models/user/user";
 import { SERVER_API_URL } from "../app.constants";
 
@@ -54,8 +54,12 @@ export class AuthService {
     });
   }
 
-  verifyFirebaseToken(idToken: string): Observable<void> {
-    return this.http.post<void>(`${SERVER_API_URL}/${this.VERIFY_FIREBASE_TOKEN_ROUTE}`, { idToken });
+  verifyFirebaseToken(idToken: string): Observable<boolean> {
+    return this.http.post<void>(`${SERVER_API_URL}/${this.VERIFY_FIREBASE_TOKEN_ROUTE}`, { idToken })
+      .pipe(
+        map(() => true),
+        catchError(() => of(false))
+      );
   }
 
   saveTokenToLocalStorage(response: JwtToken): void {

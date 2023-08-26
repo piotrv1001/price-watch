@@ -1,3 +1,4 @@
+import { from, of, switchMap } from 'rxjs';
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Auth, user } from '@angular/fire/auth';
 import { Subscription } from 'rxjs';
@@ -25,6 +26,7 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.validateJWT();
     this.observeFirebaseUser();
+    this.observeAuth();
     this.observeSignOut();
   }
 
@@ -60,22 +62,26 @@ export class AppComponent implements OnInit, OnDestroy {
         }
       })
     );
-    this.subs.push(
-      this.authService.getAuthObs().subscribe(auth => {
-        this.isAuthenticated = auth;
-      })
-    );
   }
 
   private observeFirebaseUser(): void {
     this.subs.push(
-      this.user$.subscribe(async (user) => {
-        this.isFirebaseUser = user != null;
-        if(this.isFirebaseUser) {
-          const idToken = await user?.getIdToken();
-          this.authService.setFirebaseToken(idToken);
-          this.isAuthenticated = true;
-        }
+      this.user$.pipe(
+        switchMap((user) => {
+          if (user) {
+            return from(user.getIdToken()).pipe(
+              switchMap((idToken) => {
+                this.authService.setFirebaseToken(idToken);
+                return this.authService.verifyFirebaseToken(idToken);
+              })
+            );
+          } else {
+            return of(false);
+          }
+        })
+      ).subscribe((verificationResult) => {
+        this.isFirebaseUser = verificationResult;
+        this.isAuthenticated = verificationResult;
       })
     );
   }
@@ -86,6 +92,14 @@ export class AppComponent implements OnInit, OnDestroy {
         await this.signOut();
         this.isAuthenticated = false;
         this.createNewAccount = false;
+      })
+    );
+  }
+
+  private observeAuth(): void {
+    this.subs.push(
+      this.authService.getAuthObs().subscribe(auth => {
+        this.isAuthenticated = auth;
       })
     );
   }
