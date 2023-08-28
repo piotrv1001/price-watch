@@ -1,4 +1,4 @@
-import { Subscription } from 'rxjs';
+import { Subscription, switchMap } from 'rxjs';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { EmailConfigService } from 'src/app/services/email-config.service';
 import { DateUtil } from 'src/app/utils/date/date.util';
@@ -6,6 +6,7 @@ import { EmailConfig } from 'src/app/models/email-config/email-config';
 import { CreateEmailConfigDTO } from 'src/app/models/dto/create-email-config.dto';
 import { LabelAndValue } from 'src/app/types/common/label-and-value';
 import { ToastService } from 'src/app/services/toast.service';
+import { UserId, UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-email-config-page',
@@ -25,7 +26,8 @@ export class EmailConfigPageComponent implements OnInit, OnDestroy {
 
   constructor(
     private emailConfigService: EmailConfigService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
@@ -120,6 +122,7 @@ export class EmailConfigPageComponent implements OnInit, OnDestroy {
         }
       })
     );
+    this.rescheduleEmail(config);
   }
 
   private updateEmailConfig(config: CreateEmailConfigDTO): void {
@@ -139,6 +142,16 @@ export class EmailConfigPageComponent implements OnInit, OnDestroy {
           this.toastService.handleError(error);
         }
       })
+    );
+    this.rescheduleEmail(config);
+  }
+
+  private rescheduleEmail(config: CreateEmailConfigDTO): void {
+    const reqConfig = {...config, enabled: config.enabled ? 1 : 0};
+    this.subs.push(
+      this.userService.getId().pipe(
+        switchMap((userId: UserId) => this.emailConfigService.rescheduleEmail({...reqConfig, userId: userId.id})
+      )).subscribe()
     );
   }
 }
