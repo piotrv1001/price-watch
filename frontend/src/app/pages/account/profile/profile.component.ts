@@ -16,6 +16,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   username?: string;
   profilePic?: string;
   bigLetter?: string;
+  isGoogleAccount = false;
   subs: Subscription[] = [];
 
   constructor(
@@ -44,7 +45,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.subs.push(
         this.userService.updateProfile({ email: this.email, displayName: this.username }).subscribe({
           next: (user: User) => {
-            this.toastService.successMessage('Success!', 'Profile updated successfully!')
+            this.toastService.successMessage('Success!', 'Profile updated successfully!');
             this.initialEmail = user.email;
             this.initialUsername = user.displayName;
             this.email = this.initialEmail;
@@ -61,6 +62,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   private getInitialData(): void {
     this.subs.push(
       this.userService.getProfile().subscribe(user => {
+        this.isGoogleAccount = user.isGoogleAccount ?? false;
         this.initialEmail = user.email;
         this.initialUsername = user.displayName;
         this.profilePic = user.profilePic;

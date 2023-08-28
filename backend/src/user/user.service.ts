@@ -12,6 +12,18 @@ export class UserService {
     private readonly userRepository: Repository<User>,
   ) {}
 
+  async getUserFromRequest(user: any): Promise<User | null> {
+    const uId = user?.uid;
+    if (uId != null) {
+      return await this.getByUId(uId);
+    }
+    const id = user?.sub;
+    if (id != null) {
+      return await this.getById(id);
+    }
+    return null;
+  }
+
   async create(createUserDTO: CreateUserDto): Promise<User> {
     const user = new User();
     user.u_id = createUserDTO.u_id;

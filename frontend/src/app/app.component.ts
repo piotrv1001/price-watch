@@ -1,8 +1,10 @@
+import { from, of, switchMap } from 'rxjs';
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Auth, user } from '@angular/fire/auth';
 import { Subscription } from 'rxjs';
 import { AuthService } from './services/auth.service';
 import { SharedService } from './services/shared.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -19,12 +21,14 @@ export class AppComponent implements OnInit, OnDestroy {
 
   constructor(
     private authService: AuthService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.validateJWT();
     this.observeFirebaseUser();
+    this.observeAuth();
     this.observeSignOut();
   }
 
@@ -43,8 +47,10 @@ export class AppComponent implements OnInit, OnDestroy {
   private async signOut(): Promise<void> {
     if(this.isFirebaseUser) {
       await this.auth.signOut();
+      this.authService.removeFirebaseToken();
     }
     await this.authService.logout();
+    this.router.navigate(['/']);
   }
 
   private validateJWT(): void {
@@ -60,18 +66,26 @@ export class AppComponent implements OnInit, OnDestroy {
         }
       })
     );
-    this.subs.push(
-      this.authService.getAuthObs().subscribe(auth => {
-        this.isAuthenticated = auth;
-      })
-    );
   }
 
   private observeFirebaseUser(): void {
     this.subs.push(
-      this.user$.subscribe(user => {
-        this.isFirebaseUser = user != null;
-        if(this.isFirebaseUser) {
+      this.user$.pipe(
+        switchMap((user) => {
+          if (user) {
+            return from(user.getIdToken()).pipe(
+              switchMap((idToken) => {
+                this.authService.setFirebaseToken(idToken);
+                return this.authService.verifyFirebaseToken(idToken);
+              })
+            );
+          } else {
+            return of(false);
+          }
+        })
+      ).subscribe((verificationResult) => {
+        this.isFirebaseUser = verificationResult;
+        if(verificationResult) {
           this.isAuthenticated = true;
         }
       })
@@ -84,6 +98,14 @@ export class AppComponent implements OnInit, OnDestroy {
         await this.signOut();
         this.isAuthenticated = false;
         this.createNewAccount = false;
+      })
+    );
+  }
+
+  private observeAuth(): void {
+    this.subs.push(
+      this.authService.getAuthObs().subscribe(auth => {
+        this.isAuthenticated = auth;
       })
     );
   }

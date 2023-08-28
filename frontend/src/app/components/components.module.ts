@@ -15,6 +15,8 @@ import { DateRangeComponent } from './date-range/date-range.component';
 import { PdfExportBtnComponent } from './pdf-export-btn/pdf-export-btn.component';
 import { ChartExportPngBtnComponent } from './chart-export-png-btn/chart-export-png-btn.component';
 import { DateRangeWithOptionsComponent } from './date-range-with-options/date-range-with-options.component';
+import { HoursMinutesComponent } from './hours-minutes/hours-minutes.component';
+
 
 // PrimeNG
 import { TableModule } from 'primeng/table';
@@ -25,6 +27,9 @@ import { CalendarModule } from 'primeng/calendar';
 import { TooltipModule } from 'primeng/tooltip';
 import { InputTextModule } from 'primeng/inputtext';
 import { ProgressBarModule } from 'primeng/progressbar';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { PadStartPipe } from '../pipes/pad-start.pipe';
 
 @NgModule({
   imports: [
@@ -37,7 +42,9 @@ import { ProgressBarModule } from 'primeng/progressbar';
     CalendarModule,
     TooltipModule,
     InputTextModule,
-    ProgressBarModule
+    ProgressBarModule,
+    InputSwitchModule,
+    InputNumberModule
   ],
   declarations: [
     ProductTableComponent,
@@ -51,7 +58,9 @@ import { ProgressBarModule } from 'primeng/progressbar';
     ExcelExportBtnComponent,
     PdfExportBtnComponent,
     ChartExportPngBtnComponent,
-    DateRangeWithOptionsComponent
+    DateRangeWithOptionsComponent,
+    HoursMinutesComponent,
+    PadStartPipe
   ],
   exports: [
     ProductTableComponent,
@@ -68,7 +77,14 @@ import { ProgressBarModule } from 'primeng/progressbar';
     ProgressBarModule,
     PdfExportBtnComponent,
     ChartExportPngBtnComponent,
-    DateRangeWithOptionsComponent
+    DateRangeWithOptionsComponent,
+    InputSwitchModule,
+    DropdownModule,
+    HoursMinutesComponent,
+    InputNumberModule,
+    FormsModule,
+    CommonModule,
+    PadStartPipe
   ]
 })
 export class ComponentsModule {

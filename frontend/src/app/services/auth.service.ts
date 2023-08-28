@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Subject, Observable, map } from "rxjs";
+import { Subject, Observable, map, catchError, of } from "rxjs";
 import { User } from "../models/user/user";
 import { SERVER_API_URL } from "../app.constants";
 
@@ -12,6 +12,8 @@ type JwtPayload = { id: number, username: string };
 })
 export class AuthService {
 
+  private firebaseToken?: string;
+
   constructor(private http: HttpClient) { }
 
   REGISTER_ROUTE = 'register';
@@ -21,7 +23,7 @@ export class AuthService {
   isAuthSubject: Subject<boolean> = new Subject<boolean>();
 
   getToken(): string | null {
-    return localStorage.getItem('token');
+    return this.firebaseToken ?? localStorage.getItem('token');
   }
 
   getAuthObs(): Observable<boolean> {
@@ -52,14 +54,25 @@ export class AuthService {
     });
   }
 
-  verifyFirebaseToken(idToken: string): Observable<void> {
-    return this.http.post<JwtToken>(`${SERVER_API_URL}/${this.VERIFY_FIREBASE_TOKEN_ROUTE}`, { idToken })
-    .pipe(map(response => this.saveTokenToLocalStorage(response)));
+  verifyFirebaseToken(idToken: string): Observable<boolean> {
+    return this.http.post<void>(`${SERVER_API_URL}/${this.VERIFY_FIREBASE_TOKEN_ROUTE}`, { idToken })
+      .pipe(
+        map(() => true),
+        catchError(() => of(false))
+      );
   }
 
   saveTokenToLocalStorage(response: JwtToken): void {
     const { access_token } = response;
     localStorage.setItem('token', access_token);
+  }
+
+  setFirebaseToken(token?: string): void {
+    this.firebaseToken = token;
+  }
+
+  removeFirebaseToken(): void {
+    this.firebaseToken = undefined;
   }
 
 }

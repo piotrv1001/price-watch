@@ -1,40 +1,54 @@
-import { Controller, Get, UseGuards, Request, Put } from '@nestjs/common';
+import { Controller, Get, UseGuards, Request, Put, Res } from '@nestjs/common';
 import { UserService } from './user.service';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { AuthGuard } from 'src/auth/guards/auth.guard';
 
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   @Get('profile')
-  async getProfile(@Request() req) {
-    const userId = req.user.userId;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { id, u_id, password, ...user } = await this.userService.getById(
-      userId,
-    );
-    return user;
+  async getProfile(@Request() req, @Res() res) {
+    const user = await this.userService.getUserFromRequest(req.user);
+    if (user == null) {
+      res.status(404).send();
+    } else {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { id, u_id, password, ...strippedUser } = user;
+      let isGoogleAccount = false;
+      if (u_id != null) {
+        isGoogleAccount = true;
+      }
+      const resJson = { ...strippedUser, isGoogleAccount };
+      res.status(200).json(resJson);
+    }
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   @Get('profile-picture')
-  async getProfilePicture(@Request() req) {
-    const userId = req.user.userId;
-    const user = await this.userService.getById(userId);
-    return { profilePic: user.profilePic, email: user.email };
+  async getProfilePicture(@Request() req, @Res() res) {
+    const user = await this.userService.getUserFromRequest(req.user);
+    if (user == null) {
+      res.status(404).send();
+    } else {
+      const resJson = { profilePic: user.profilePic, email: user.email };
+      res.status(200).json(resJson);
+    }
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   @Put('profile')
-  async updateProfile(@Request() req) {
-    const userId = req.user.userId;
-    const user = await this.userService.getById(userId);
-    user.displayName = req.body.displayName;
-    user.email = req.body.email;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { id, u_id, password, ...updatedUser } =
-      await this.userService.partialUpdate(user);
-    return updatedUser;
+  async updateProfile(@Request() req, @Res() res) {
+    const user = await this.userService.getUserFromRequest(req.user);
+    if (user == null) {
+      res.status(404).send();
+    } else {
+      user.displayName = req.body.displayName;
+      user.email = req.body.email;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { id, u_id, password, ...updatedUser } =
+        await this.userService.partialUpdate(user);
+      res.status(200).json(updatedUser);
+    }
   }
 }

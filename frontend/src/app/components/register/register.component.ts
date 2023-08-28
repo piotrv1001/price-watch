@@ -80,8 +80,13 @@ export class RegisterComponent implements OnInit, OnDestroy {
       const idToken = await userCredential.user.getIdToken();
       this.subs.push(
         this.authService.verifyFirebaseToken(idToken).subscribe({
-          next: () => {
-            this.authService.authenticate();
+          next: (authResult) => {
+            if(authResult) {
+              this.authService.setFirebaseToken(idToken);
+              this.authService.authenticate();
+            } else {
+              this.toastService.errorMessage('Google sign in error');
+            }
           },
           error: (error) => {
             this.toastService.handleError(error);

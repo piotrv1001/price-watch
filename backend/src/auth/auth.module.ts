@@ -14,8 +14,9 @@ import { readFileSync } from 'fs';
     UsersModule,
     PassportModule,
     JwtModule.register({
+      global: true,
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: '15m' }, // 15 minutes
+      signOptions: { expiresIn: '60m' }, // 60 minutes
     }),
   ],
   providers: [

@@ -38,7 +38,13 @@ export class AppMenuComponent implements OnInit {
             routerLink: ['/price-changes']
           }
         ]
-      }
+      },
+      {
+        label: 'Settings',
+        items: [
+          { label: 'Email', icon: 'pi pi-envelope', routerLink: ['/email-config'] }
+        ]
+      },
     ];
   }
 }

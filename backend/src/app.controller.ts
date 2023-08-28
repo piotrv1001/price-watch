@@ -5,10 +5,11 @@ import {
   UseGuards,
   Get,
   Body,
+  Res,
 } from '@nestjs/common';
 import { AuthService } from './auth/auth.service';
 import { LocalAuthGuard } from './auth/guards/local-auth.guard';
-import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { AuthGuard } from './auth/guards/auth.guard';
 
 @Controller()
 export class AppController {
@@ -25,23 +26,22 @@ export class AppController {
     return this.authService.login(req.user);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   @Get('authenticate')
-  getProfile(@Request() req) {
-    return req.user.userId;
+  authenticate(@Request() req) {
+    return req.user;
   }
 
   @Post('auth/verify-token')
-  async verifyToken(@Body() body: { idToken: string }) {
+  async verifyToken(@Body() body: { idToken: string }, @Res() res) {
     try {
       const decodedToken = await this.authService.verifyFirebaseToken(
         body.idToken,
       );
-      const user = await this.authService.findOrCreateUser(decodedToken);
-      const customJwtToken = await this.authService.login(user);
-      return customJwtToken;
+      await this.authService.findOrCreateUser(decodedToken);
+      res.status(200).send();
     } catch (error) {
-      console.log(error);
+      res.status(401).send();
     }
   }
 }
