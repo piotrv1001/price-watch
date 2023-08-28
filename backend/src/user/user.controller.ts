@@ -7,6 +7,17 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @UseGuards(AuthGuard)
+  @Get('id')
+  async getId(@Request() req, @Res() res) {
+    const user = await this.userService.getUserFromRequest(req.user);
+    if (user == null) {
+      return res.status(404).send();
+    } else {
+      return res.status(200).json({ id: user.id });
+    }
+  }
+
+  @UseGuards(AuthGuard)
   @Get('profile')
   async getProfile(@Request() req, @Res() res) {
     const user = await this.userService.getUserFromRequest(req.user);

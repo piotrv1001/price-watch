@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { SERVER_API_URL } from "../app.constants";
+import { SCRAPER_URL, SERVER_API_URL } from "../app.constants";
 import { CreateEmailConfigDTO } from '../models/dto/create-email-config.dto';
 import { EmailConfig } from '../models/email-config/email-config';
 
@@ -11,6 +11,7 @@ import { EmailConfig } from '../models/email-config/email-config';
 export class EmailConfigService {
 
   private emailConfigResourceUrl = `${SERVER_API_URL}/email-config`
+  private emailConfigScraperUrl = `${SCRAPER_URL}/email-config`
 
   constructor(private http: HttpClient) {}
 
@@ -24,5 +25,9 @@ export class EmailConfigService {
 
   update(emailConfig: CreateEmailConfigDTO): Observable<EmailConfig> {
     return this.http.put<EmailConfig>(`${this.emailConfigResourceUrl}`, emailConfig);
+  }
+
+  rescheduleEmail(emailConfig: EmailConfig): Observable<void> {
+    return this.http.put<void>(`${this.emailConfigScraperUrl}`, emailConfig);
   }
 }

@@ -5,6 +5,7 @@ import { HttpClient } from "@angular/common/http";
 import { User } from '../models/user/user';
 
 export interface ProfilePic { profilePic?: string, email: string }
+export interface UserId { id: number }
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,10 @@ export class UserService {
   private profilePictureResourceUrl = `${this.userResourceUrl}/profile-picture`;
 
   constructor(private http: HttpClient) {}
+
+  getId(): Observable<UserId> {
+    return this.http.get<UserId>(`${this.userResourceUrl}/id`);
+  }
 
   getProfile(): Observable<User> {
     return this.http.get<any>(this.profileResourceUrl);

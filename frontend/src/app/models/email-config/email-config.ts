@@ -4,6 +4,6 @@ export class EmailConfig {
   dayOfWeek?: number;
   hour?: number;
   minute?: number;
-  enabled?: boolean;
+  enabled?: boolean | number;
   userId?: number;
 }

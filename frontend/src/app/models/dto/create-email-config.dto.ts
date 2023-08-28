@@ -3,5 +3,5 @@ export class CreateEmailConfigDTO {
   dayOfWeek?: number;
   hour?: number;
   minute?: number;
-  enabled?: boolean;
+  enabled?: boolean | number;
 }
