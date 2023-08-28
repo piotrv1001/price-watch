@@ -60,7 +60,7 @@ export class EmailConfigPageComponent implements OnInit, OnDestroy {
   }
 
   changesMade(): boolean {
-    if(this.enabled === this.initialConfig?.enabled && this.email === this.initialConfig?.email) {
+    if(!this.enabled && !this.initialConfig?.enabled && this.email === this.initialConfig?.email) {
       return false;
     }
     return (
@@ -74,27 +74,31 @@ export class EmailConfigPageComponent implements OnInit, OnDestroy {
 
   private getEmailConfig(): void {
     this.subs.push(
-      this.emailConfigService
-        .getByUserId().subscribe((res: EmailConfig | null) => {
-          if (res) {
-            this.initialConfig = res;
-            this.emptyInitialConfig = false;
-            this.email = res.email ?? '';
-            this.dayOfWeek = res.dayOfWeek ?? 0;
-            this.hour = res.hour ?? 0;
-            this.minute = res.minute ?? 0;
-            this.enabled = res.enabled ?? false;
+      this.emailConfigService.getByUserId().subscribe((res: EmailConfig | null) => {
+        if (res) {
+          this.initialConfig = res;
+          this.emptyInitialConfig = false;
+          this.email = res.email ?? '';
+          this.dayOfWeek = res.dayOfWeek ?? 0;
+          this.hour = res.hour ?? 0;
+          this.minute = res.minute ?? 0;
+          if(typeof res.enabled === 'number') {
+            this.enabled = res.enabled === 1;
           } else {
-            this.emptyInitialConfig = true;
-            this.initialConfig = {
-              email: '',
-              dayOfWeek: 0,
-              hour: 0,
-              minute: 0,
-              enabled: false
-            };
+            this.enabled = res.enabled ?? false;
           }
-        })
+          this.initialConfig.enabled = this.enabled;
+        } else {
+          this.emptyInitialConfig = true;
+          this.initialConfig = {
+            email: '',
+            dayOfWeek: 0,
+            hour: 0,
+            minute: 0,
+            enabled: false
+          };
+        }
+      })
     );
   }
 
@@ -103,6 +107,11 @@ export class EmailConfigPageComponent implements OnInit, OnDestroy {
       this.emailConfigService.create(config).subscribe({
         next: (emailConfig: EmailConfig) => {
           this.initialConfig = emailConfig;
+          if(typeof emailConfig.enabled === 'number') {
+            this.initialConfig.enabled = emailConfig.enabled === 1;
+          } else {
+            this.initialConfig.enabled = emailConfig.enabled ?? false;
+          }
           this.emptyInitialConfig = false;
           this.toastService.successMessage('Success!', 'Email config created successfully');
         },
@@ -117,6 +126,13 @@ export class EmailConfigPageComponent implements OnInit, OnDestroy {
     this.subs.push(
       this.emailConfigService.update(config).subscribe({
         next: () => {
+          this.initialConfig = {
+            email: this.email,
+            dayOfWeek: this.dayOfWeek,
+            hour: this.hour,
+            minute: this.minute,
+            enabled: this.enabled,
+          };
           this.toastService.successMessage('Success!', 'Email config updated successfully');
         },
         error: (error) => {

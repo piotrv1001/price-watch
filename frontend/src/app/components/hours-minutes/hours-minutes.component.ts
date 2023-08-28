@@ -15,12 +15,18 @@ export class HoursMinutesComponent {
   minutesIntervalId?: any;
 
   onHoursMouseDown(event: Event, increment: boolean): void {
+    if(this.disabled) {
+      return;
+    }
     this.hoursIntervalId = setInterval(() => {
       this.changeHours(event, increment);
     }, 150);
   }
 
   onHoursMouseUp(event: Event): void {
+    if(this.disabled) {
+      return;
+    }
     event.preventDefault();
     if(this.hoursIntervalId !== undefined) {
       clearInterval(this.hoursIntervalId);
@@ -28,12 +34,18 @@ export class HoursMinutesComponent {
   }
 
   onMinutesMouseDown(event: Event, increment: boolean): void {
+    if(this.disabled) {
+      return;
+    }
     this.minutesIntervalId = setInterval(() => {
       this.changeMinutes(event, increment);
     }, 150);
   }
 
   onMinutesMouseUp(event: Event): void {
+    if(this.disabled) {
+      return;
+    }
     event.preventDefault();
     if(this.minutesIntervalId !== undefined) {
       clearInterval(this.minutesIntervalId);
@@ -41,6 +53,9 @@ export class HoursMinutesComponent {
   }
 
   changeHours(event: Event, increment: boolean): void {
+    if(this.disabled) {
+      return;
+    }
     event.preventDefault();
     this.hours += increment ? 1 : -1;
     if(this.hours < 0) {
@@ -51,6 +66,9 @@ export class HoursMinutesComponent {
   }
 
   changeMinutes(event: Event, increment: boolean): void {
+    if(this.disabled) {
+      return;
+    }
     event.preventDefault();
     this.minutes += increment ? 1 : -1;
     if(this.minutes < 0) {

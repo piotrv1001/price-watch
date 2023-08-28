@@ -57,8 +57,7 @@ export class EmailConfigController {
       user.id,
     );
     if (!existingEmailConfig) {
-      res.status(404).send();
-      return;
+      return res.status(404).send();
     }
     existingEmailConfig.email = emailConfig.email;
     existingEmailConfig.dayOfWeek = emailConfig.dayOfWeek;
@@ -69,6 +68,6 @@ export class EmailConfigController {
     const { userId, ...updatedConfig } = await this.emailConfigService.update(
       existingEmailConfig,
     );
-    res.status(204).json(updatedConfig);
+    return res.status(204).json(updatedConfig);
   }
 }

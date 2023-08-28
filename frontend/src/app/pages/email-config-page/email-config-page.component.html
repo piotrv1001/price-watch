@@ -20,7 +20,7 @@
           </div>
           <div class="flex flex-column mt-3">
             <span class="mb-1" [ngStyle]="{'opacity' : this.enabled ? '1' : '0.6'}">Time</span>
-            <app-hours-minutes id="time" [disabled]="!this.enabled" (hoursChange)="handleHourChange($event)" (minutesChange)="handleMinuteChange($event)"></app-hours-minutes>
+            <app-hours-minutes [hours]="hour" [minutes]="minute" id="time" [disabled]="!this.enabled" (hoursChange)="handleHourChange($event)" (minutesChange)="handleMinuteChange($event)"></app-hours-minutes>
           </div>
         </div>
         <div class="mt-6">
