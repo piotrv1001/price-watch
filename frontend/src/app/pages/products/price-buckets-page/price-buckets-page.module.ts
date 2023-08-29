@@ -1,12 +1,14 @@
 import { NgModule } from "@angular/core";
-import { ComponentsModule } from "src/app/components/components.module";
-import { PriceBucketsPageRoutingModule } from "./price-buckets-page-routing.module";
+
 import { PriceBucketsPageComponent } from "./price-buckets-page.component";
+
+import { ChooseSellerModule } from "src/app/components/choose-seller/choose-seller.module";
+import { HistogramModule } from "src/app/components/histogram/histogram.module";
 
 @NgModule({
   imports: [
-    ComponentsModule,
-    PriceBucketsPageRoutingModule
+    ChooseSellerModule,
+    HistogramModule
   ],
   declarations: [
     PriceBucketsPageComponent

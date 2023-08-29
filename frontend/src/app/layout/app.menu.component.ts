@@ -25,24 +25,24 @@ export class AppMenuComponent implements OnInit {
           {
             label: 'New Products',
             icon: 'pi pi-shopping-cart',
-            routerLink: ['/new-products']
+            routerLink: ['/products/new-products']
           },
           {
             label: 'Price buckets',
             icon: 'pi pi-chart-pie',
-            routerLink: ['/price-buckets']
+            routerLink: ['/products/price-buckets']
           },
           {
             label: 'Price changes',
             icon: 'pi pi-chart-bar',
-            routerLink: ['/price-changes']
+            routerLink: ['/products/price-changes']
           }
         ]
       },
       {
         label: 'Settings',
         items: [
-          { label: 'Email', icon: 'pi pi-envelope', routerLink: ['/email-config'] }
+          { label: 'Email', icon: 'pi pi-envelope', routerLink: ['/settings/email-config'] }
         ]
       },
     ];
