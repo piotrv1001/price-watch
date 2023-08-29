@@ -12,7 +12,7 @@ export class Price {
   @PrimaryGeneratedColumn()
   id?: number;
 
-  @Column({ nullable: true })
+  @Column('decimal', { precision: 10, scale: 2, nullable: true })
   price?: number;
 
   @Column({ nullable: true, type: 'datetime' })

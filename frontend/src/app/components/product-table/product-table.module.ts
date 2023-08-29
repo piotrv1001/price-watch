@@ -6,6 +6,7 @@ import { TableModule } from 'primeng/table';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { ButtonModule } from "primeng/button";
 import { InputTextModule } from "primeng/inputtext";
+import { TooltipModule } from "primeng/tooltip";
 
 import { ExcelExportBtnModule } from './../excel-export-btn/excel-export-btn.module';
 import { PdfExportBtnModule } from "../pdf-export-btn/pdf-export-btn.module";
@@ -21,7 +22,8 @@ import { PipeModule } from "src/app/pipes/pipe.module";
     ProgressBarModule,
     ButtonModule,
     PdfExportBtnModule,
-    InputTextModule
+    InputTextModule,
+    TooltipModule
   ],
   declarations: [
     ProductTableComponent

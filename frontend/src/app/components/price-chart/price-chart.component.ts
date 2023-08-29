@@ -119,7 +119,7 @@ export class PriceChartComponent implements OnInit, OnDestroy {
 
   private getGrouppedProducts(): void {
     this.subs.push(
-      this.priceService.getPricesByProductIds(this.productIdArray).subscribe({
+      this.priceService.getPricesByProductIds(this.productIdArray, this.startDate?.toISOString(), this.endDate?.toISOString()).subscribe({
         next: (response: Record<string, number[]>) => {
           this.grouppedProducts = new Map<string, number[]>(Object.entries(response));
           this.getChartData();
@@ -146,8 +146,8 @@ export class PriceChartComponent implements OnInit, OnDestroy {
       labels,
       datasets: Array.from(this.grouppedProducts).map((entry: [string, number[]], index: number) => ({
         label: entry[0],
-        // data: entry[1],
-        data: this.getFakeData(labels.length),
+        data: entry[1],
+        // data: this.getFakeData(labels.length),
         fill: false,
         borderColor: documentStyle.getPropertyValue(this.colors[index]),
         tension: 0.4

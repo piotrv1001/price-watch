@@ -76,10 +76,20 @@ export class PriceController {
   }
 
   @Post('by-product-ids')
-  async getPricesByProductIds(@Body() productIds: string[]) {
-    const grouppedPrices = await this.priceService.getPricesByProductIds(
-      productIds,
-    );
+  async getPricesByProductIds(
+    @Body() productIds: string[],
+    @Query('fromDate') fromDate?: string,
+    @Query('toDate') toDate?: string,
+  ) {
+    const { fromDateParsed, toDateParsed } = this.parseDates(fromDate, toDate);
+    const grouppedPrices =
+      fromDate && toDate
+        ? await this.priceService.getPricesByProductIds(productIds)
+        : await this.priceService.getPricesByProductIds(
+            productIds,
+            fromDateParsed,
+            toDateParsed,
+          );
     const response = {};
     grouppedPrices.forEach((prices: number[], productId: string) => {
       response[productId] = prices;

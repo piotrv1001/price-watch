@@ -23,6 +23,11 @@ export class AppMenuComponent implements OnInit {
         label: 'Products',
         items: [
           {
+            label: 'Prices',
+            icon: 'pi pi-chart-line',
+            routerLink: ['/products/prices']
+          },
+          {
             label: 'New Products',
             icon: 'pi pi-shopping-cart',
             routerLink: ['/products/new-products']

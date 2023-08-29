@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import { Price } from './price.entity';
 import { CreatePriceDTO } from './dto/create-price.dto';
 import { PriceChangeDTO } from './dto/price-change.dto';
@@ -46,6 +46,19 @@ export class PriceService {
     return await this.priceRepository.findBy({ productId });
   }
 
+  async findByProductIdAndDates(
+    productId: string,
+    fromDate: Date,
+    toDate: Date,
+  ): Promise<Price[]> {
+    return await this.priceRepository.find({
+      where: {
+        productId: productId,
+        date: Between(fromDate, toDate),
+      },
+    });
+  }
+
   async getNewProducts(
     seller: string,
     fromDate: Date,
@@ -64,10 +77,15 @@ export class PriceService {
 
   async getPricesByProductIds(
     productIds: string[],
+    fromDate?: Date,
+    toDate?: Date,
   ): Promise<Map<string, number[]>> {
     const pricesByProductId = new Map<string, number[]>();
     for (const productId of productIds) {
-      const prices = await this.findByProductId(productId);
+      const prices =
+        fromDate && toDate
+          ? await this.findByProductId(productId)
+          : await this.findByProductIdAndDates(productId, fromDate, toDate);
       pricesByProductId.set(
         productId,
         prices.map((price: Price) => price.price),

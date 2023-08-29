@@ -15,7 +15,10 @@ export class PriceService {
 
   constructor(private http: HttpClient) {}
 
-  getPricesByProductIds(productIds: string[]): Observable<Record<string, number[]>> {
+  getPricesByProductIds(productIds: string[], fromDate?: string, toDate?: string): Observable<Record<string, number[]>> {
+    if(!fromDate || !toDate) {
+      return this.http.post<Record<string, number[]>>(`${this.priceResourceUrl}/by-product-ids?fromDate=${fromDate}&toDate=${toDate}`, productIds);
+    }
     return this.http.post<Record<string, number[]>>(`${this.priceResourceUrl}/by-product-ids`, productIds);
   }
 
