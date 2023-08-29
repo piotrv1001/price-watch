@@ -1,12 +1,14 @@
 import { NgModule } from "@angular/core";
-import { ComponentsModule } from "src/app/components/components.module";
+
 import { NewProductsPageComponent } from "./new-products-page.component";
-import { NewProductsPageRoutingModule } from "./new-products-page-routing.module";
+
+import { ChooseSellerModule } from "src/app/components/choose-seller/choose-seller.module";
+import { NewProductsModule } from "src/app/components/new-products/new-products.module";
 
 @NgModule({
   imports: [
-    ComponentsModule,
-    NewProductsPageRoutingModule
+    ChooseSellerModule,
+    NewProductsModule
   ],
   declarations: [
     NewProductsPageComponent

@@ -5,30 +5,26 @@ import { AppLayoutModule } from './layout/app.layout.module';
 import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
 import { environment } from '../environments/environment';
 import { provideAuth, getAuth } from '@angular/fire/auth';
-import { LoginComponent } from './components/login/login.component';
-import { RegisterComponent } from './components/register/register.component';
-import { InputTextModule } from 'primeng/inputtext';
-import { ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { httpInterceptorProviders } from './interceptors';
-import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { SharedModule } from './shared/shared.module';
+import { LoginModule } from './components/login/login.module';
+import { RegisterModule } from './components/register/register.module';
+import { ToastModule } from 'primeng/toast';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    LoginComponent,
-    RegisterComponent
+    AppComponent
   ],
   imports: [
-    CommonModule,
     BrowserModule,
-    ReactiveFormsModule,
-    InputTextModule,
-    ToastModule,
+    SharedModule,
     AppRoutingModule,
     AppLayoutModule,
+    LoginModule,
+    RegisterModule,
+    ToastModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
   ],

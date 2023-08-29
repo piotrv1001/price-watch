@@ -1,16 +1,30 @@
 import { NgModule } from "@angular/core";
-import { DashboardComponent } from "./dashboard.component";
-import { ComponentsModule } from "src/app/components/components.module";
+
 import { DashboardsRoutingModule } from "./dashboard-routing.module";
+
+import { DashboardComponent } from "./dashboard.component";
+
+import { ChooseSellerModule } from "src/app/components/choose-seller/choose-seller.module";
+import { NewProductsModule } from "src/app/components/new-products/new-products.module";
+import { PriceChangesTableModule } from "src/app/components/price-changes-table/price-changes-table.module";
+import { HistogramModule } from "src/app/components/histogram/histogram.module";
+import { PriceChartModule } from "src/app/components/price-chart/price-chart.module";
 
 @NgModule({
   imports: [
-    ComponentsModule,
-    DashboardsRoutingModule
+    DashboardsRoutingModule,
+    NewProductsModule,
+    ChooseSellerModule,
+    PriceChangesTableModule,
+    HistogramModule,
+    PriceChartModule
   ],
   declarations: [
     DashboardComponent
   ],
+  exports: [
+    DashboardComponent
+  ]
 })
 export class DashboardModule {
 
