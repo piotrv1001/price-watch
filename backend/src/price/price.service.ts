@@ -176,9 +176,11 @@ export class PriceService {
       (item) => item.priceChange !== null && item.priceChange !== 0,
     );
     const priceChangesSorted = filteredPriceChanges.sort((a, b) => {
-      if (a.priceChange === null) return 1;
-      if (b.priceChange === null) return -1;
-      return Math.abs(b.priceChange) - Math.abs(a.priceChange);
+      if (a.priceChangePercentage === null) return 1;
+      if (b.priceChangePercentage === null) return -1;
+      return (
+        Math.abs(b.priceChangePercentage) - Math.abs(a.priceChangePercentage)
+      );
     });
     return returnNewProducts ? newProducts : priceChangesSorted;
   }

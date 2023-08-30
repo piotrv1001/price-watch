@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { PriceService } from 'src/app/services/price.service';
 import { ThemeService } from 'src/app/services/theme.service';
@@ -13,8 +13,8 @@ import { DateUtil } from 'src/app/utils/date/date.util';
   templateUrl: './price-chart.component.html',
   styleUrls: ['./price-chart.component.scss'],
 })
-export class PriceChartComponent implements OnInit, OnDestroy {
-  @Input() productIdArray: string[] = ['10034334650', '10147698713'];
+export class PriceChartComponent implements OnInit, OnChanges, OnDestroy {
+  @Input() productIdArray: string[] = [];
   grouppedProducts: Map<string, number[]> = new Map<string, number[]>();
   colors: string[] = ['--blue-500', '--pink-500', '--green-500', '--yellow-500', '--purple-500', '--red-500'];
   data?: HistogramData;
@@ -39,6 +39,12 @@ export class PriceChartComponent implements OnInit, OnDestroy {
     this.getChartOptions();
     this.getGrouppedProducts();
     this.getThemeChange();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['productIdArray'] && changes['productIdArray'].currentValue) {
+      this.getGrouppedProducts();
+    }
   }
 
   ngOnDestroy(): void {
@@ -131,14 +137,6 @@ export class PriceChartComponent implements OnInit, OnDestroy {
     );
   }
 
-  private getFakeData(length: number): number[] {
-    const data: number[] = [];
-    for (let i = 0; i < length; i++) {
-      data.push(Math.floor(Math.random() * 100));
-    }
-    return data;
-  }
-
   private getChartData(): void {
     const documentStyle = getComputedStyle(document.documentElement);
     const labels = this.dateRange?.getChartLabels() ?? DateUtil.WEEK_DAYS;
@@ -147,7 +145,6 @@ export class PriceChartComponent implements OnInit, OnDestroy {
       datasets: Array.from(this.grouppedProducts).map((entry: [string, number[]], index: number) => ({
         label: entry[0],
         data: entry[1],
-        // data: this.getFakeData(labels.length),
         fill: false,
         borderColor: documentStyle.getPropertyValue(this.colors[index]),
         tension: 0.4

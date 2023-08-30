@@ -3,8 +3,9 @@
     <div class="card">
       <h5>Prices</h5>
       <div class="mt-6">
-        <app-price-chart [productIdArray]="productIdArray"></app-price-chart>
+        <app-product-multiselect (selectedProductsChange)="updateProductIdArray($event)"></app-product-multiselect>
       </div>
+      <app-price-chart [productIdArray]="productIdArray"></app-price-chart>
     </div>
   </div>
 </div>

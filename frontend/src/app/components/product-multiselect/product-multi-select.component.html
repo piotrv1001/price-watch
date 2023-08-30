@@ -1,0 +1,22 @@
+<div *ngIf="showLabel" class="mb-1">Choose products (5 max)</div>
+<p-multiSelect
+  [style]="{'minWidth':'800px'}"
+  [options]="products"
+  [(ngModel)]="selectedProducts"
+  (onChange)="handleProductChange($event)"
+  optionLabel="name"
+  optionValue="id"
+  [virtualScroll]="true"
+  [filter]="true"
+  [virtualScrollItemSize]="43"
+  scrollHeight="400px"
+  [maxSelectedLabels]="1"
+  selectedItemsLabel="Selected {0} products"
+  [selectionLimit]="5">
+  <ng-template let-product pTemplate="item">
+    <div class="flex align-items-center ml-3">
+      <img [src]="product.imgSrc" alt="Product image" height="36" width="36">
+      <div class="ml-3">{{product.name}}</div>
+    </div>
+  </ng-template>
+</p-multiSelect>

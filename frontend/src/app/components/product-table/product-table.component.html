@@ -70,10 +70,10 @@
             </ng-container>
             <ng-container *ngSwitchCase="'promo'">
               <ng-container *ngIf="rowData[col.field]; else noPromoTemplate">
-                <i class="pi pi-check-circle pi-button pi-button-success" style="color: green;"></i>
+                <i class="pi pi-check-circle pi-button pi-button-success" style="color: #28a745;"></i>
               </ng-container>
               <ng-template #noPromoTemplate>
-                <i class="pi pi-minus-circle" style="color: darkred;"></i>
+                <i class="pi pi-minus-circle" style="color: #dc3545;"></i>
               </ng-template>
             </ng-container>
             <ng-container *ngSwitchCase="'priceChange'">

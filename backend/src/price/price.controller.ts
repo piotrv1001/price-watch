@@ -106,7 +106,7 @@ export class PriceController {
     if (toDate) {
       toDateParsed = new Date(toDate);
     }
-    let fromDateParsed = new Date(today.getTime() - 8 * 24 * 60 * 60 * 1000);
+    let fromDateParsed = new Date(today.getTime() - 8 * 24 * 60 * 60 * 1000); // 8 days ago
     if (fromDate) {
       fromDateParsed = new Date(fromDate);
     }

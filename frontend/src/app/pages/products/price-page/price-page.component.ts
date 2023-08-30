@@ -6,5 +6,9 @@ import { Component } from "@angular/core";
   styleUrls: ['./price-page.component.scss']
 })
 export class PricePageComponent {
-  productIdArray: string[] = ['13152132106', '14123071988', '6174571693'];
+  productIdArray: string[] = [];
+
+  updateProductIdArray(event: string[]): void {
+    this.productIdArray = event;
+  }
 }
