@@ -11,7 +11,7 @@ import { ProductService } from "src/app/services/product.service";
 })
 export class ProductMultiSelectComponent implements OnInit, OnDestroy {
   @Input() showLabel = true;
-  @Output() selectedProductsChange = new EventEmitter<string[]>();
+  @Output() selectedProductsChange = new EventEmitter<Product[]>();
   products: Product[] = [];
   selectedProducts: Product[] = [];
   subs: Subscription[] = [];

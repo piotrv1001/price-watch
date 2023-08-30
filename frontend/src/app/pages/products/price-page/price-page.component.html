@@ -5,6 +5,9 @@
       <div class="mt-6">
         <app-product-multiselect (selectedProductsChange)="updateProductIdArray($event)"></app-product-multiselect>
       </div>
+      <div class="mt-6">
+        <app-price-legend [priceLegendArray]="priceLegendArray"></app-price-legend>
+      </div>
       <app-price-chart [productIdArray]="productIdArray"></app-price-chart>
     </div>
   </div>

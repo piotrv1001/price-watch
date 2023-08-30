@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { PRICE_CHART_COLORS } from 'src/app/app.constants';
 import { PriceService } from 'src/app/services/price.service';
 import { ThemeService } from 'src/app/services/theme.service';
 import { ToastService } from 'src/app/services/toast.service';
@@ -16,7 +17,6 @@ import { DateUtil } from 'src/app/utils/date/date.util';
 export class PriceChartComponent implements OnInit, OnChanges, OnDestroy {
   @Input() productIdArray: string[] = [];
   grouppedProducts: Map<string, number[]> = new Map<string, number[]>();
-  colors: string[] = ['--blue-500', '--pink-500', '--green-500', '--yellow-500', '--purple-500', '--red-500'];
   data?: HistogramData;
   options?: HistogramOptions;
   subs: Subscription[] = [];
@@ -143,10 +143,10 @@ export class PriceChartComponent implements OnInit, OnChanges, OnDestroy {
     this.data = {
       labels,
       datasets: Array.from(this.grouppedProducts).map((entry: [string, number[]], index: number) => ({
-        label: entry[0],
+        label: `Product ${index + 1}`,
         data: entry[1],
         fill: false,
-        borderColor: documentStyle.getPropertyValue(this.colors[index]),
+        borderColor: documentStyle.getPropertyValue(PRICE_CHART_COLORS[index]),
         tension: 0.4
       }))
     };

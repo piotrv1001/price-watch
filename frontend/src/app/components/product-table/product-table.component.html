@@ -63,7 +63,7 @@
         <ng-template #noPrice>
           <ng-container [ngSwitch]="col.field">
             <ng-container *ngSwitchCase="'imgSrc'">
-              <img [src]="rowData[col.field]" alt="Product image" width="80" height="60" class="shadow-4 pd-4">
+              <img [src]="rowData[col.field]" alt="Product image" width="80" height="60" class="shadow-4 pd-4 border-round">
             </ng-container>
             <ng-container *ngSwitchCase="'link'">
               <p-button icon="pi pi-external-link" styleClass="p-button-link" (onClick)="navigateToUrl(rowData[col.field])"></p-button>
