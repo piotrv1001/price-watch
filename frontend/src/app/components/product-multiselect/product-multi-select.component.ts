@@ -1,3 +1,4 @@
+import { PriceChartService } from './../../services/price-chart.service';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
 import { MultiSelectChangeEvent } from "primeng/multiselect";
 import { Subscription } from "rxjs";
@@ -16,10 +17,19 @@ export class ProductMultiSelectComponent implements OnInit, OnDestroy {
   selectedProducts: Product[] = [];
   subs: Subscription[] = [];
 
-  constructor(private productService: ProductService) {}
+  constructor(
+    private productService: ProductService,
+    private priceChartService: PriceChartService
+  ) {}
 
   ngOnInit(): void {
     this.getAllProducts();
+    this.subs.push(
+      this.priceChartService.getProductRemovedIndex().subscribe((index: number) => {
+        this.selectedProducts.splice(index, 1);
+        this.selectedProducts = [...this.selectedProducts];
+      })
+    );
   }
 
   ngOnDestroy(): void {

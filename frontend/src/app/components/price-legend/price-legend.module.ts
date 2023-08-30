@@ -2,11 +2,14 @@ import { NgModule } from '@angular/core';
 
 import { PriceLegendComponent } from './price-legend.component';
 
+import { ButtonModule } from 'primeng/button';
+
 import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   imports: [
-    SharedModule
+    SharedModule,
+    ButtonModule
   ],
   declarations: [
     PriceLegendComponent

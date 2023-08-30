@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { PRICE_CHART_COLORS } from 'src/app/app.constants';
+import { PRICE_CHART_COLORS, PRICE_CHART_COLORS_TRANSPARENT } from 'src/app/app.constants';
 import { PriceService } from 'src/app/services/price.service';
 import { ThemeService } from 'src/app/services/theme.service';
 import { ToastService } from 'src/app/services/toast.service';
@@ -147,6 +147,10 @@ export class PriceChartComponent implements OnInit, OnChanges, OnDestroy {
         data: entry[1],
         fill: false,
         borderColor: documentStyle.getPropertyValue(PRICE_CHART_COLORS[index]),
+        backgroundColor: documentStyle.getPropertyValue(PRICE_CHART_COLORS_TRANSPARENT[index]),
+        pointStyle: 'circle',
+        pointRadius: 10,
+        pointHoverRadius: 15,
         tension: 0.4
       }))
     };

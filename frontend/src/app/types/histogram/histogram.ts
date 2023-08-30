@@ -6,11 +6,14 @@ export interface HistogramData {
 export interface HistogramDataset {
   label?: string;
   data: number[];
-  backgroundColor?: string[];
+  backgroundColor?: string[] | string;
   hoverBackgroundColor?: string[];
   borderColor?: string | string[];
   borderWidth?: number;
   borderRadius?: number;
+  pointStyle?: string,
+  pointRadius?: number,
+  pointHoverRadius?: number,
 }
 
 export interface LegendLabels {

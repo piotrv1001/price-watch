@@ -1,9 +1,20 @@
 <div class="flex flex-column gap-4 ml-1">
-  <div *ngFor="let legend of priceLegendArray" class="flex flex-column gap-2">
-    <div class="flex gap-2 align-items-center">
-      <div class="w-2rem h-2rem border-round" [ngStyle]="{ 'background-color' : legend.color }"></div>
-      <div class="font-bold">Product {{ legend.index }}</div>
+  <div
+    @legendItemAnim
+    *ngFor="let legend of priceLegendArray; let i = index"
+    class="flex flex-row justify-content-between align-items-center"
+    style="width: 800px;">
+    <div class="flex flex-column gap-2">
+      <div class="flex gap-2 align-items-center">
+        <div class="w-2rem h-2rem border-round" [ngStyle]="{ 'background-color' : legend.color }"></div>
+        <div class="font-bold">Product {{ legend.index }}</div>
+      </div>
+      <div>{{ legend.productName }}</div>
     </div>
-    <div>{{ legend.productName }}</div>
+    <p-button
+      icon="pi pi-times"
+      styleClass="p-button-rounded p-button-secondary p-button-text p-button-raised"
+      (onClick)="removeItem(i)">
+    </p-button>
   </div>
 </div>
