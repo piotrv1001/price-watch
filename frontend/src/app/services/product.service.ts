@@ -15,6 +15,10 @@ export class ProductService {
 
   constructor(private http: HttpClient) {}
 
+  getAllProducts(): Observable<Product[]> {
+    return this.http.get<Product[]>(`${this.productResourceUrl}`);
+  }
+
   getBySeller(seller: string): Observable<ProductWithPrice[]> {
     return this.http.get<Product[]>(`${this.productResourceUrl}/seller/${seller}`)
     .pipe(

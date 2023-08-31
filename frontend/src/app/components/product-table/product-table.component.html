@@ -63,17 +63,20 @@
         <ng-template #noPrice>
           <ng-container [ngSwitch]="col.field">
             <ng-container *ngSwitchCase="'imgSrc'">
-              <img [src]="rowData[col.field]" alt="Product image" width="80" height="60" class="shadow-4 pd-4">
+              <img [src]="rowData[col.field]" alt="Product image" width="80" height="60" class="shadow-4 pd-4 border-round">
             </ng-container>
             <ng-container *ngSwitchCase="'link'">
-              <p-button icon="pi pi-external-link" styleClass="p-button-link" (onClick)="navigateToUrl(rowData[col.field])"></p-button>
+              <p-button icon="pi pi-external-link" styleClass="p-button-rounded p-button-info p-button-text" (onClick)="navigateToUrl(rowData[col.field])"></p-button>
+            </ng-container>
+            <ng-container *ngSwitchCase="'chart'">
+              <p-button icon="pi pi-chart-line" styleClass="p-button-rounded p-button-help p-button-text" (onClick)="handleChartBtnClick(rowData)"></p-button>
             </ng-container>
             <ng-container *ngSwitchCase="'promo'">
               <ng-container *ngIf="rowData[col.field]; else noPromoTemplate">
-                <i class="pi pi-check-circle pi-button pi-button-success" style="color: green;"></i>
+                <i class="pi pi-check-circle pi-button pi-button-success" style="color: #28a745;"></i>
               </ng-container>
               <ng-template #noPromoTemplate>
-                <i class="pi pi-minus-circle" style="color: darkred;"></i>
+                <i class="pi pi-minus-circle" style="color: #dc3545;"></i>
               </ng-template>
             </ng-container>
             <ng-container *ngSwitchCase="'priceChange'">

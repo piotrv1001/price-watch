@@ -6,11 +6,7 @@
     </div>
     <div class="card">
       <h5>New products</h5>
-      <app-new-products [currentSellerName]="currentSeller?.name"></app-new-products>
-    </div>
-    <div class="card">
-      <h5>Price changes</h5>
-      <app-price-changes-table></app-price-changes-table>
+      <app-new-products [currentSellerName]="currentSeller?.name" [paginatorRows]="10"></app-new-products>
     </div>
   </div>
   <div class="col-12 xl:col-6 p-3">
@@ -21,8 +17,8 @@
       <app-histogram [currentSellerName]="currentSeller?.name"></app-histogram>
     </div>
     <div class="card">
-      <h5>Price chart</h5>
-      <app-price-chart></app-price-chart>
+      <h5>Price changes</h5>
+      <app-price-changes-table [currentSellerName]="currentSeller?.name"></app-price-changes-table>
     </div>
   </div>
 </div>

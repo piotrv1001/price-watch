@@ -12,6 +12,7 @@ import { PriceService } from './price.service';
 import { Price } from './price.entity';
 import { NewProductDTO } from './dto/new-product.dto';
 import { PriceChangeDTO } from './dto/price-change.dto';
+import { CreatePriceDTO } from './dto/create-price.dto';
 
 @Controller('prices')
 export class PriceController {
@@ -76,12 +77,22 @@ export class PriceController {
   }
 
   @Post('by-product-ids')
-  async getPricesByProductIds(@Body() productIds: string[]) {
-    const grouppedPrices = await this.priceService.getPricesByProductIds(
-      productIds,
-    );
+  async getPricesByProductIds(
+    @Body() productIds: string[],
+    @Query('fromDate') fromDate?: string,
+    @Query('toDate') toDate?: string,
+  ) {
+    const { fromDateParsed, toDateParsed } = this.parseDates(fromDate, toDate);
+    const grouppedPrices =
+      fromDate && toDate
+        ? await this.priceService.getPricesByProductIds(
+            productIds,
+            fromDateParsed,
+            toDateParsed,
+          )
+        : await this.priceService.getPricesByProductIds(productIds);
     const response = {};
-    grouppedPrices.forEach((prices: number[], productId: string) => {
+    grouppedPrices.forEach((prices: CreatePriceDTO[], productId: string) => {
       response[productId] = prices;
     });
     return response;
@@ -96,7 +107,7 @@ export class PriceController {
     if (toDate) {
       toDateParsed = new Date(toDate);
     }
-    let fromDateParsed = new Date(today.getTime() - 8 * 24 * 60 * 60 * 1000);
+    let fromDateParsed = new Date(today.getTime() - 8 * 24 * 60 * 60 * 1000); // 8 days ago
     if (fromDate) {
       fromDateParsed = new Date(fromDate);
     }

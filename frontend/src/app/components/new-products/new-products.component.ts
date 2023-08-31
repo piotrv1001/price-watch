@@ -13,6 +13,7 @@ import { CustomDateRangeStrategy } from "src/app/utils/date/date-range/strategy/
 })
 export class NewProductsComponent implements OnInit, OnChanges, OnDestroy {
   @Input() currentSellerName?: string;
+  @Input() paginatorRows = 5;
   products: NewProductDTO[] = [];
   subs: Subscription[] = [];
   dateRange: DateRange | null = null;

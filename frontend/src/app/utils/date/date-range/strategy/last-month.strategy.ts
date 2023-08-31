@@ -1,4 +1,3 @@
-import { DateUtil } from "../../date.util";
 import { DateRangeStrategy } from "./date-range.strategy";
 
 export class LastMonthStrategy implements DateRangeStrategy {
@@ -10,9 +9,5 @@ export class LastMonthStrategy implements DateRangeStrategy {
 
   getEndDate(): Date {
     return new Date();
-  }
-
-  getChartLabels(): string[] {
-    return DateUtil.WEEKS;
   }
 }

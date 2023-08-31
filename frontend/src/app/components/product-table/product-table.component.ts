@@ -1,4 +1,5 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Router } from '@angular/router';
 import { CustomTemplate } from 'src/app/models/dto/column.dto';
 import { ExportDataDTO } from 'src/app/models/dto/export-data.dto';
 import { Product } from 'src/app/models/product/product';
@@ -19,6 +20,8 @@ export class ProductTableComponent implements OnInit, OnChanges {
   columns: TableColumn[] = [];
   exportData: ExportDataDTO | null = null;
   downloadProgress = -1;
+
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
     this.columns = this.getColumns();
@@ -41,6 +44,10 @@ export class ProductTableComponent implements OnInit, OnChanges {
     }
   }
 
+  handleChartBtnClick(product: Product): void {
+    this.router.navigate(['/products/prices'], { state: { product: product } });
+  }
+
   getFilterFields(): string[] {
     return this.columns.filter(column => column.filter).map(column => column.field);
   }
@@ -50,11 +57,12 @@ export class ProductTableComponent implements OnInit, OnChanges {
     switch(this.type) {
       case 'new-products':
         columns = [
-          { header: 'Name', field: 'name', ngStyle: { width: '60%' }, filter: true },
+          { header: 'Name', field: 'name', ngStyle: { width: '50%' }, filter: true },
           { header: 'Image', field: 'imgSrc', ngStyle: { width: '15%' }, filter: false },
           { header: 'Price', field: 'currentPrice', ngStyle: { width: '15%' }, filter: false, formatOptions: { suffix: ' zł' } },
           { header: 'Promo', field: 'promo', ngStyle: { width: '10%' }, filter: false },
-          { header: 'Link', field: 'link', ngStyle: { width: '10%' }, filter: false }
+          { header: 'Link', field: 'link', ngStyle: { width: '10%' }, filter: false },
+          { header: 'Chart', field: 'chart', ngStyle: { width: '10%' }, filter: false },
         ];
         this.exportData = {
           title: 'New products',
@@ -71,10 +79,11 @@ export class ProductTableComponent implements OnInit, OnChanges {
         columns = [
           { header: 'Name', field: 'name', ngStyle: { width: '35%' }, filter: true },
           { header: 'Image', field: 'imgSrc', ngStyle: { width: '15%' }, filter: false },
-          { header: 'Old price', field: 'prevPrice', ngStyle: { width: '15%' }, filter: false },
-          { header: 'Current price', field: 'currentPrice', ngStyle: { width: '15%' }, filter: false },
-          { header: '+/- [%]', field: 'priceChangePercentage', ngStyle: { width: '15%' }, filter: false },
-          { header: 'Link', field: 'link', ngStyle: { width: '5%' }, filter: false }
+          { header: 'Old price', field: 'prevPrice', ngStyle: { width: '10%' }, filter: false },
+          { header: 'Current price', field: 'currentPrice', ngStyle: { width: '10%' }, filter: false },
+          { header: '+/- [%]', field: 'priceChangePercentage', ngStyle: { width: '10%' }, filter: false },
+          { header: 'Link', field: 'link', ngStyle: { width: '10%' }, filter: false },
+          { header: 'Chart', field: 'chart', ngStyle: { width: '10%' }, filter: false }
         ];
         this.exportData = {
           title: 'Price changes',

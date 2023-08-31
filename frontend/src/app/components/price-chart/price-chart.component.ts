@@ -1,10 +1,29 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
+import {
+  PRICE_CHART_COLORS,
+  PRICE_CHART_COLORS_TRANSPARENT,
+} from 'src/app/app.constants';
+import { CreatePriceDTO } from 'src/app/models/dto/create-price.dto';
+import { PriceChartService } from 'src/app/services/price-chart.service';
 import { PriceService } from 'src/app/services/price.service';
 import { ThemeService } from 'src/app/services/theme.service';
 import { ToastService } from 'src/app/services/toast.service';
-import { HistogramData, HistogramOptions } from 'src/app/types/histogram/histogram';
-import { DateRange, DateRangeType } from 'src/app/utils/date/date-range/date-range';
+import {
+  HistogramData,
+  HistogramOptions,
+} from 'src/app/types/histogram/histogram';
+import {
+  DateRange,
+  DateRangeType,
+} from 'src/app/utils/date/date-range/date-range';
 import { CustomDateRangeStrategy } from 'src/app/utils/date/date-range/strategy/custom.strategy';
 import { DateUtil } from 'src/app/utils/date/date.util';
 
@@ -13,10 +32,12 @@ import { DateUtil } from 'src/app/utils/date/date.util';
   templateUrl: './price-chart.component.html',
   styleUrls: ['./price-chart.component.scss'],
 })
-export class PriceChartComponent implements OnInit, OnDestroy {
-  @Input() productIdArray: string[] = ['10034334650', '10147698713'];
-  grouppedProducts: Map<string, number[]> = new Map<string, number[]>();
-  colors: string[] = ['--blue-500', '--pink-500', '--green-500', '--yellow-500', '--purple-500', '--red-500'];
+export class PriceChartComponent implements OnInit, OnChanges, OnDestroy {
+  @Input() productIdArray: string[] = [];
+  grouppedProducts: Map<string, CreatePriceDTO[]> = new Map<
+    string,
+    CreatePriceDTO[]
+  >();
   data?: HistogramData;
   options?: HistogramOptions;
   subs: Subscription[] = [];
@@ -24,11 +45,13 @@ export class PriceChartComponent implements OnInit, OnDestroy {
   startDate?: Date;
   endDate?: Date;
   selectedDropdownOption: DateRangeType | null = null;
+  labels: string[] = [];
 
   constructor(
     private priceService: PriceService,
     private themeService: ThemeService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private priceChartService: PriceChartService
   ) {
     this.dateRange = new DateRange();
     this.dateRange.setDateRangeStrategy('last-week');
@@ -39,6 +62,20 @@ export class PriceChartComponent implements OnInit, OnDestroy {
     this.getChartOptions();
     this.getGrouppedProducts();
     this.getThemeChange();
+    this.subs.push(
+      this.priceChartService.getProductRemovedIndex().subscribe((index: number) => {
+        const removedProductId = this.productIdArray[index];
+        this.productIdArray.splice(index, 1);
+        this.grouppedProducts.delete(removedProductId);
+        this.getChartData();
+      })
+    )
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['productIdArray'] && changes['productIdArray'].currentValue) {
+      this.getGrouppedProducts();
+    }
   }
 
   ngOnDestroy(): void {
@@ -63,7 +100,10 @@ export class PriceChartComponent implements OnInit, OnDestroy {
   handleStartDateChange(startDate: Date): void {
     this.startDate = startDate;
     this.dateRange?.setDateRangeStrategy('custom');
-    if(this.dateRange?.dateRangeStrategy instanceof CustomDateRangeStrategy && startDate) {
+    if (
+      this.dateRange?.dateRangeStrategy instanceof CustomDateRangeStrategy &&
+      startDate
+    ) {
       this.dateRange.dateRangeStrategy.setStartDate(startDate);
       this.getGrouppedProducts();
     }
@@ -72,7 +112,10 @@ export class PriceChartComponent implements OnInit, OnDestroy {
   handleEndDateChange(endDate: Date): void {
     this.endDate = endDate;
     this.dateRange?.setDateRangeStrategy('custom');
-    if(this.dateRange?.dateRangeStrategy instanceof CustomDateRangeStrategy && endDate) {
+    if (
+      this.dateRange?.dateRangeStrategy instanceof CustomDateRangeStrategy &&
+      endDate
+    ) {
       this.dateRange.dateRangeStrategy.setEndDate(endDate);
       this.getGrouppedProducts();
     }
@@ -81,7 +124,9 @@ export class PriceChartComponent implements OnInit, OnDestroy {
   private getChartOptions(): void {
     const documentStyle = getComputedStyle(document.documentElement);
     const textColor = documentStyle.getPropertyValue('--text-color');
-    const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
+    const textColorSecondary = documentStyle.getPropertyValue(
+      '--text-color-secondary'
+    );
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
     this.options = {
@@ -97,6 +142,14 @@ export class PriceChartComponent implements OnInit, OnDestroy {
       scales: {
         x: {
           ticks: {
+            callback: (value: any, index: number) => {
+              const maxLabels = 7;
+              const div = Math.floor(this.labels.length / (maxLabels + 1));
+              if(index % (div + 1) === 0) {
+                return this.labels[index];
+              }
+              return '';
+            },
             color: textColorSecondary,
           },
           grid: {
@@ -118,40 +171,55 @@ export class PriceChartComponent implements OnInit, OnDestroy {
   }
 
   private getGrouppedProducts(): void {
-    this.subs.push(
-      this.priceService.getPricesByProductIds(this.productIdArray).subscribe({
-        next: (response: Record<string, number[]>) => {
-          this.grouppedProducts = new Map<string, number[]>(Object.entries(response));
-          this.getChartData();
-        },
-        error: (error) => {
-          this.toastService.handleError(error);
-        }
-      })
-    );
-  }
-
-  private getFakeData(length: number): number[] {
-    const data: number[] = [];
-    for (let i = 0; i < length; i++) {
-      data.push(Math.floor(Math.random() * 100));
+    if (this.productIdArray.length === 0) {
+      this.grouppedProducts = new Map<string, CreatePriceDTO[]>();
+      this.getChartData();
+      return;
     }
-    return data;
+    this.subs.push(
+      this.priceService
+        .getPricesByProductIds(
+          this.productIdArray,
+          this.startDate?.toISOString(),
+          this.endDate?.toISOString()
+        )
+        .subscribe({
+          next: (response: Record<string, CreatePriceDTO[]>) => {
+            this.grouppedProducts = new Map<string, CreatePriceDTO[]>(
+              Object.entries(response)
+            );
+            this.getChartData();
+          },
+          error: (error) => {
+            this.toastService.handleError(error);
+          },
+        })
+    );
   }
 
   private getChartData(): void {
     const documentStyle = getComputedStyle(document.documentElement);
-    const labels = this.dateRange?.getChartLabels() ?? DateUtil.WEEK_DAYS;
+    const labels = DateUtil.getLabels(this.startDate, this.endDate);
+    this.labels = labels;
     this.data = {
       labels,
-      datasets: Array.from(this.grouppedProducts).map((entry: [string, number[]], index: number) => ({
-        label: entry[0],
-        // data: entry[1],
-        data: this.getFakeData(labels.length),
-        fill: false,
-        borderColor: documentStyle.getPropertyValue(this.colors[index]),
-        tension: 0.4
-      }))
+      datasets: Array.from(this.grouppedProducts).map(
+        (entry: [string, CreatePriceDTO[]], index: number) => ({
+          label: `Product ${index + 1}`,
+          data: entry[1].map((price: CreatePriceDTO) => price.price!),
+          fill: false,
+          borderColor: documentStyle.getPropertyValue(
+            PRICE_CHART_COLORS[index]
+          ),
+          backgroundColor: documentStyle.getPropertyValue(
+            PRICE_CHART_COLORS_TRANSPARENT[index]
+          ),
+          pointStyle: 'circle',
+          pointRadius: 10,
+          pointHoverRadius: 15,
+          tension: 0.4,
+        })
+      ),
     };
   }
 
