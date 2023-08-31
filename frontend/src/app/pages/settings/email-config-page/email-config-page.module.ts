@@ -9,6 +9,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { InputTextModule } from 'primeng/inputtext';
 
 import { HoursMinutesModule } from 'src/app/components/hours-minutes/hours-minutes.module';
+import { SpinnerModule } from 'src/app/components/spinner/spinner.module';
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import { HoursMinutesModule } from 'src/app/components/hours-minutes/hours-minut
     InputSwitchModule,
     ButtonModule,
     HoursMinutesModule,
-    InputTextModule
+    InputTextModule,
+    SpinnerModule
   ],
   declarations: [
     EmailConfigPageComponent

@@ -10,6 +10,7 @@ import { DateRangeType } from "src/app/utils/date/date-range/date-range";
 export class DateRangeWithOptionsComponent implements OnInit {
   @Input() startDate?: Date;
   @Input() endDate?: Date;
+  @Input() disabled = false;
   dateRangeDropdownOptions: DateRangeDropdownOption[] = [];
   selectedDropdownOption: DateRangeType | null = null;
   @Output() startDateChange: EventEmitter<Date> = new EventEmitter<Date>();

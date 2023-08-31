@@ -1,5 +1,6 @@
 <div class="flex align-items-center">
   <p-calendar
+    [disabled]="disabled"
     [(ngModel)]="startDate"
     (onSelect)="handleStartDateChange($event)"
     [dateFormat]="dateFormat"
@@ -8,6 +9,7 @@
   </p-calendar>
   <span class="m-2">-</span>
   <p-calendar
+    [disabled]="disabled"
     [(ngModel)]="endDate"
     (onSelect)="handleEndDateChange($event)"
     [dateFormat]="dateFormat"

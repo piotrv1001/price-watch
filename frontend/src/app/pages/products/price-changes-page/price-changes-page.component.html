@@ -1,12 +1,31 @@
+<ng-container *ngIf="loading">
+  <app-spinner></app-spinner>
+</ng-container>
 <div class="grid">
   <div class="col">
     <div class="card">
       <h5>Price changes</h5>
-      <div class="mt-6">
-        <app-choose-seller (sellerChange)="handleSellerChange($event)"></app-choose-seller>
+      <div class="mt-6 mb-6 flex flex-row justify-content-between align-items-center">
+        <app-choose-seller (sellerChange)="handleSellerChange($event)" [disabled]="loading"></app-choose-seller>
+        <app-date-range-with-options
+          [disabled]="loading"
+          [startDate]="startDate"
+          [endDate]="endDate"
+          (startDateChange)="handleDateChange('start', $event)"
+          (endDateChange)="handleDateChange('end', $event)"
+          (dateRangeDropdownOptionChange)="handleDropdownChange($event)">
+        </app-date-range-with-options>
       </div>
-      <app-price-changes-table [currentSellerName]="currentSeller?.name"></app-price-changes-table>
+      <ng-container *ngIf="!loading">
+        <div class="scalein animation-duration-200 animation-iteration-1">
+          <app-product-table
+            [products]="products"
+            [type]="'price-changes'"
+            [showPaginator]="true"
+            [paginatorRows]="5">
+          </app-product-table>
+        </div>
+      </ng-container>
     </div>
   </div>
 </div>
-

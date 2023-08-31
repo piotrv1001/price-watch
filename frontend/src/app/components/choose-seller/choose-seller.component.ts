@@ -9,6 +9,7 @@ import { ChosenSellerService } from "src/app/services/chosen-seller.service";
 })
 export class ChooseSellerComponent implements OnInit {
   @Input() showLabel = true;
+  @Input() disabled = false;
   sellers: Seller[] = [];
   currentSeller: Seller | null = null;
   @Output() sellerChange = new EventEmitter<Seller>();
@@ -31,7 +32,6 @@ export class ChooseSellerComponent implements OnInit {
       { id: 4, name: 'ledhouse_pl' },
     ];
     this.currentSeller = this.sellers[0];
-    this.sellerChange.emit(this.currentSeller);
   }
 
   private updateCurrentSeller(): void {

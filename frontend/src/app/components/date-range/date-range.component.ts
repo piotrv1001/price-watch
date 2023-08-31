@@ -8,6 +8,7 @@ import { Component, EventEmitter, Input, Output } from "@angular/core";
 export class DateRangeComponent {
   @Input() startDate?: Date;
   @Input() endDate?: Date;
+  @Input() disabled = false;
   @Output() startDateChange: EventEmitter<Date> = new EventEmitter<Date>();
   @Output() endDateChange: EventEmitter<Date> = new EventEmitter<Date>();
   dateFormat = 'd MM yy';

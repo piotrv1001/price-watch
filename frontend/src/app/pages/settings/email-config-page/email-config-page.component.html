@@ -1,31 +1,38 @@
+<ng-container *ngIf="loading">
+  <app-spinner></app-spinner>
+</ng-container>
 <div class="grid">
   <div class="col">
     <div class="card">
       <h5>Email options</h5>
       <div class="mt-6">
-        <div class="flex flex-column gap-2 mb-6">
-          <label htmlFor="email">Email for product reports</label>
-          <input pInputText type="text" id="email" [(ngModel)]="email" />
-        </div>
-        <div class="flex flex-column">
-          <div class="flex flex-row gap-2 mb-3 w-20rem justify-content-between">
-            <span class="text-lg font-bold">Enable product reports</span>
-            <p-inputSwitch [(ngModel)]="this.enabled"></p-inputSwitch>
+        <ng-container *ngIf="!loading">
+          <div class="scalein animation-duration-200 animation-iteration-1">
+            <div class="flex flex-column gap-2 mb-6">
+              <label htmlFor="email">Email for product reports</label>
+              <input pInputText type="text" id="email" [(ngModel)]="email" />
+            </div>
+            <div class="flex flex-column">
+              <div class="flex flex-row gap-2 mb-3 w-20rem justify-content-between">
+                <span class="text-lg font-bold">Enable product reports</span>
+                <p-inputSwitch [(ngModel)]="this.enabled"></p-inputSwitch>
+              </div>
+              <div class="divider"></div>
+              <div class="flex flex-column gap-2">
+                <label htmlFor="day-of-week" [ngStyle]="{'opacity' : this.enabled ? '1' : '0.6'}">Day of week</label>
+                <p-dropdown id="day-of-week" [style]="{'width': '20rem'}" [options]="weekDays" [(ngModel)]="this.dayOfWeek"
+                  [disabled]="!this.enabled" [optionLabel]="'label'" [optionValue]="'value'"></p-dropdown>
+              </div>
+              <div class="flex flex-column mt-3">
+                <span class="mb-1" [ngStyle]="{'opacity' : this.enabled ? '1' : '0.6'}">Time</span>
+                <app-hours-minutes [hours]="hour" [minutes]="minute" id="time" [disabled]="!this.enabled" (hoursChange)="handleHourChange($event)" (minutesChange)="handleMinuteChange($event)"></app-hours-minutes>
+              </div>
+            </div>
+            <div class="mt-6">
+              <p-button label="Save changes" [disabled]="!changesMade()" (onClick)="saveChanges()"></p-button>
+            </div>
           </div>
-          <div class="divider"></div>
-          <div class="flex flex-column gap-2">
-            <label htmlFor="day-of-week" [ngStyle]="{'opacity' : this.enabled ? '1' : '0.6'}">Day of week</label>
-            <p-dropdown id="day-of-week" [style]="{'width': '20rem'}" [options]="weekDays" [(ngModel)]="this.dayOfWeek"
-              [disabled]="!this.enabled" [optionLabel]="'label'" [optionValue]="'value'"></p-dropdown>
-          </div>
-          <div class="flex flex-column mt-3">
-            <span class="mb-1" [ngStyle]="{'opacity' : this.enabled ? '1' : '0.6'}">Time</span>
-            <app-hours-minutes [hours]="hour" [minutes]="minute" id="time" [disabled]="!this.enabled" (hoursChange)="handleHourChange($event)" (minutesChange)="handleMinuteChange($event)"></app-hours-minutes>
-          </div>
-        </div>
-        <div class="mt-6">
-          <p-button label="Save changes" [disabled]="!changesMade()" (onClick)="saveChanges()"></p-button>
-        </div>
+        </ng-container>
       </div>
     </div>
   </div>
