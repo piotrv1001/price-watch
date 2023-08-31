@@ -1,4 +1,5 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { AfterViewInit, Component, OnDestroy, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
 import { Subscription } from "rxjs";
 import { PRICE_CHART_COLORS } from "src/app/app.constants";
 import { Product } from "src/app/models/product/product";
@@ -14,10 +15,24 @@ export class PricePageComponent implements OnInit, OnDestroy {
   productIdArray: string[] = [];
   priceLegendArray: PriceLegend[] = [];
   subs: Subscription[] = [];
+  productFromNav?: any;
 
   constructor(
-    private priceChartService: PriceChartService
-  ) {}
+    private priceChartService: PriceChartService,
+    private router: Router
+  ) {
+    const product = this.router.getCurrentNavigation()?.extras.state?.["product"];
+    if(product) {
+      const productId = product.productId;
+      this.productIdArray.push(productId);
+      this.productFromNav = product;
+      this.priceLegendArray.push({
+        index: 1,
+        productName: product.name!,
+        color: `var(${PRICE_CHART_COLORS[0]})`
+      })
+    }
+  }
 
   ngOnInit(): void {
     this.subs.push(
@@ -26,10 +41,15 @@ export class PricePageComponent implements OnInit, OnDestroy {
         this.priceLegendArray = this.priceLegendArray.map((legend: PriceLegend, idx: number) => {
           return {...legend, index: idx + 1, color: `var(${PRICE_CHART_COLORS[idx]})`};
         });
-        this.productIdArray.splice(index, 1);
-        this.productIdArray = [...this.productIdArray];
       })
     );
+    this.subs.push(
+      this.priceChartService.getProductsInitialized().subscribe(() => {
+        if(this.productFromNav) {
+          this.priceChartService.setNewProduct(this.productFromNav);
+        }
+      })
+    )
   }
 
   ngOnDestroy(): void {

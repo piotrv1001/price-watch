@@ -27,7 +27,7 @@ export class ChooseSellerComponent implements OnInit {
     this.sellers = [
       { id: 1, name: 'SmartLED' },
       { id: 2, name: 'LEDLUX' },
-      { id: 3, name: 'KanluxSA' },
+      { id: 3, name: 'ELE24' },
       { id: 4, name: 'ledhouse_pl' },
     ];
     this.currentSeller = this.sellers[0];

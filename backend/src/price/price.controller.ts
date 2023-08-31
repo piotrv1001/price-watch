@@ -12,6 +12,7 @@ import { PriceService } from './price.service';
 import { Price } from './price.entity';
 import { NewProductDTO } from './dto/new-product.dto';
 import { PriceChangeDTO } from './dto/price-change.dto';
+import { CreatePriceDTO } from './dto/create-price.dto';
 
 @Controller('prices')
 export class PriceController {
@@ -84,14 +85,14 @@ export class PriceController {
     const { fromDateParsed, toDateParsed } = this.parseDates(fromDate, toDate);
     const grouppedPrices =
       fromDate && toDate
-        ? await this.priceService.getPricesByProductIds(productIds)
-        : await this.priceService.getPricesByProductIds(
+        ? await this.priceService.getPricesByProductIds(
             productIds,
             fromDateParsed,
             toDateParsed,
-          );
+          )
+        : await this.priceService.getPricesByProductIds(productIds);
     const response = {};
-    grouppedPrices.forEach((prices: number[], productId: string) => {
+    grouppedPrices.forEach((prices: CreatePriceDTO[], productId: string) => {
       response[productId] = prices;
     });
     return response;

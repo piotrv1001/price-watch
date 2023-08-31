@@ -1,4 +1,3 @@
-import { DateUtil } from "../date.util";
 import { CustomDateRangeStrategy } from "./strategy/custom.strategy";
 import { DateRangeStrategy } from "./strategy/date-range.strategy";
 import { LastMonthStrategy } from "./strategy/last-month.strategy";
@@ -41,12 +40,5 @@ export class DateRange {
       return this.dateRangeStrategy.getEndDate();
     }
     return new Date();
-  }
-
-  getChartLabels(): string[] {
-    if (this.dateRangeStrategy) {
-      return this.dateRangeStrategy.getChartLabels();
-    }
-    return DateUtil.WEEK_DAYS;
   }
 }

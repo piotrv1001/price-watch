@@ -30,6 +30,15 @@ export class ProductMultiSelectComponent implements OnInit, OnDestroy {
         this.selectedProducts = [...this.selectedProducts];
       })
     );
+    this.subs.push(
+      this.priceChartService.getNewProduct().subscribe((product: any) => {
+        const productExists = this.products.find((p: Product) => p.id === product.productId);
+        if(productExists) {
+          this.selectedProducts.push(productExists);
+          this.selectedProducts = [...this.selectedProducts];
+        }
+      })
+    )
   }
 
   ngOnDestroy(): void {
@@ -44,6 +53,7 @@ export class ProductMultiSelectComponent implements OnInit, OnDestroy {
     this.subs.push(
       this.productService.getAllProducts().subscribe((products: Product[]) => {
         this.products = products;
+        this.priceChartService.setProductsInitialized();
       })
     );
   }

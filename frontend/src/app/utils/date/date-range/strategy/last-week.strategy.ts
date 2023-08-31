@@ -11,8 +11,4 @@ export class LastWeekStrategy implements DateRangeStrategy {
   getEndDate(): Date {
     return new Date();
   }
-
-  getChartLabels(): string[] {
-    return DateUtil.WEEK_DAYS;
-  }
 }

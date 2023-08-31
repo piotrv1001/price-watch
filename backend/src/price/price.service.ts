@@ -56,6 +56,9 @@ export class PriceService {
         productId: productId,
         date: Between(fromDate, toDate),
       },
+      order: {
+        date: 'ASC',
+      },
     });
   }
 
@@ -79,17 +82,26 @@ export class PriceService {
     productIds: string[],
     fromDate?: Date,
     toDate?: Date,
-  ): Promise<Map<string, number[]>> {
-    const pricesByProductId = new Map<string, number[]>();
+  ): Promise<Map<string, CreatePriceDTO[]>> {
+    const pricesByProductId = new Map<string, CreatePriceDTO[]>();
     for (const productId of productIds) {
       const prices =
         fromDate && toDate
-          ? await this.findByProductId(productId)
-          : await this.findByProductIdAndDates(productId, fromDate, toDate);
-      pricesByProductId.set(
-        productId,
-        prices.map((price: Price) => price.price),
+          ? await this.findByProductIdAndDates(productId, fromDate, toDate)
+          : await this.findByProductId(productId);
+      const mappedPrices = prices.map((price: Price) => {
+        return {
+          productId: price.productId,
+          date: price.date,
+          price: price.price,
+        };
+      });
+      const filledPrices = this.fillMissingDates(
+        fromDate,
+        toDate,
+        mappedPrices,
       );
+      pricesByProductId.set(productId, filledPrices);
     }
     return pricesByProductId;
   }
@@ -183,5 +195,46 @@ export class PriceService {
       );
     });
     return returnNewProducts ? newProducts : priceChangesSorted;
+  }
+
+  private fillMissingDates(
+    startDate: Date,
+    endDate: Date,
+    data: CreatePriceDTO[],
+  ): CreatePriceDTO[] {
+    if (data.length === 0) {
+      return [];
+    }
+    const filledData: CreatePriceDTO[] = [];
+    const maxDate = data.reduce(
+      (maxDate, item) => (item.date > maxDate ? item.date : maxDate),
+      data[0].date,
+    );
+    const currentDate = new Date(startDate);
+    const lastDate = new Date(endDate);
+    const dataMap = new Map<string, CreatePriceDTO>();
+    data.forEach((item) =>
+      dataMap.set(item.date.toISOString().substring(0, 10), item),
+    );
+    let prevPrice: number | undefined = undefined;
+    while (currentDate <= lastDate) {
+      const dateString = currentDate.toISOString().substring(0, 10);
+      const existingData = dataMap.get(dateString);
+      if (existingData) {
+        filledData.push(existingData);
+        prevPrice = existingData.price;
+      } else {
+        if (currentDate > maxDate) {
+          prevPrice = undefined;
+        }
+        filledData.push({
+          price: prevPrice,
+          date: new Date(currentDate),
+          productId: data[0].productId,
+        });
+      }
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+    return filledData;
   }
 }
