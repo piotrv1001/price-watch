@@ -10,9 +10,53 @@
       </div>
     </div>
   </div>
+  <ng-container *ngIf="!loading && logo">
+    <div class="col-12 xl:col-6 p-3 flex justify-content-center align-items-center fadeinright animation-duration-200 animation-iteration-1">
+      <img [src]="'../../../assets/img/' + logo" alt="Logo" width="300">
+    </div>
+  </ng-container>
 </div>
 <ng-container *ngIf="!loading">
   <div class="grid scalein animation-duration-200 animation-iteration-1">
+    <div class="col-12 p-3">
+      <div class="card">
+        <h5>Price buckets</h5>
+        <div class="grid">
+          <div class="col-12 xl:col-6">
+            <div class="flex justify-content-end mt-6 mb-6">
+              <app-chart-export-png-btn
+                [chartComponent]="barChart"
+                [filename]="'price_buckets'">
+              </app-chart-export-png-btn>
+            </div>
+            <p-chart
+              #barChart
+              type="bar"
+              [data]="barData"
+              [options]="barOptions"
+              [plugins]="plugins"
+              height="400px">
+            </p-chart>
+          </div>
+          <div class="col-12 xl:col-6">
+            <div class="flex justify-content-end mt-6 mb-6">
+              <app-chart-export-png-btn
+                [chartComponent]="doughnutChart"
+                [filename]="'price_buckets'">
+              </app-chart-export-png-btn>
+            </div>
+            <p-chart
+              #doughnutChart
+              type="doughnut"
+              [data]="doughnutData"
+              [options]="doughnutOptions"
+              [plugins]="plugins"
+              height="400px">
+            </p-chart>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="col-12 xl:col-6 p-3">
       <div class="card">
         <h5>New products</h5>
@@ -28,28 +72,11 @@
     </div>
     <div class="col-12 xl:col-6 p-3">
       <div class="card">
-        <h5>Price buckets</h5>
-        <div class="flex justify-content-end mt-6 mb-6">
-          <app-chart-export-png-btn
-            [chartComponent]="chart"
-            [filename]="'price_buckets'">
-          </app-chart-export-png-btn>
-        </div>
-        <p-chart
-          #chart
-          type="bar"
-          [data]="basicData"
-          [options]="basicOptions"
-          [plugins]="plugins"
-          height="600">
-        </p-chart>
-      </div>
-      <div class="card">
         <h5>Price changes</h5>
         <div class="mt-6">
           <app-product-table
             [products]="priceChanges"
-            [type]="'price-changes'"
+            [type]="'price-changes-min'"
             [showPaginator]="true"
             [paginatorRows]="5">
           </app-product-table>

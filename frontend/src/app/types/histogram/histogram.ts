@@ -22,7 +22,9 @@ export interface LegendLabels {
 
 export interface Plugins {
   legend: {
-    labels: LegendLabels;
+    display?: boolean;
+    position?: string;
+    labels?: LegendLabels;
   };
   datalabels?: any
 }

@@ -24,11 +24,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
   loading = false;
   startDate?: Date;
   endDate?: Date;
-  basicData?: HistogramData;
-  basicOptions?: HistogramOptions;
+  barData?: HistogramData;
+  barOptions?: HistogramOptions;
+  doughnutData?: HistogramData;
+  doughnutOptions?: HistogramOptions;
   plugins: any[] = [ChartDataLabels];
   grouppedProducts: number[] = [0, 0, 0, 0];
   subs: Subscription[] = [];
+  logo?: string;
+  darkTheme = false;
 
   constructor(
     private priceService: PriceService,
@@ -50,18 +54,28 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   getThemeChange(): void {
     this.subs.push(
-      this.themeService.getTheme().subscribe(() => {
+      this.themeService.getTheme().subscribe((darkTheme) => {
+        this.darkTheme = darkTheme;
         this.getChartOptions();
+        this.logo = this.darkTheme ? this.currentSeller?.logoDarkTheme : this.currentSeller?.logoLightTheme;
       })
     );
   }
 
   handleSellerChange(seller: Seller): void {
     this.currentSeller = seller;
+    this.logo = this.darkTheme ? this.currentSeller?.logoDarkTheme : this.currentSeller?.logoLightTheme;
+    this.getData();
   }
 
   private init(): void {
-    this.currentSeller = { id: 1, name: 'SmartLED' };
+    this.currentSeller = {
+      id: 1,
+      name: 'SmartLED',
+      logoLightTheme: 'smart_led_logo_light_theme.png',
+      logoDarkTheme: 'smart_led_logo_dark_theme.png',
+    },
+    this.logo = this.currentSeller?.logoLightTheme;
     this.startDate = new Date();
     this.startDate.setDate(this.startDate.getDate() - 14);
     this.endDate = new Date();
@@ -137,7 +151,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     ];
     const borderColors = bgColors;
 
-    this.basicData = {
+    this.barData = {
       labels: [
         'Cheap (0 - 20 zł)',
         'Medium (20 - 50 zł)',
@@ -155,6 +169,23 @@ export class DashboardComponent implements OnInit, OnDestroy {
         },
       ]
     };
+
+    this.doughnutData = {
+      labels: [
+        'Cheap',
+        'Medium',
+        'Expensive',
+        'Very expensive',
+      ],
+      datasets: [
+        {
+          label: 'Products',
+          data: this.grouppedProducts,
+          backgroundColor: bgColors,
+          borderColor: borderColors
+        },
+      ]
+    }
   }
 
   private getChartOptions(): void {
@@ -163,14 +194,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
     const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
-    this.basicOptions = {
+    this.barOptions = {
       responsive: false,
       maintainAspectRatio: false,
       plugins: {
         legend: {
+          display: false,
           labels: {
             color: textColor,
-          },
+          }
         },
         datalabels: {
           display: true,
@@ -192,7 +224,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           grid: {
             color: surfaceBorder,
             drawBorder: false,
-          },
+          }
         },
         x: {
           ticks: {
@@ -201,9 +233,33 @@ export class DashboardComponent implements OnInit, OnDestroy {
           grid: {
             color: surfaceBorder,
             drawBorder: false,
+          }
+        }
+      }
+    };
+
+    this.doughnutOptions = {
+      responsive: false,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: true,
+          position: 'bottom',
+          labels: {
+            color: textColor,
           },
         },
-      },
+        datalabels: {
+          display: true,
+          color: textColor,
+          font: {
+            weight: 'bold'
+          },
+          formatter: Math.round,
+          align: 'end',
+          anchor: 'end'
+        }
+      }
     };
   }
 }

@@ -132,6 +132,7 @@ export class PriceBucketsPageComponent {
       maintainAspectRatio: false,
       plugins: {
         legend: {
+          display: false,
           labels: {
             color: textColor,
           },
