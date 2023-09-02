@@ -24,6 +24,12 @@ export class ProductController {
   }
 
   @UseGuards(AuthGuard)
+  @Get('price-buckets/:seller')
+  getPriceBuckets(@Param('seller') seller: string): Promise<number[]> {
+    return this.productService.getPriceBuckets(seller);
+  }
+
+  @UseGuards(AuthGuard)
   @Get('seller/:seller')
   findBySeller(@Param('seller') seller: string): Promise<Product[]> {
     return this.productService.findBySeller(seller);

@@ -19,6 +19,10 @@ export class ProductService {
     return this.http.get<Product[]>(`${this.productResourceUrl}`);
   }
 
+  getPriceBuckets(seller: string): Observable<number[]> {
+    return this.http.get<number[]>(`${this.productResourceUrl}/price-buckets/${seller}`);
+  }
+
   getBySeller(seller: string): Observable<ProductWithPrice[]> {
     return this.http.get<Product[]>(`${this.productResourceUrl}/seller/${seller}`)
     .pipe(

@@ -1,11 +1,9 @@
 import { Component } from "@angular/core";
 import { Subscription } from "rxjs";
-import { ProductWithPrice } from "src/app/models/product/product-with-price";
 import { Seller } from "src/app/models/seller/seller";
 import { ProductService } from "src/app/services/product.service";
 import { ThemeService } from "src/app/services/theme.service";
 import { ToastService } from "src/app/services/toast.service";
-import { Bucket } from "src/app/types/histogram/bucket";
 import { HistogramData, HistogramOptions } from "src/app/types/histogram/histogram";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
@@ -58,10 +56,10 @@ export class PriceBucketsPageComponent {
     }
     this.loading = true;
     this.subs.push(
-      this.productService.getBySeller(this.currentSeller.name).subscribe({
+      this.productService.getPriceBuckets(this.currentSeller.name).subscribe({
         next: (products) => {
           this.loading = false;
-          this.grouppedProducts = this.groupProducts(products);
+          this.grouppedProducts = products;
           this.getChartData();
           this.getChartOptions();
         },
@@ -71,25 +69,6 @@ export class PriceBucketsPageComponent {
         }
       })
     );
-  }
-
-  private groupProducts(products: ProductWithPrice[]): number[] {
-    const grouppedProducts: number[] = [0, 0, 0, 0];
-    products.forEach((product: ProductWithPrice) => {
-      const price = product.currentPrice;
-      if (price) {
-        if (price < 20) {
-          grouppedProducts[Bucket.CHEAP] += 1;
-        } else if (price < 50) {
-          grouppedProducts[Bucket.MEDIUM] += 1;
-        } else if (price < 100) {
-          grouppedProducts[Bucket.EXPENSIVE] += 1;
-        } else {
-          grouppedProducts[Bucket.VERY_EXPENSIVE] += 1;
-        }
-      }
-    });
-    return grouppedProducts;
   }
 
   private getChartData(): void {
