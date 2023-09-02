@@ -180,7 +180,9 @@ export class PriceService {
           prevPrice: prices[lastIndex].price,
           currentPrice: prices[0].price,
           priceChange,
-          priceChangePercentage: (priceChange / prices[lastIndex].price) * 100,
+          priceChangePercentage: Math.round(
+            (priceChange / prices[lastIndex].price) * 100,
+          ),
         };
       }
     });

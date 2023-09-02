@@ -1,1 +1,1 @@
-export type ProductTableType = 'new-products' | 'price-changes';
+export type ProductTableType = 'new-products' | 'price-changes' | 'price-changes-min';

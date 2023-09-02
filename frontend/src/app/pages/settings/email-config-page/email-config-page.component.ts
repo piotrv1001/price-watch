@@ -23,6 +23,7 @@ export class EmailConfigPageComponent implements OnInit, OnDestroy {
   minute = 0;
   enabled = false;
   subs: Subscription[] = [];
+  loading = false;
 
   constructor(
     private emailConfigService: EmailConfigService,
@@ -75,30 +76,38 @@ export class EmailConfigPageComponent implements OnInit, OnDestroy {
   }
 
   private getEmailConfig(): void {
+    this.loading = true;
     this.subs.push(
-      this.emailConfigService.getByUserId().subscribe((res: EmailConfig | null) => {
-        if (res) {
-          this.initialConfig = res;
-          this.emptyInitialConfig = false;
-          this.email = res.email ?? '';
-          this.dayOfWeek = res.dayOfWeek ?? 0;
-          this.hour = res.hour ?? 0;
-          this.minute = res.minute ?? 0;
-          if(typeof res.enabled === 'number') {
-            this.enabled = res.enabled === 1;
+      this.emailConfigService.getByUserId().subscribe({
+        next: (res: EmailConfig | null) => {
+          this.loading = false;
+          if (res) {
+            this.initialConfig = res;
+            this.emptyInitialConfig = false;
+            this.email = res.email ?? '';
+            this.dayOfWeek = res.dayOfWeek ?? 0;
+            this.hour = res.hour ?? 0;
+            this.minute = res.minute ?? 0;
+            if(typeof res.enabled === 'number') {
+              this.enabled = res.enabled === 1;
+            } else {
+              this.enabled = res.enabled ?? false;
+            }
+            this.initialConfig.enabled = this.enabled;
           } else {
-            this.enabled = res.enabled ?? false;
+            this.emptyInitialConfig = true;
+            this.initialConfig = {
+              email: '',
+              dayOfWeek: 0,
+              hour: 0,
+              minute: 0,
+              enabled: false
+            };
           }
-          this.initialConfig.enabled = this.enabled;
-        } else {
-          this.emptyInitialConfig = true;
-          this.initialConfig = {
-            email: '',
-            dayOfWeek: 0,
-            hour: 0,
-            minute: 0,
-            enabled: false
-          };
+        },
+        error: (error: any) => {
+          this.loading = false;
+          this.toastService.handleError(error);
         }
       })
     );

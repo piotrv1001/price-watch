@@ -10,6 +10,7 @@ import html2canvas from "html2canvas";
 export class ChartExportPngBtnComponent {
   @Input() chartComponent?: UIChart;
   @Input() filename = 'chart';
+  @Input() disabled = false;
 
   async downloadPng(): Promise<void> {
     const canvas = this.chartComponent?.chart?.canvas;

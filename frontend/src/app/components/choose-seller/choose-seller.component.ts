@@ -1,14 +1,15 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { Seller } from "src/app/models/seller/seller";
-import { ChosenSellerService } from "src/app/services/chosen-seller.service";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Seller } from 'src/app/models/seller/seller';
+import { ChosenSellerService } from 'src/app/services/chosen-seller.service';
 
 @Component({
   selector: 'app-choose-seller',
   templateUrl: './choose-seller.component.html',
-  styleUrls: ['./choose-seller.component.scss']
+  styleUrls: ['./choose-seller.component.scss'],
 })
 export class ChooseSellerComponent implements OnInit {
   @Input() showLabel = true;
+  @Input() disabled = false;
   sellers: Seller[] = [];
   currentSeller: Seller | null = null;
   @Output() sellerChange = new EventEmitter<Seller>();
@@ -25,17 +26,26 @@ export class ChooseSellerComponent implements OnInit {
 
   private initSellers(): void {
     this.sellers = [
-      { id: 1, name: 'SmartLED' },
-      { id: 2, name: 'LEDLUX' },
+      {
+        id: 1,
+        name: 'SmartLED',
+        logoLightTheme: 'smart_led_logo_light_theme.png',
+        logoDarkTheme: 'smart_led_logo_dark_theme.png',
+      },
+      {
+        id: 2,
+        name: 'LEDLUX',
+        logoLightTheme: 'led_lux_logo_light_theme.png',
+        logoDarkTheme: 'led_lux_logo_dark_theme.png',
+      },
       { id: 3, name: 'ELE24' },
       { id: 4, name: 'ledhouse_pl' },
     ];
     this.currentSeller = this.sellers[0];
-    this.sellerChange.emit(this.currentSeller);
   }
 
   private updateCurrentSeller(): void {
-    if(!this.currentSeller) {
+    if (!this.currentSeller) {
       return;
     }
     this.sellerChange.emit(this.currentSeller);

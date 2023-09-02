@@ -1,11 +1,31 @@
+<ng-container *ngIf="loading">
+  <app-spinner></app-spinner>
+</ng-container>
 <div class="grid">
   <div class="col">
     <div class="card">
       <h5>Price buckets</h5>
-      <div class="mt-6">
-        <app-choose-seller (sellerChange)="handleSellerChange($event)"></app-choose-seller>
+      <div class="mt-6 mb-6">
+        <app-choose-seller (sellerChange)="handleSellerChange($event)" [disabled]="loading"></app-choose-seller>
       </div>
-      <app-histogram [currentSellerName]="currentSeller?.name"></app-histogram>
+      <ng-container *ngIf="!loading">
+        <div class="scalein animation-duration-200 animation-iteration-1">
+          <div class="flex justify-content-end mb-6">
+            <app-chart-export-png-btn
+              [chartComponent]="chart"
+              [filename]="'price_buckets'">
+            </app-chart-export-png-btn>
+          </div>
+          <p-chart
+            #chart
+            type="bar"
+            [data]="basicData"
+            [options]="basicOptions"
+            [plugins]="plugins"
+            height="800px">
+          </p-chart>
+        </div>
+      </ng-container>
     </div>
   </div>
 </div>

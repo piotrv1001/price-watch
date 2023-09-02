@@ -1,6 +1,7 @@
 <div class="flex justify-content-end">
   <span class="mr-2">
     <app-date-range
+      [disabled]="disabled"
       [startDate]="startDate"
       [endDate]="endDate"
       (startDateChange)="handleStartDateChange($event)"
@@ -8,6 +9,7 @@
     </app-date-range>
   </span>
   <p-dropdown
+    [disabled]="disabled"
     [style]="{'width': '150px'}"
     [options]="dateRangeDropdownOptions"
     [optionLabel]="'label'"

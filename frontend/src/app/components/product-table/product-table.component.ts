@@ -98,6 +98,27 @@ export class ProductTableComponent implements OnInit, OnChanges {
           data: this.products
         };
         break;
+      case 'price-changes-min':
+        columns = [
+          { header: 'Name', field: 'name', ngStyle: { width: '40%' }, filter: true },
+          { header: 'Image', field: 'imgSrc', ngStyle: { width: '15%' }, filter: false },
+          { header: 'Old price', field: 'prevPrice', ngStyle: { width: '15%' }, filter: false },
+          { header: 'Price', field: 'currentPrice', ngStyle: { width: '15%' }, filter: false },
+          { header: '+/- [%]', field: 'priceChangePercentage', ngStyle: { width: '15%' }, filter: false },
+        ];
+        this.exportData = {
+          title: 'Price changes',
+          columns: [
+            { header: '', key: 'imgSrc', isImage: true },
+            { header: 'Name', key: 'name', width: 64 },
+            { header: 'Old price', key: 'prevPrice', width: 16, formatOptions: { suffix: ' zł' } },
+            { header: 'Current price', key: 'currentPrice', width: 16, formatOptions: { suffix: ' zł' } },
+            { header: '+/- [%]', key: 'priceChangePercentage', width: 12, formatOptions: { suffix: ' %' }, customTemplate: CustomTemplate.PriceChange },
+            { header: 'Link', key: 'link', width: 10, isLink: true }
+          ],
+          data: this.products
+        };
+        break;
     }
     return columns;
   }
