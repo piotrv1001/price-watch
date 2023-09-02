@@ -1,4 +1,4 @@
-<div *ngIf="showLabel" class="mb-1">Choose products (5 max)</div>
+<div *ngIf="showLabel" class="mb-1">{{ 'productSelect.chooseProductsMax5' | translate }}</div>
 <p-multiSelect
   [style]="{'minWidth':'800px'}"
   [options]="products"
@@ -10,7 +10,7 @@
   [virtualScrollItemSize]="43"
   scrollHeight="400px"
   [maxSelectedLabels]="1"
-  selectedItemsLabel="Selected {0} products"
+  selectedItemsLabel="{{ 'productSelect.selectedXProducts' | translate }}"
   [selectionLimit]="5">
   <ng-template let-product pTemplate="item">
     <div class="flex align-items-center ml-3">

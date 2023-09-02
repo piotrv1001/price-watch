@@ -12,40 +12,44 @@ export class AppMenuComponent implements OnInit {
   constructor(public layoutService: LayoutService) {}
 
   ngOnInit() {
+    this.getMenuItems();
+  }
+
+  private getMenuItems(): void {
     this.model = [
       {
-        label: 'Home',
+        label: 'menu.home',
         items: [
-          { label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
+          { label: 'menu.dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
         ]
       },
       {
-        label: 'Products',
+        label: 'menu.products',
         items: [
           {
-            label: 'Prices',
+            label: 'menu.prices',
             icon: 'pi pi-chart-line',
             routerLink: ['/products/prices']
           },
           {
-            label: 'New Products',
+            label: 'menu.newProducts',
             icon: 'pi pi-shopping-cart',
             routerLink: ['/products/new-products']
           },
           {
-            label: 'Price buckets',
+            label: 'menu.priceBuckets',
             icon: 'pi pi-chart-pie',
             routerLink: ['/products/price-buckets']
           },
           {
-            label: 'Price changes',
+            label: 'menu.priceChanges',
             icon: 'pi pi-chart-bar',
             routerLink: ['/products/price-changes']
           }
         ]
       },
       {
-        label: 'Settings',
+        label: 'menu.settings',
         items: [
           { label: 'Email', icon: 'pi pi-envelope', routerLink: ['/settings/email-config'] }
         ]

@@ -1,8 +1,10 @@
+import { TranslateService } from '@ngx-translate/core';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { LayoutService } from './service/app.layout.service';
 import { ThemeService } from '../services/theme.service';
 import { SharedService } from '../services/shared.service';
+import { Language } from '../types/common/language';
 
 @Component({
   selector: 'app-topbar',
@@ -16,14 +18,18 @@ export class AppTopBarComponent implements OnInit {
   @ViewChild('topbarmenu') menu!: ElementRef;
   accountMenuItems: MenuItem[] = [];
   isDarkTheme: boolean = false;
+  languages: Language[] = [];
+  selectedLanguage?: Language;
 
   constructor(
     public layoutService: LayoutService,
     private themeService: ThemeService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
+    this.getLanguages();
     this.getAccountMenuItems();
   }
 
@@ -36,23 +42,48 @@ export class AppTopBarComponent implements OnInit {
     this.sharedService.signOut();
   }
 
+  languageChange(): void {
+    if(this.selectedLanguage) {
+      this.translateService.use(this.selectedLanguage.key);
+      this.getAccountMenuItems();
+    }
+  }
+
   private getAccountMenuItems(): void {
     this.accountMenuItems = [
       {
-        label: 'Profile',
+        label: this.translateService.instant('profile.title'),
         icon: 'pi pi-user',
         routerLink: ['/account/profile'],
       },
       {
-        label: 'Settings',
+        label: this.translateService.instant('menu.settings'),
         icon: 'pi pi-cog',
         routerLink: ['/account/settings'],
       },
       {
-        label: 'Sign Out',
+        label: this.translateService.instant('global.signOut'),
         icon: 'pi pi-power-off',
         command: () => this.signOut()
       },
     ];
+  }
+
+  private getLanguages(): void {
+    this.languages = [
+      {
+        flagUrl: 'poland.png',
+        name: 'Polski',
+        key: 'pl'
+      },
+      {
+        flagUrl: 'uk.png',
+        name: 'English',
+        key: 'en'
+      }
+    ];
+    const browserLang = this.translateService.getBrowserLang();
+    const useLang = browserLang?.match(/en|pl/) ? browserLang : 'pl';
+    this.selectedLanguage = this.languages.find(lang => lang.key === useLang);
   }
 }

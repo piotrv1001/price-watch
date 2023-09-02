@@ -1,7 +1,7 @@
 <div class="grid">
   <div class="col">
     <div class="card">
-      <h5>Prices</h5>
+      <h5>{{ 'menu.prices' | translate }}</h5>
       <div class="mt-6">
         <app-product-multiselect (selectedProductsChange)="updateProductIdArray($event)"></app-product-multiselect>
       </div>

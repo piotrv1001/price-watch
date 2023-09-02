@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { AuthService } from './services/auth.service';
 import { SharedService } from './services/shared.service';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
@@ -22,8 +23,15 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     private sharedService: SharedService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private translateService: TranslateService
+  ) {
+    this.translateService.addLangs(['en', 'pl']);
+    this.translateService.setDefaultLang('pl');
+    const browserLang = translateService.getBrowserLang();
+    const useLang = browserLang?.match(/en|pl/) ? browserLang : 'pl';
+    translateService.use(useLang);
+  }
 
   ngOnInit(): void {
     this.validateJWT();

@@ -4,6 +4,7 @@ export interface TableColumn {
   ngStyle?: any;
   filter?: boolean;
   formatOptions?: FormatOptions;
+  translate?: boolean;
 }
 
 export class FormatOptions {

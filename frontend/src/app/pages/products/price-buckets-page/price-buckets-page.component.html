@@ -4,7 +4,7 @@
 <div class="grid">
   <div class="col">
     <div class="card">
-      <h5>Price buckets</h5>
+      <h5>{{ 'menu.priceBuckets' | translate }}</h5>
       <div class="mt-6 mb-6">
         <app-choose-seller (sellerChange)="handleSellerChange($event)" [disabled]="loading"></app-choose-seller>
       </div>

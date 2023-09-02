@@ -14,8 +14,20 @@
           pInputText
           type="text"
           (input)="table.filterGlobal($any($event.target).value, 'contains')"
-          placeholder="Search"/>
+          placeholder="{{ 'global.search' | translate }}"/>
       </span>
+      <div class="w-10rem flex flex-column justify-content-around mr-2" *ngIf="downloadProgress > -1">
+        <span *ngIf="downloadProgress < 100" class="font-semibold text-sm">{{ 'global.downloading' | translate }}</span>
+        <div *ngIf="downloadProgress === 100" class="flex align-items-center">
+          <span class="mr-1 font-semibold text-sm text-green-600">{{ 'global.done' | translate }}</span>
+          <i class="pi pi-check text-sm font-semibold text-green-500"></i>
+        </div>
+        <p-progressBar
+          [value]="downloadProgress"
+          [showValue]="false"
+          [style]="{'height': '6px'}">
+        </p-progressBar>
+      </div>
       <button
         type="button"
         pButton
@@ -33,24 +45,17 @@
       <app-pdf-export-btn
         [exportData]="exportData">
       </app-pdf-export-btn>
-      <div class="w-10rem flex flex-column justify-content-around mr-2" *ngIf="downloadProgress > -1">
-        <span *ngIf="downloadProgress < 100" class="font-semibold text-sm">Downloading...</span>
-        <div *ngIf="downloadProgress === 100" class="flex align-items-center">
-          <span class="mr-1 font-semibold text-sm text-green-600">Done</span>
-          <i class="pi pi-check text-sm font-semibold text-green-500"></i>
-        </div>
-        <p-progressBar
-          [value]="downloadProgress"
-          [showValue]="false"
-          [style]="{'height': '6px'}">
-        </p-progressBar>
-      </div>
     </div>
   </ng-template>
   <ng-template pTemplate="header" let-columns>
     <tr>
       <th *ngFor="let col of columns" [ngStyle]="col.ngStyle">
-        {{col.header}}
+        <ng-container *ngIf="col.translate === false; else defaultHeader">
+          {{ col.header }}
+        </ng-container>
+        <ng-template #defaultHeader>
+          {{ ('productTable.' + col.header) | translate }}
+        </ng-template>
       </th>
     </tr>
   </ng-template>

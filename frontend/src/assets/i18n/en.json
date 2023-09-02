@@ -1,0 +1,97 @@
+{
+  "global": {
+    "search": "Search",
+    "products": "Products",
+    "chooseSeller": "Choose seller",
+    "downloading": "Downloading...",
+    "done": "Done",
+    "saveChanges": "Save changes",
+    "signOut": "Sign out"
+  },
+  "menu": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "newProducts": "New products",
+    "prices": "Prices",
+    "priceBuckets": "Price buckets",
+    "priceChanges": "Price changes",
+    "settings": "Settings"
+  },
+  "date": {
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday",
+    "dayOfWeek": "Day of week",
+    "time": "Time"
+  },
+  "error": {
+    "invalidUsernameOrPassword": "Invalid username or password",
+    "notAuthorized": "You are not authorized to access this resource",
+    "notFound": "Resource not found",
+    "serverError": "Server error",
+    "unexpectedError": "Unexpected error"
+  },
+  "msg": {
+    "error": "Error",
+    "success": "Success",
+    "info": "Info",
+    "warning": "Warning"
+  },
+  "login": {
+    "logIn": "Log in",
+    "enterDetails": "Please enter your details",
+    "password": "Password",
+    "googleSignIn": "Sign in with Google",
+    "or": "or",
+    "noAccount": "Don't have an account? Sign up"
+  },
+  "register": {
+    "createAccount": "Create new account",
+    "confirmPassword": "Confirm password",
+    "usernameOptional": "Username (optional)",
+    "haveAccount": "Already have an account? Log in"
+  },
+  "dashboard": {
+    "sellers": "Sellers",
+    "priceBuckets": "Price buckets",
+    "newProducts": "New products",
+    "priceChanges": "Price changes"
+  },
+  "productTable": {
+    "name": "Name",
+    "image": "Image",
+    "oldPrice": "Old price",
+    "currentPrice": "Current price",
+    "price": "Price",
+    "chart": "Chart"
+  },
+  "chart": {
+    "buckets": {
+      "cheap": "Cheap (0 - 20 zł)",
+      "medium": "Medium (20 - 50 zł)",
+      "expensive": "Expensive (50 - 100 zł)",
+      "veryExpensive": "Very expensive (100+ zł)"
+    }
+  },
+  "productSelect": {
+    "chooseProductsMax5": "Choose products (max 5)",
+    "selectedXProducts": "Selected products: {0}"
+  },
+  "emailConfig": {
+    "emailOptions": "Email options",
+    "reportEmail": "Email for product reports",
+    "enableReports": "Enable product reports"
+  },
+  "profile": {
+    "title": "Profile",
+    "googleAccount": "Google account",
+    "personalAccount": "Personal account",
+    "profileInfo": "Profile information",
+    "username": "Username",
+    "updateProfile": "Update profile"
+  }
+}

@@ -16,6 +16,31 @@
 
   <div #topbarmenu class="layout-topbar-menu"
     [ngClass]="{'layout-topbar-menu-mobile-active': layoutService.state.profileSidebarVisible}">
+    <p-dropdown
+      [style]="{'minWidth': '150px'}"
+      [options]="languages"
+      [(ngModel)]="selectedLanguage"
+      (ngModelChange)="languageChange()"
+      optionLabel="name">
+      <ng-template pTemplate="selectedItem">
+        <div class="flex align-items-center gap-2" *ngIf="selectedLanguage">
+          <img
+            src="assets/img/flags/{{selectedLanguage.flagUrl}}"
+            [class]="'flag flag-' + selectedLanguage.key.toLowerCase()"
+            style="width: 18px;"/>
+          <div>{{ selectedLanguage.name }}</div>
+        </div>
+      </ng-template>
+      <ng-template let-language pTemplate="item">
+        <div class="flex align-items-center gap-2">
+          <img
+            src="assets/img/flags/{{language.flagUrl}}"
+            [class]="'flag flag-' + selectedLanguage?.key?.toLowerCase()"
+            style="width: 18px;"/>
+          <div>{{ language.name }}</div>
+        </div>
+      </ng-template>
+    </p-dropdown>
     <button class="p-link layout-topbar-button" (click)="changeTheme(!isDarkTheme)">
       <i [ngClass]="isDarkTheme ? 'pi pi-sun' : 'pi pi-moon'"></i>
     </button>

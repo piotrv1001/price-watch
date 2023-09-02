@@ -4,7 +4,7 @@
 <div class="grid">
   <div class="col-12 xl:col-6 p-3">
     <div class="card">
-      <h5>Sellers</h5>
+      <h5>{{ 'dashboard.sellers' | translate }}</h5>
       <div class="mt-6">
         <app-choose-seller (sellerChange)="handleSellerChange($event)"></app-choose-seller>
       </div>
@@ -12,7 +12,7 @@
   </div>
   <ng-container *ngIf="!loading && logo">
     <div class="col-12 xl:col-6 p-3 flex justify-content-center align-items-center fadeinright animation-duration-200 animation-iteration-1">
-      <img [src]="'../../../assets/img/' + logo" alt="Logo" width="300">
+      <img [src]="'assets/img/' + logo" alt="Logo" width="300">
     </div>
   </ng-container>
 </div>
@@ -20,7 +20,7 @@
   <div class="grid scalein animation-duration-200 animation-iteration-1">
     <div class="col-12 p-3">
       <div class="card">
-        <h5>Price buckets</h5>
+        <h5>{{ 'dashboard.priceBuckets' | translate }}</h5>
         <div class="grid">
           <div class="col-12 xl:col-6">
             <div class="flex justify-content-end mt-6 mb-6">
@@ -59,7 +59,7 @@
     </div>
     <div class="col-12 xl:col-6 p-3">
       <div class="card">
-        <h5>New products</h5>
+        <h5>{{ 'dashboard.newProducts' | translate }}</h5>
         <div class="mt-6">
           <app-product-table
             [products]="newProducts"
@@ -72,7 +72,7 @@
     </div>
     <div class="col-12 xl:col-6 p-3">
       <div class="card">
-        <h5>Price changes</h5>
+        <h5>{{ 'dashboard.priceChanges' | translate }}</h5>
         <div class="mt-6">
           <app-product-table
             [products]="priceChanges"

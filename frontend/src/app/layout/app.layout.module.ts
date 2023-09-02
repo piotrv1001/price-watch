@@ -21,6 +21,7 @@ import { BadgeModule } from 'primeng/badge';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { RippleModule } from 'primeng/ripple';
+import { DropdownModule } from 'primeng/dropdown';
 
 import { SharedModule } from '../shared/shared.module';
 import { ProfilePictureModule } from '../components/profile-picture/profile-picture.module';
@@ -48,6 +49,7 @@ import { ProfilePictureModule } from '../components/profile-picture/profile-pict
     RouterModule,
     ToastModule,
     MenuModule,
+    DropdownModule,
     SharedModule
   ],
   exports: [AppLayoutComponent],

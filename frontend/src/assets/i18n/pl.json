@@ -1,0 +1,97 @@
+{
+  "global": {
+    "search": "Wyszukaj",
+    "products": "Produkty",
+    "chooseSeller": "Wybierz sprzedawcę",
+    "downloading": "Pobieranie ...",
+    "done": "Gotowe",
+    "saveChanges": "Zapisz zmiany",
+    "signOut": "Wyloguj się"
+  },
+  "menu": {
+    "home": "Strona główna",
+    "dashboard": "Panel",
+    "newProducts": "Nowe produkty",
+    "prices": "Ceny",
+    "priceBuckets": "Koszyki cenowe",
+    "priceChanges": "Zmiany cen",
+    "settings": "Ustawienia"
+  },
+  "date": {
+    "monday": "Poniedziałek",
+    "tuesday": "Wtorek",
+    "wednesday": "Środa",
+    "thursday": "Czwartek",
+    "friday": "Piątek",
+    "saturday": "Sobota",
+    "sunday": "Niedziela",
+    "dayOfWeek": "Dzień tygodnia",
+    "time": "Czas"
+  },
+  "error": {
+    "invalidUsernameOrPassword": "Nieprawidłowa nazwa użytkownika lub hasło",
+    "notAuthorized": "Nie masz uprawnień do wykonania tej operacji",
+    "notFound": "Nie znaleziono",
+    "serverError": "Błąd serwera",
+    "unexpectedError": "Nieoczekiwany błąd"
+  },
+  "msg": {
+    "error": "Błąd",
+    "success": "Sukces",
+    "info": "Informacja",
+    "warning": "Ostrzeżenie"
+  },
+  "login": {
+    "logIn": "Zaloguj się",
+    "enterDetails": "Wprowadź dane logowania",
+    "password": "Hasło",
+    "googleSignIn": "Zaloguj się przez Google",
+    "or": "lub",
+    "noAccount": "Nie masz konta? Zarejestruj się"
+  },
+  "register": {
+    "createAccount": "Utwórz konto",
+    "confirmPassword": "Potwierdź hasło",
+    "usernameOptional": "Nazwa użytkownika (opcjonalnie)",
+    "haveAccount": "Masz już konto? Zaloguj się"
+  },
+  "dashboard": {
+    "sellers": "Sprzedawcy",
+    "priceBuckets": "Koszyki cenowe",
+    "newProducts": "Nowe produkty",
+    "priceChanges": "Zmiany cen"
+  },
+  "productTable": {
+    "name": "Nazwa",
+    "image": "Obraz",
+    "oldPrice": "Stara cena",
+    "currentPrice": "Aktualna cena",
+    "price": "Cena",
+    "chart": "Wykres"
+  },
+  "chart": {
+    "buckets": {
+      "cheap": "Tanie (0 - 20 zł)",
+      "medium": "Średnie (20 - 50 zł)",
+      "expensive": "Drogie (50 - 100 zł)",
+      "veryExpensive": "Bardzo drogie (100+ zł)"
+    }
+  },
+  "productSelect": {
+    "chooseProductsMax5": "Wybierz produkty (maks. 5)",
+    "selectedXProducts": "Wybrane produkty: {0}"
+  },
+  "emailConfig": {
+    "emailOptions": "Ustawienia e-mail",
+    "reportEmail": "E-mail do raportów o produktach",
+    "enableReports": "Włącz raporty o produktach"
+  },
+  "profile": {
+    "title": "Profil",
+    "googleAccount": "Konto Google",
+    "personalAccount": "Konto osobiste",
+    "profileInfo": "Informacje o profilu",
+    "username": "Nazwa użytkownika",
+    "updateProfile": "Aktualizuj profil"
+  }
+}
