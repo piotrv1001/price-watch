@@ -1,24 +1,60 @@
+<ng-container *ngIf="loading">
+  <app-spinner></app-spinner>
+</ng-container>
 <div class="grid">
   <div class="col-12 xl:col-6 p-3">
     <div class="card">
       <h5>Sellers</h5>
-      <app-choose-seller (sellerChange)="handleSellerChange($event)"></app-choose-seller>
-    </div>
-    <div class="card">
-      <h5>New products</h5>
-      <app-new-products [currentSellerName]="currentSeller?.name" [paginatorRows]="10"></app-new-products>
-    </div>
-  </div>
-  <div class="col-12 xl:col-6 p-3">
-    <div class="card">
-      <div class="flex align-items-start justify-content-between">
-        <h5>Price buckets</h5>
+      <div class="mt-6">
+        <app-choose-seller (sellerChange)="handleSellerChange($event)"></app-choose-seller>
       </div>
-      <app-histogram [currentSellerName]="currentSeller?.name"></app-histogram>
-    </div>
-    <div class="card">
-      <h5>Price changes</h5>
-      <app-price-changes-table [currentSellerName]="currentSeller?.name"></app-price-changes-table>
     </div>
   </div>
 </div>
+<ng-container *ngIf="!loading">
+  <div class="grid scalein animation-duration-200 animation-iteration-1">
+    <div class="col-12 xl:col-6 p-3">
+      <div class="card">
+        <h5>New products</h5>
+        <div class="mt-6">
+          <app-product-table
+            [products]="newProducts"
+            [type]="'new-products'"
+            [showPaginator]="true"
+            [paginatorRows]="5">
+          </app-product-table>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 xl:col-6 p-3">
+      <div class="card">
+        <h5>Price buckets</h5>
+        <div class="flex justify-content-end mt-6 mb-6">
+          <app-chart-export-png-btn
+            [chartComponent]="chart"
+            [filename]="'price_buckets'">
+          </app-chart-export-png-btn>
+        </div>
+        <p-chart
+          #chart
+          type="bar"
+          [data]="basicData"
+          [options]="basicOptions"
+          [plugins]="plugins"
+          height="600">
+        </p-chart>
+      </div>
+      <div class="card">
+        <h5>Price changes</h5>
+        <div class="mt-6">
+          <app-product-table
+            [products]="priceChanges"
+            [type]="'price-changes'"
+            [showPaginator]="true"
+            [paginatorRows]="5">
+          </app-product-table>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

@@ -1,10 +1,4 @@
-<div class="flex justify-content-end mb-4">
-  <app-chart-export-png-btn
-    [chartComponent]="chart"
-    [filename]="'prices'">
-  </app-chart-export-png-btn>
-</div>
-<div class="mb-6">
+<div class="flex justify-content-end mb-6">
   <app-date-range-with-options
     [startDate]="startDate"
     [endDate]="endDate"
@@ -12,6 +6,12 @@
     (endDateChange)="handleEndDateChange($event)"
     (dateRangeDropdownOptionChange)="handleDropdownChange($event)">
   </app-date-range-with-options>
+</div>
+<div class="flex justify-content-end mb-6">
+  <app-chart-export-png-btn
+    [chartComponent]="chart"
+    [filename]="'prices'">
+  </app-chart-export-png-btn>
 </div>
 <p-chart
   #chart

@@ -31,7 +31,6 @@ export class PriceBucketsPageComponent {
 
   ngOnInit() {
     this.currentSeller = { id: 1, name: 'SmartLED' };
-    this.getChartOptions();
     this.getPrices();
     this.getThemeChange();
   }

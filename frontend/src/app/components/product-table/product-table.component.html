@@ -8,6 +8,14 @@
   [globalFilterFields]="getFilterFields()">
   <ng-template pTemplate="caption">
     <div class="flex">
+      <span class="p-input-icon-left mr-auto">
+        <i class="pi pi-search"></i>
+        <input
+          pInputText
+          type="text"
+          (input)="table.filterGlobal($any($event.target).value, 'contains')"
+          placeholder="Search"/>
+      </span>
       <button
         type="button"
         pButton
@@ -37,14 +45,6 @@
           [style]="{'height': '6px'}">
         </p-progressBar>
       </div>
-      <span class="p-input-icon-left ml-auto">
-        <i class="pi pi-search"></i>
-        <input
-          pInputText
-          type="text"
-          (input)="table.filterGlobal($any($event.target).value, 'contains')"
-          placeholder="Search"/>
-      </span>
     </div>
   </ng-template>
   <ng-template pTemplate="header" let-columns>
