@@ -5,22 +5,22 @@ export class ErrorUtil {
     if(error instanceof HttpErrorResponse) {
       switch(error.status) {
         case 401: {
-          return 'Invalid email or password';
+          return 'invalidUsernameOrPassword';
         }
         case 403: {
-          return 'You are not authorized to access this resource';
+          return 'notAuthorized';
         }
         case 404: {
-          return 'Resource not found';
+          return 'notFound';
         }
         case 500: {
-          return 'Internal server error';
+          return 'serverError';
         }
         default: {
-          return 'Un expected error occurred';
+          return 'unexpectedError';
         }
       }
     }
-    return 'Un expected error occurred';
+    return 'unexpectedError';
   }
 }

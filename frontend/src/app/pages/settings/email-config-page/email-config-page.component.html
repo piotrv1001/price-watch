@@ -4,32 +4,39 @@
 <div class="grid">
   <div class="col">
     <div class="card">
-      <h5>Email options</h5>
+      <h5>{{ 'emailConfig.emailOptions' | translate }}</h5>
       <div class="mt-6">
         <ng-container *ngIf="!loading">
           <div class="scalein animation-duration-200 animation-iteration-1">
             <div class="flex flex-column gap-2 mb-6">
-              <label htmlFor="email">Email for product reports</label>
+              <label htmlFor="email">{{ 'emailConfig.reportEmail' | translate }}</label>
               <input pInputText type="text" id="email" [(ngModel)]="email" />
             </div>
             <div class="flex flex-column">
               <div class="flex flex-row gap-2 mb-3 w-20rem justify-content-between">
-                <span class="text-lg font-bold">Enable product reports</span>
+                <span class="text-lg font-bold">{{ 'emailConfig.enableReports' | translate }}</span>
                 <p-inputSwitch [(ngModel)]="this.enabled"></p-inputSwitch>
               </div>
               <div class="divider"></div>
               <div class="flex flex-column gap-2">
-                <label htmlFor="day-of-week" [ngStyle]="{'opacity' : this.enabled ? '1' : '0.6'}">Day of week</label>
+                <label htmlFor="day-of-week" [ngStyle]="{'opacity' : this.enabled ? '1' : '0.6'}">{{ 'date.dayOfWeek' | translate }}</label>
                 <p-dropdown id="day-of-week" [style]="{'width': '20rem'}" [options]="weekDays" [(ngModel)]="this.dayOfWeek"
-                  [disabled]="!this.enabled" [optionLabel]="'label'" [optionValue]="'value'"></p-dropdown>
+                  [disabled]="!this.enabled" [optionLabel]="'label'">
+                  <ng-template pTemplate="selectedItem">
+                    {{ ('date.' + this.dayOfWeek?.label) | translate }}
+                  </ng-template>
+                  <ng-template let-item pTemplate="item">
+                    {{ ('date.' + item.label) | translate }}
+                  </ng-template>
+                </p-dropdown>
               </div>
               <div class="flex flex-column mt-3">
-                <span class="mb-1" [ngStyle]="{'opacity' : this.enabled ? '1' : '0.6'}">Time</span>
+                <span class="mb-1" [ngStyle]="{'opacity' : this.enabled ? '1' : '0.6'}">{{ 'date.time' | translate }}</span>
                 <app-hours-minutes [hours]="hour" [minutes]="minute" id="time" [disabled]="!this.enabled" (hoursChange)="handleHourChange($event)" (minutesChange)="handleMinuteChange($event)"></app-hours-minutes>
               </div>
             </div>
             <div class="mt-6">
-              <p-button label="Save changes" [disabled]="!changesMade()" (onClick)="saveChanges()"></p-button>
+              <p-button label="{{ 'global.saveChanges' | translate }}" [disabled]="!changesMade()" (onClick)="saveChanges()"></p-button>
             </div>
           </div>
         </ng-container>

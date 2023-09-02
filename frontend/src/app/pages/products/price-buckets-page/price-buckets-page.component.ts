@@ -1,3 +1,4 @@
+import { TranslateService } from '@ngx-translate/core';
 import { Component } from "@angular/core";
 import { Subscription } from "rxjs";
 import { Seller } from "src/app/models/seller/seller";
@@ -24,13 +25,15 @@ export class PriceBucketsPageComponent {
   constructor(
     private productService: ProductService,
     private themeService: ThemeService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private translateService: TranslateService
   ) {}
 
   ngOnInit() {
     this.currentSeller = { id: 1, name: 'SmartLED' };
     this.getPrices();
     this.getThemeChange();
+    this.getLangChange();
   }
 
   ngOnDestroy(): void {
@@ -46,6 +49,14 @@ export class PriceBucketsPageComponent {
     this.subs.push(
       this.themeService.getTheme().subscribe(() => {
         this.getChartOptions();
+      })
+    );
+  }
+
+  getLangChange(): void {
+    this.subs.push(
+      this.translateService.onLangChange.subscribe(() => {
+        this.getChartData();
       })
     );
   }
@@ -82,10 +93,10 @@ export class PriceBucketsPageComponent {
 
     this.basicData = {
       labels: [
-        'Cheap (0 - 20 zł)',
-        'Medium (20 - 50 zł)',
-        'Expensive (50 - 100 zł)',
-        'Very expensive (100+ zł)',
+        this.translateService.instant('chart.buckets.cheap'),
+        this.translateService.instant('chart.buckets.medium'),
+        this.translateService.instant('chart.buckets.expensive'),
+        this.translateService.instant('chart.buckets.veryExpensive')
       ],
       datasets: [
         {

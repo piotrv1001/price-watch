@@ -18,7 +18,7 @@ export class EmailConfigPageComponent implements OnInit, OnDestroy {
   initialConfig?: CreateEmailConfigDTO;
   emptyInitialConfig = false;
   email = '';
-  dayOfWeek = 0;
+  dayOfWeek?: LabelAndValue;
   hour = 0;
   minute = 0;
   enabled = false;
@@ -50,7 +50,7 @@ export class EmailConfigPageComponent implements OnInit, OnDestroy {
   saveChanges(): void {
     const config: CreateEmailConfigDTO = {
       email: this.email,
-      dayOfWeek: this.dayOfWeek,
+      dayOfWeek: this.dayOfWeek?.value,
       hour: this.hour,
       minute: this.minute,
       enabled: this.enabled,
@@ -85,7 +85,9 @@ export class EmailConfigPageComponent implements OnInit, OnDestroy {
             this.initialConfig = res;
             this.emptyInitialConfig = false;
             this.email = res.email ?? '';
-            this.dayOfWeek = res.dayOfWeek ?? 0;
+            if(this.dayOfWeek) {
+              this.dayOfWeek.value = res.dayOfWeek ?? 0;
+            }
             this.hour = res.hour ?? 0;
             this.minute = res.minute ?? 0;
             if(typeof res.enabled === 'number') {
@@ -140,7 +142,7 @@ export class EmailConfigPageComponent implements OnInit, OnDestroy {
         next: () => {
           this.initialConfig = {
             email: this.email,
-            dayOfWeek: this.dayOfWeek,
+            dayOfWeek: this.dayOfWeek?.value,
             hour: this.hour,
             minute: this.minute,
             enabled: this.enabled,

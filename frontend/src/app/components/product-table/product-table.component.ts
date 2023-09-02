@@ -57,12 +57,12 @@ export class ProductTableComponent implements OnInit, OnChanges {
     switch(this.type) {
       case 'new-products':
         columns = [
-          { header: 'Name', field: 'name', ngStyle: { width: '50%' }, filter: true },
-          { header: 'Image', field: 'imgSrc', ngStyle: { width: '15%' }, filter: false },
-          { header: 'Price', field: 'currentPrice', ngStyle: { width: '15%' }, filter: false, formatOptions: { suffix: ' zł' } },
-          { header: 'Promo', field: 'promo', ngStyle: { width: '10%' }, filter: false },
-          { header: 'Link', field: 'link', ngStyle: { width: '10%' }, filter: false },
-          { header: 'Chart', field: 'chart', ngStyle: { width: '10%' }, filter: false },
+          { header: 'name', field: 'name', ngStyle: { width: '50%' }, filter: true },
+          { header: 'image', field: 'imgSrc', ngStyle: { width: '15%' }, filter: false },
+          { header: 'price', field: 'currentPrice', ngStyle: { width: '15%' }, filter: false, formatOptions: { suffix: ' zł' } },
+          { header: 'Promo', field: 'promo', ngStyle: { width: '10%' }, filter: false, translate: false },
+          { header: 'Link', field: 'link', ngStyle: { width: '10%' }, filter: false, translate: false },
+          { header: 'chart', field: 'chart', ngStyle: { width: '10%' }, filter: false },
         ];
         this.exportData = {
           title: 'New products',
@@ -77,13 +77,13 @@ export class ProductTableComponent implements OnInit, OnChanges {
         break;
       case 'price-changes':
         columns = [
-          { header: 'Name', field: 'name', ngStyle: { width: '35%' }, filter: true },
-          { header: 'Image', field: 'imgSrc', ngStyle: { width: '15%' }, filter: false },
-          { header: 'Old price', field: 'prevPrice', ngStyle: { width: '10%' }, filter: false },
-          { header: 'Current price', field: 'currentPrice', ngStyle: { width: '10%' }, filter: false },
-          { header: '+/- [%]', field: 'priceChangePercentage', ngStyle: { width: '10%' }, filter: false },
-          { header: 'Link', field: 'link', ngStyle: { width: '10%' }, filter: false },
-          { header: 'Chart', field: 'chart', ngStyle: { width: '10%' }, filter: false }
+          { header: 'name', field: 'name', ngStyle: { width: '35%' }, filter: true },
+          { header: 'image', field: 'imgSrc', ngStyle: { width: '15%' }, filter: false },
+          { header: 'oldPrice', field: 'prevPrice', ngStyle: { width: '10%' }, filter: false },
+          { header: 'currentPrice', field: 'currentPrice', ngStyle: { width: '10%' }, filter: false },
+          { header: '+/- [%]', field: 'priceChangePercentage', ngStyle: { width: '10%' }, filter: false, translate: false },
+          { header: 'Link', field: 'link', ngStyle: { width: '10%' }, filter: false, translate: false },
+          { header: 'chart', field: 'chart', ngStyle: { width: '10%' }, filter: false }
         ];
         this.exportData = {
           title: 'Price changes',
@@ -100,11 +100,11 @@ export class ProductTableComponent implements OnInit, OnChanges {
         break;
       case 'price-changes-min':
         columns = [
-          { header: 'Name', field: 'name', ngStyle: { width: '40%' }, filter: true },
-          { header: 'Image', field: 'imgSrc', ngStyle: { width: '15%' }, filter: false },
-          { header: 'Old price', field: 'prevPrice', ngStyle: { width: '15%' }, filter: false },
-          { header: 'Price', field: 'currentPrice', ngStyle: { width: '15%' }, filter: false },
-          { header: '+/- [%]', field: 'priceChangePercentage', ngStyle: { width: '15%' }, filter: false },
+          { header: 'name', field: 'name', ngStyle: { width: '40%' }, filter: true },
+          { header: 'image', field: 'imgSrc', ngStyle: { width: '15%' }, filter: false },
+          { header: 'oldPrice', field: 'prevPrice', ngStyle: { width: '15%' }, filter: false },
+          { header: 'price', field: 'currentPrice', ngStyle: { width: '15%' }, filter: false },
+          { header: '+/- [%]', field: 'priceChangePercentage', ngStyle: { width: '15%' }, filter: false, translate: false },
         ];
         this.exportData = {
           title: 'Price changes',

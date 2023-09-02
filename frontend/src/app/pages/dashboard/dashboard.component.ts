@@ -1,3 +1,5 @@
+import { StringUtil } from './../../utils/string/string.util';
+import { TranslateService } from '@ngx-translate/core';
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Subscription, catchError, forkJoin, of } from "rxjs";
 import { PriceChangeDTO } from "src/app/models/dto/price-change.dto";
@@ -36,11 +38,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private priceService: PriceService,
     private productService: ProductService,
     private toastService: ToastService,
-    private themeService: ThemeService
+    private themeService: ThemeService,
+    private translateService: TranslateService
   ) { }
 
   ngOnInit(): void {
     this.init();
+    this.getLangChange();
     this.getChartOptions();
     this.getThemeChange();
     this.getData();
@@ -56,6 +60,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.darkTheme = darkTheme;
         this.getChartOptions();
         this.logo = this.darkTheme ? this.currentSeller?.logoDarkTheme : this.currentSeller?.logoLightTheme;
+      })
+    );
+  }
+
+  getLangChange(): void {
+    this.subs.push(
+      this.translateService.onLangChange.subscribe(() => {
+        this.getChartData();
       })
     );
   }
@@ -132,14 +144,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     this.barData = {
       labels: [
-        'Cheap (0 - 20 zł)',
-        'Medium (20 - 50 zł)',
-        'Expensive (50 - 100 zł)',
-        'Very expensive (100+ zł)',
+        this.translateService.instant('chart.buckets.cheap'),
+        this.translateService.instant('chart.buckets.medium'),
+        this.translateService.instant('chart.buckets.expensive'),
+        this.translateService.instant('chart.buckets.veryExpensive')
       ],
       datasets: [
         {
-          label: 'Products',
+          label: this.translateService.instant('global.products'),
           data: this.grouppedProducts,
           backgroundColor: bgColors,
           borderColor: borderColors,
@@ -151,14 +163,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     this.doughnutData = {
       labels: [
-        'Cheap',
-        'Medium',
-        'Expensive',
-        'Very expensive',
+        StringUtil.removeContentInBraces(this.translateService.instant('chart.buckets.cheap')),
+        StringUtil.removeContentInBraces(this.translateService.instant('chart.buckets.medium')),
+        StringUtil.removeContentInBraces(this.translateService.instant('chart.buckets.expensive')),
+        StringUtil.removeContentInBraces(this.translateService.instant('chart.buckets.veryExpensive'))
       ],
       datasets: [
         {
-          label: 'Products',
+          label: this.translateService.instant('global.products'),
           data: this.grouppedProducts,
           backgroundColor: bgColors,
           borderColor: borderColors

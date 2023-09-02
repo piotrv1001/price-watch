@@ -5,7 +5,6 @@ import { PriceBucketsPageComponent } from "./price-buckets-page.component";
 import { ChartModule } from "primeng/chart";
 
 import { ChooseSellerModule } from "src/app/components/choose-seller/choose-seller.module";
-import { HistogramModule } from "src/app/components/histogram/histogram.module";
 import { SharedModule } from "src/app/shared/shared.module";
 import { SpinnerModule } from "src/app/components/spinner/spinner.module";
 import { ChartExportPngButtonModule } from "src/app/components/chart-export-png-btn/chart-export-png-btn.module";
@@ -14,7 +13,6 @@ import { ChartExportPngButtonModule } from "src/app/components/chart-export-png-
   imports: [
     SharedModule,
     ChooseSellerModule,
-    HistogramModule,
     SpinnerModule,
     ChartExportPngButtonModule,
     ChartModule
