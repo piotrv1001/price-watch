@@ -2,14 +2,12 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Subscription, catchError, forkJoin, of } from "rxjs";
 import { PriceChangeDTO } from "src/app/models/dto/price-change.dto";
 import { Product } from "src/app/models/product/product";
-import { ProductWithPrice } from "src/app/models/product/product-with-price";
 import { Seller } from "src/app/models/seller/seller";
 import { PriceService } from "src/app/services/price.service";
 import { ProductService } from "src/app/services/product.service";
 import { ToastService } from "src/app/services/toast.service";
 import { HistogramData, HistogramOptions } from "src/app/types/histogram/histogram";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { Bucket } from "src/app/types/histogram/bucket";
 import { ThemeService } from "src/app/services/theme.service";
 
 @Component({
@@ -96,7 +94,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.startDate?.toISOString(),
       this.endDate?.toISOString()
     );
-    const priceBuckets$ = this.productService.getBySeller(this.currentSeller.name);
+    const priceBuckets$ = this.productService.getPriceBuckets(this.currentSeller.name);
     const sources$ = forkJoin([
       newProducts$.pipe(catchError(() => of(null))),
       priceChanges$.pipe(catchError(() => of(null))),
@@ -112,7 +110,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.priceChanges = priceChanges;
         }
         if (priceBuckets !== null) {
-          this.grouppedProducts = this.groupProducts(priceBuckets);
+          this.grouppedProducts = priceBuckets;
           this.getChartData();
           this.getChartOptions();
         }
@@ -121,25 +119,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
       })
     );
-  }
-
-  private groupProducts(products: ProductWithPrice[]): number[] {
-    const grouppedProducts: number[] = [0, 0, 0, 0];
-    products.forEach((product: ProductWithPrice) => {
-      const price = product.currentPrice;
-      if (price) {
-        if (price < 20) {
-          grouppedProducts[Bucket.CHEAP] += 1;
-        } else if (price < 50) {
-          grouppedProducts[Bucket.MEDIUM] += 1;
-        } else if (price < 100) {
-          grouppedProducts[Bucket.EXPENSIVE] += 1;
-        } else {
-          grouppedProducts[Bucket.VERY_EXPENSIVE] += 1;
-        }
-      }
-    });
-    return grouppedProducts;
   }
 
   private getChartData(): void {
