@@ -3,6 +3,7 @@ import { NgModule } from "@angular/core";
 import { PriceBucketsPageComponent } from "./price-buckets-page.component";
 
 import { ChartModule } from "primeng/chart";
+import { SelectButtonModule } from 'primeng/selectbutton';
 
 import { ChooseSellerModule } from "src/app/components/choose-seller/choose-seller.module";
 import { SharedModule } from "src/app/shared/shared.module";
@@ -15,7 +16,8 @@ import { ChartExportPngButtonModule } from "src/app/components/chart-export-png-
     ChooseSellerModule,
     SpinnerModule,
     ChartExportPngButtonModule,
-    ChartModule
+    ChartModule,
+    SelectButtonModule
   ],
   declarations: [
     PriceBucketsPageComponent

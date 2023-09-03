@@ -1,5 +1,5 @@
 import { TranslateService } from '@ngx-translate/core';
-import { Component } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Subscription } from "rxjs";
 import { Seller } from "src/app/models/seller/seller";
 import { ProductService } from "src/app/services/product.service";
@@ -8,16 +8,26 @@ import { ToastService } from "src/app/services/toast.service";
 import { HistogramData, HistogramOptions } from "src/app/types/histogram/histogram";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
+type ChartType = 'bar' | 'doughnut';
+interface ChartOption {
+  value: ChartType;
+  icon: string;
+}
+
 @Component({
   selector: 'app-price-buckets-page',
   templateUrl: './price-buckets-page.component.html',
   styleUrls: ['./price-buckets-page.component.scss']
 })
-export class PriceBucketsPageComponent {
+export class PriceBucketsPageComponent implements OnInit, OnDestroy {
+  chartOptions: ChartOption[] = [];
+  selectedChart: ChartType = 'bar';
   currentSeller: Seller | null = null;
   loading = false;
-  basicData?: HistogramData;
-  basicOptions?: HistogramOptions;
+  barData?: HistogramData;
+  doughnutData?: HistogramData;
+  doughnutOptions?: HistogramOptions;
+  barOptions?: HistogramOptions;
   grouppedProducts: number[] = [0, 0, 0, 0];
   subs: Subscription[] = [];
   plugins: any[] = [ChartDataLabels];
@@ -30,6 +40,7 @@ export class PriceBucketsPageComponent {
   ) {}
 
   ngOnInit() {
+    this.getChartTypeOptions();
     this.currentSeller = { id: 1, name: 'SmartLED' };
     this.getPrices();
     this.getThemeChange();
@@ -59,6 +70,19 @@ export class PriceBucketsPageComponent {
         this.getChartData();
       })
     );
+  }
+
+  private getChartTypeOptions(): void {
+    this.chartOptions = [
+      {
+        value: 'bar',
+        icon: 'pi pi-chart-bar'
+      },
+      {
+        value: 'doughnut',
+        icon: 'pi pi-chart-pie'
+      }
+    ];
   }
 
   private getPrices(): void {
@@ -91,7 +115,7 @@ export class PriceBucketsPageComponent {
     ];
     const borderColors = bgColors;
 
-    this.basicData = {
+    this.barData = {
       labels: [
         this.translateService.instant('chart.buckets.cheap'),
         this.translateService.instant('chart.buckets.medium'),
@@ -100,7 +124,7 @@ export class PriceBucketsPageComponent {
       ],
       datasets: [
         {
-          label: 'Products',
+          label: this.translateService.instant('global.products'),
           data: this.grouppedProducts,
           backgroundColor: bgColors,
           borderColor: borderColors,
@@ -109,6 +133,23 @@ export class PriceBucketsPageComponent {
         },
       ]
     };
+
+    this.doughnutData = {
+      labels: [
+        this.translateService.instant('chart.buckets.cheap'),
+        this.translateService.instant('chart.buckets.medium'),
+        this.translateService.instant('chart.buckets.expensive'),
+        this.translateService.instant('chart.buckets.veryExpensive')
+      ],
+      datasets: [
+        {
+          label: this.translateService.instant('global.products'),
+          data: this.grouppedProducts,
+          backgroundColor: bgColors,
+          borderColor: borderColors
+        },
+      ]
+    }
   }
 
   private getChartOptions(): void {
@@ -117,15 +158,12 @@ export class PriceBucketsPageComponent {
     const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
-    this.basicOptions = {
+    this.barOptions = {
       responsive: false,
       maintainAspectRatio: false,
       plugins: {
         legend: {
-          display: false,
-          labels: {
-            color: textColor,
-          },
+          display: false
         },
         datalabels: {
           display: true,
@@ -159,6 +197,30 @@ export class PriceBucketsPageComponent {
           },
         },
       },
+    };
+
+    this.doughnutOptions = {
+      responsive: false,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: true,
+          position: 'bottom',
+          labels: {
+            color: textColor,
+          },
+        },
+        datalabels: {
+          display: true,
+          color: textColor,
+          font: {
+            weight: 'bold'
+          },
+          formatter: Math.round,
+          align: 'end',
+          anchor: 'end'
+        }
+      }
     };
   }
 }
