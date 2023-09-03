@@ -1,6 +1,7 @@
 import { DateRangeStrategy } from "./date-range.strategy";
 
 export class CustomDateRangeStrategy implements DateRangeStrategy {
+
   private startDate: Date = new Date();
   private endDate: Date = new Date();
 

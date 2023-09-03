@@ -190,10 +190,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       maintainAspectRatio: false,
       plugins: {
         legend: {
-          display: false,
-          labels: {
-            color: textColor,
-          }
+          display: false
         },
         datalabels: {
           display: true,

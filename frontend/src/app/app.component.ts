@@ -6,6 +6,7 @@ import { AuthService } from './services/auth.service';
 import { SharedService } from './services/shared.service';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { PrimeNGConfig } from 'primeng/api';
 
 @Component({
   selector: 'app-root',
@@ -24,13 +25,17 @@ export class AppComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private sharedService: SharedService,
     private router: Router,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private config: PrimeNGConfig
   ) {
     this.translateService.addLangs(['en', 'pl']);
     this.translateService.setDefaultLang('pl');
     const browserLang = translateService.getBrowserLang();
     const useLang = browserLang?.match(/en|pl/) ? browserLang : 'pl';
     translateService.use(useLang);
+    this.subs.push(
+      this.translateService.get('primeng').subscribe(res => this.config.setTranslation(res))
+    );
   }
 
   ngOnInit(): void {
