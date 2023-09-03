@@ -11,7 +11,7 @@ export class DateRangeComponent {
   @Input() disabled = false;
   @Output() startDateChange: EventEmitter<Date> = new EventEmitter<Date>();
   @Output() endDateChange: EventEmitter<Date> = new EventEmitter<Date>();
-  dateFormat = 'd MM yy';
+  dateFormat = 'dd-mm-yy';
 
   handleStartDateChange(startDate: Date): void {
     this.startDateChange.emit(startDate);

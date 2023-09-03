@@ -1,10 +1,16 @@
 import { CustomDateRangeStrategy } from "./strategy/custom.strategy";
 import { DateRangeStrategy } from "./strategy/date-range.strategy";
 import { LastMonthStrategy } from "./strategy/last-month.strategy";
+import { LastTwoWeeksStrategy } from "./strategy/last-two-weeks.strategy";
 import { LastWeekStrategy } from "./strategy/last-week.strategy";
 import { LastYearStrategy } from "./strategy/last-year.strategy";
 
-export type DateRangeType = 'last-week' | 'last-month' | 'last-year' | 'custom';
+export type DateRangeType =
+  | 'last-week'
+  | 'last-two-weeks'
+  | 'last-month'
+  | 'last-year'
+  | 'custom';
 
 export class DateRange {
   dateRangeStrategy: DateRangeStrategy | null = null;
@@ -13,6 +19,9 @@ export class DateRange {
     switch (dateRangeType) {
       case 'last-week':
         this.dateRangeStrategy = new LastWeekStrategy();
+        break;
+      case 'last-two-weeks':
+        this.dateRangeStrategy = new LastTwoWeeksStrategy();
         break;
       case 'last-month':
         this.dateRangeStrategy = new LastMonthStrategy();
@@ -29,16 +38,10 @@ export class DateRange {
   }
 
   getStartDate(): Date {
-    if (this.dateRangeStrategy) {
-      return this.dateRangeStrategy.getStartDate();
-    }
-    return new Date();
+    return this.dateRangeStrategy?.getStartDate() ?? new Date();
   }
 
   getEndDate(): Date {
-    if (this.dateRangeStrategy) {
-      return this.dateRangeStrategy.getEndDate();
-    }
-    return new Date();
+    return this.dateRangeStrategy?.getEndDate() ?? new Date();
   }
 }

@@ -1,6 +1,7 @@
+import { Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { MenuItem } from 'primeng/api';
+import { Component, ElementRef, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { MenuItem, PrimeNGConfig } from 'primeng/api';
 import { LayoutService } from './service/app.layout.service';
 import { ThemeService } from '../services/theme.service';
 import { SharedService } from '../services/shared.service';
@@ -10,7 +11,7 @@ import { Language } from '../types/common/language';
   selector: 'app-topbar',
   templateUrl: './app.topbar.component.html'
 })
-export class AppTopBarComponent implements OnInit {
+export class AppTopBarComponent implements OnInit, OnDestroy {
 
   items!: MenuItem[];
   @ViewChild('menubutton') menuButton!: ElementRef;
@@ -20,17 +21,23 @@ export class AppTopBarComponent implements OnInit {
   isDarkTheme: boolean = false;
   languages: Language[] = [];
   selectedLanguage?: Language;
+  subs: Subscription[] = [];
 
   constructor(
     public layoutService: LayoutService,
     private themeService: ThemeService,
     private sharedService: SharedService,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private config: PrimeNGConfig
   ) {}
 
   ngOnInit(): void {
     this.getLanguages();
     this.getAccountMenuItems();
+  }
+
+  ngOnDestroy(): void {
+    this.subs.forEach((sub: Subscription) => sub.unsubscribe());
   }
 
   changeTheme(isDark: boolean) {
@@ -45,6 +52,9 @@ export class AppTopBarComponent implements OnInit {
   languageChange(): void {
     if(this.selectedLanguage) {
       this.translateService.use(this.selectedLanguage.key);
+      this.subs.push(
+        this.translateService.get('primeng').subscribe(res => this.config.setTranslation(res))
+      );
       this.getAccountMenuItems();
     }
   }

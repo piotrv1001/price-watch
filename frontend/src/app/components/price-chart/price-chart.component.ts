@@ -34,10 +34,7 @@ import { DateUtil } from 'src/app/utils/date/date.util';
 })
 export class PriceChartComponent implements OnInit, OnChanges, OnDestroy {
   @Input() productIdArray: string[] = [];
-  grouppedProducts: Map<string, CreatePriceDTO[]> = new Map<
-    string,
-    CreatePriceDTO[]
-  >();
+  grouppedProducts: Map<string, CreatePriceDTO[]> = new Map<string,CreatePriceDTO[]>();
   data?: HistogramData;
   options?: HistogramOptions;
   subs: Subscription[] = [];
@@ -69,7 +66,7 @@ export class PriceChartComponent implements OnInit, OnChanges, OnDestroy {
         this.grouppedProducts.delete(removedProductId);
         this.getChartData();
       })
-    )
+    );
   }
 
   ngOnChanges(changes: SimpleChanges): void {
