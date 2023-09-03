@@ -11,7 +11,8 @@
   scrollHeight="400px"
   [maxSelectedLabels]="1"
   selectedItemsLabel="{{ 'productSelect.selectedXProducts' | translate }}"
-  [selectionLimit]="5">
+  [selectionLimit]="5"
+  [disabled]="loading">
   <ng-template let-product pTemplate="item">
     <div class="flex align-items-center ml-3">
       <img [src]="product.imgSrc" alt="Product image" height="36" width="36">
