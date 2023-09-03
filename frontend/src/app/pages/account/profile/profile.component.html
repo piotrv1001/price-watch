@@ -1,46 +1,54 @@
-<div class="flex gap-4">
-  <app-profile-picture
-    [picSize]="128"
-    [fontSize]="75"
-    [hover]="false"
-    [loadPic]="false"
-    [profilePic]="profilePic"
-    [bigLetter]="bigLetter">
-  </app-profile-picture>
-  <div class="flex flex-column">
-    <h1>{{ initialUsername ?? initialEmail }}</h1>
-    <ng-container *ngIf="isGoogleAccount; else regularAccountTemplate">
-      <div class="flex flex-row gap-2 align-items-center">
-        <img src="assets/img/Google.png" alt="Google" width="18" height="18">
-        <p class="text-lg">{{ 'profile.googleAccount' | translate }}</p>
+<ng-container *ngIf="loading; else defaultTemplate">
+  <app-spinner></app-spinner>
+</ng-container>
+<ng-template #defaultTemplate>
+  <div class="scalein animation-duration-200 animation-iteration-1">
+    <div class="flex gap-4">
+      <app-profile-picture
+        [picSize]="128"
+        [fontSize]="75"
+        [hover]="false"
+        [loadPic]="false"
+        [profilePic]="profilePic"
+        [bigLetter]="bigLetter">
+      </app-profile-picture>
+      <div class="flex flex-column">
+        <h1>{{ initialUsername ?? initialEmail }}</h1>
+        <ng-container *ngIf="isGoogleAccount; else regularAccountTemplate">
+          <div class="flex flex-row gap-2 align-items-center">
+            <img src="assets/img/Google.png" alt="Google" width="18" height="18">
+            <p class="text-lg">{{ 'profile.googleAccount' | translate }}</p>
+          </div>
+        </ng-container>
+        <ng-template #regularAccountTemplate>
+          <p class="text-lg">{{ 'profile.personalAccount' | translate }}</p>
+        </ng-template>
       </div>
-    </ng-container>
-    <ng-template #regularAccountTemplate>
-      <p class="text-lg">{{ 'profile.personalAccount' | translate }}</p>
-    </ng-template>
-  </div>
-</div>
-<div class="grid">
-  <div class="col mt-3">
-    <div class="card">
-      <h5>{{ 'profile.profileInfo' | translate }}</h5>
-      <div class="mt-6">
-        <div class="flex flex-column gap-2 mb-3">
-          <label htmlFor="email">Email</label>
-          <input pInputText type="text" id="email" [(ngModel)]="email"/>
-        </div>
-        <div class="flex flex-column gap-2">
-          <label htmlFor="username">{{ 'profile.username' | translate }}</label>
-          <input pInputText type="text" id="username" [(ngModel)]="username"/>
-        </div>
-        <div class="mt-6">
-          <p-button
-            (onClick)="updateProfile()"
-            label="{{ 'profile.updateProfile' | translate }}"
-            [disabled]="!changesMade() || !isValidData()">
-          </p-button>
+    </div>
+    <div class="grid">
+      <div class="col mt-3">
+        <div class="card">
+          <h5>{{ 'profile.profileInfo' | translate }}</h5>
+          <div class="mt-6">
+            <div class="flex flex-column gap-2 mb-3">
+              <label htmlFor="email">Email</label>
+              <input pInputText type="text" id="email" [(ngModel)]="email"/>
+            </div>
+            <div class="flex flex-column gap-2">
+              <label htmlFor="username">{{ 'profile.username' | translate }}</label>
+              <input pInputText type="text" id="username" [(ngModel)]="username"/>
+            </div>
+            <div class="mt-6">
+              <p-button
+                (onClick)="updateProfile()"
+                label="{{ 'profile.updateProfile' | translate }}"
+                [disabled]="!changesMade() || !isValidData()"
+                [loading]="saving">
+              </p-button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
+</ng-template>

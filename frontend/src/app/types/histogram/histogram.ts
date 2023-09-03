@@ -17,7 +17,7 @@ export interface HistogramDataset {
 }
 
 export interface LegendLabels {
-  color?: string;
+  color?: string | (() => string);
 }
 
 export interface Plugins {
@@ -31,11 +31,11 @@ export interface Plugins {
 
 export interface ScalesTicks {
   callback?: (value: any, index: number, values: any[]) => any;
-  color?: string;
+  color?: string | (() => string);
 }
 
 export interface ScalesGrid {
-  color?: string;
+  color?: string | (() => string);
   drawBorder: boolean;
 }
 

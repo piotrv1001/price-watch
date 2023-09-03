@@ -11,6 +11,7 @@ import { ToastService } from "src/app/services/toast.service";
 import { HistogramData, HistogramOptions } from "src/app/types/histogram/histogram";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { ThemeService } from "src/app/services/theme.service";
+import { Theme } from 'src/app/types/common/theme';
 
 @Component({
   selector: 'app-dashboard',
@@ -44,6 +45,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.init();
+    const themeStorage = localStorage.getItem('theme');
+    const darkTheme = themeStorage === Theme.DARK;
+    this.updateColors(darkTheme);
     this.getLangChange();
     this.getChartOptions();
     this.getThemeChange();
@@ -57,9 +61,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   getThemeChange(): void {
     this.subs.push(
       this.themeService.getTheme().subscribe((darkTheme) => {
-        this.darkTheme = darkTheme;
-        this.getChartOptions();
-        this.logo = this.darkTheme ? this.currentSeller?.logoDarkTheme : this.currentSeller?.logoLightTheme;
+        setTimeout(() => {
+          this.updateColors(darkTheme);
+        });
       })
     );
   }
@@ -89,6 +93,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.startDate = new Date();
     this.startDate.setDate(this.startDate.getDate() - 14);
     this.endDate = new Date();
+  }
+
+  private updateColors(darkTheme: boolean): void {
+    this.darkTheme = darkTheme;
+    this.getChartOptions();
+    this.logo = this.darkTheme ? this.currentSeller?.logoDarkTheme : this.currentSeller?.logoLightTheme;
   }
 
   private getData(): void {

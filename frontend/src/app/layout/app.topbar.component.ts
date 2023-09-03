@@ -6,6 +6,7 @@ import { LayoutService } from './service/app.layout.service';
 import { ThemeService } from '../services/theme.service';
 import { SharedService } from '../services/shared.service';
 import { Language } from '../types/common/language';
+import { Theme } from '../types/common/theme';
 
 @Component({
   selector: 'app-topbar',
@@ -43,6 +44,7 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
   changeTheme(isDark: boolean) {
     this.isDarkTheme = isDark;
     this.themeService.switchTheme(isDark ? 'lara-dark-blue' : 'lara-light-blue');
+    localStorage.setItem('theme', isDark ? Theme.DARK : Theme.LIGHT);
   }
 
   signOut(): void {
