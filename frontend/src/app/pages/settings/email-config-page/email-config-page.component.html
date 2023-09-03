@@ -36,7 +36,12 @@
               </div>
             </div>
             <div class="mt-6">
-              <p-button label="{{ 'global.saveChanges' | translate }}" [disabled]="!changesMade()" (onClick)="saveChanges()"></p-button>
+              <p-button
+                label="{{ 'global.saveChanges' | translate }}"
+                [disabled]="!changesMade()"
+                (onClick)="saveChanges()"
+                [loading]="saving">
+              </p-button>
             </div>
           </div>
         </ng-container>

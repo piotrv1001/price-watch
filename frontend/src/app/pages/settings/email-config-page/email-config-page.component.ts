@@ -24,6 +24,7 @@ export class EmailConfigPageComponent implements OnInit, OnDestroy {
   enabled = false;
   subs: Subscription[] = [];
   loading = false;
+  saving = false;
 
   constructor(
     private emailConfigService: EmailConfigService,
@@ -55,6 +56,7 @@ export class EmailConfigPageComponent implements OnInit, OnDestroy {
       minute: this.minute,
       enabled: this.enabled,
     };
+    this.saving = true;
     if(this.emptyInitialConfig) {
       this.createEmailConfig(config);
     } else {
@@ -63,12 +65,15 @@ export class EmailConfigPageComponent implements OnInit, OnDestroy {
   }
 
   changesMade(): boolean {
+    if(this.email === '') {
+      return false;
+    }
     if(!this.enabled && !this.initialConfig?.enabled && this.email === this.initialConfig?.email) {
       return false;
     }
     return (
       this.email !== this.initialConfig?.email ||
-      this.dayOfWeek !== this.initialConfig?.dayOfWeek ||
+      this.dayOfWeek?.value !== this.initialConfig?.dayOfWeek ||
       this.hour !== this.initialConfig?.hour ||
       this.minute !== this.initialConfig?.minute ||
       this.enabled !== this.initialConfig?.enabled
@@ -81,31 +86,7 @@ export class EmailConfigPageComponent implements OnInit, OnDestroy {
       this.emailConfigService.getByUserId().subscribe({
         next: (res: EmailConfig | null) => {
           this.loading = false;
-          if (res) {
-            this.initialConfig = res;
-            this.emptyInitialConfig = false;
-            this.email = res.email ?? '';
-            if(this.dayOfWeek) {
-              this.dayOfWeek.value = res.dayOfWeek ?? 0;
-            }
-            this.hour = res.hour ?? 0;
-            this.minute = res.minute ?? 0;
-            if(typeof res.enabled === 'number') {
-              this.enabled = res.enabled === 1;
-            } else {
-              this.enabled = res.enabled ?? false;
-            }
-            this.initialConfig.enabled = this.enabled;
-          } else {
-            this.emptyInitialConfig = true;
-            this.initialConfig = {
-              email: '',
-              dayOfWeek: 0,
-              hour: 0,
-              minute: 0,
-              enabled: false
-            };
-          }
+          this.updateConfigModel(res);
         },
         error: (error: any) => {
           this.loading = false;
@@ -119,14 +100,9 @@ export class EmailConfigPageComponent implements OnInit, OnDestroy {
     this.subs.push(
       this.emailConfigService.create(config).subscribe({
         next: (emailConfig: EmailConfig) => {
-          this.initialConfig = emailConfig;
-          if(typeof emailConfig.enabled === 'number') {
-            this.initialConfig.enabled = emailConfig.enabled === 1;
-          } else {
-            this.initialConfig.enabled = emailConfig.enabled ?? false;
-          }
-          this.emptyInitialConfig = false;
-          this.toastService.successMessage('Success!', 'Email config created successfully');
+          this.saving = false;
+          this.updateConfigModel(emailConfig);
+          this.toastService.successMessage('msg.success', 'emailConfig.createSuccess');
         },
         error: (error) => {
           this.toastService.handleError(error);
@@ -140,6 +116,7 @@ export class EmailConfigPageComponent implements OnInit, OnDestroy {
     this.subs.push(
       this.emailConfigService.update(config).subscribe({
         next: () => {
+          this.saving = false;
           this.initialConfig = {
             email: this.email,
             dayOfWeek: this.dayOfWeek?.value,
@@ -147,7 +124,7 @@ export class EmailConfigPageComponent implements OnInit, OnDestroy {
             minute: this.minute,
             enabled: this.enabled,
           };
-          this.toastService.successMessage('Success!', 'Email config updated successfully');
+          this.toastService.successMessage('msg.success', 'emailConfig.updateSuccess');
         },
         error: (error) => {
           this.toastService.handleError(error);
@@ -164,5 +141,33 @@ export class EmailConfigPageComponent implements OnInit, OnDestroy {
         switchMap((userId: UserId) => this.emailConfigService.rescheduleEmail({...reqConfig, userId: userId.id})
       )).subscribe()
     );
+  }
+
+  private updateConfigModel(res: EmailConfig | null): void {
+    if (res) {
+      this.initialConfig = res;
+      this.emptyInitialConfig = false;
+      this.email = res.email ?? '';
+      if(this.dayOfWeek) {
+        this.dayOfWeek.value = res.dayOfWeek ?? 0;
+      }
+      this.hour = res.hour ?? 0;
+      this.minute = res.minute ?? 0;
+      if(typeof res.enabled === 'number') {
+        this.enabled = res.enabled === 1;
+      } else {
+        this.enabled = res.enabled ?? false;
+      }
+      this.initialConfig.enabled = this.enabled;
+    } else {
+      this.emptyInitialConfig = true;
+      this.initialConfig = {
+        email: '',
+        dayOfWeek: 0,
+        hour: 0,
+        minute: 0,
+        enabled: false
+      };
+    }
   }
 }
