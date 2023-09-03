@@ -39,9 +39,12 @@ export class EmailConfigController {
   @Get('user')
   async getByUserId(@Req() req: any) {
     const user = await this.userService.getUserFromRequest(req.user);
+    const config = await this.emailConfigService.getByUserId(user.id);
+    if (!config) {
+      return null;
+    }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { userId, ...emailConfig } =
-      await this.emailConfigService.getByUserId(user.id);
+    const { userId, ...emailConfig } = config;
     return emailConfig;
   }
 
