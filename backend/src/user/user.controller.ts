@@ -42,7 +42,11 @@ export class UserController {
     if (user == null) {
       res.status(404).send();
     } else {
-      const resJson = { profilePic: user.profilePic, email: user.email };
+      const resJson = {
+        profilePic: user.profilePic,
+        email: user.email,
+        displayName: user.displayName,
+      };
       res.status(200).json(resJson);
     }
   }

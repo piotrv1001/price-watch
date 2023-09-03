@@ -134,7 +134,9 @@
   "emailConfig": {
     "emailOptions": "Ustawienia e-mail",
     "reportEmail": "E-mail do raportów o produktach",
-    "enableReports": "Włącz raporty o produktach"
+    "enableReports": "Włącz raporty o produktach",
+    "createSuccess": "Konfiguracja e-mail utworzona pomyślnie",
+    "updateSuccess": "Konfiguracja e-mail zaktualizowana pomyślnie"
   },
   "profile": {
     "title": "Profil",
@@ -142,6 +144,7 @@
     "personalAccount": "Konto osobiste",
     "profileInfo": "Informacje o profilu",
     "username": "Nazwa użytkownika",
-    "updateProfile": "Aktualizuj profil"
+    "updateProfile": "Aktualizuj profil",
+    "updateSuccess": "Profil zaktualizowany pomyślnie"
   }
 }

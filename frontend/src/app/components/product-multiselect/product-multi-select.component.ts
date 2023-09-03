@@ -16,6 +16,7 @@ export class ProductMultiSelectComponent implements OnInit, OnDestroy {
   products: Product[] = [];
   selectedProducts: Product[] = [];
   subs: Subscription[] = [];
+  loading = false;
 
   constructor(
     private productService: ProductService,
@@ -50,10 +51,12 @@ export class ProductMultiSelectComponent implements OnInit, OnDestroy {
   }
 
   private getAllProducts(): void {
+    this.loading = true;
     this.subs.push(
       this.productService.getAllProducts().subscribe((products: Product[]) => {
-        this.products = products;
+        this.loading = false;
         this.priceChartService.setProductsInitialized();
+        this.products = products;
       })
     );
   }

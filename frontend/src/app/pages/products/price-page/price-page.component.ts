@@ -16,6 +16,7 @@ export class PricePageComponent implements OnInit, OnDestroy {
   priceLegendArray: PriceLegend[] = [];
   subs: Subscription[] = [];
   productFromNav?: any;
+  loading = false;
 
   constructor(
     private priceChartService: PriceChartService,
@@ -35,6 +36,7 @@ export class PricePageComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.loading = true;
     this.subs.push(
       this.priceChartService.getProductRemovedIndex().subscribe((index: number) => {
         this.priceLegendArray.splice(index, 1);
@@ -45,6 +47,7 @@ export class PricePageComponent implements OnInit, OnDestroy {
     );
     this.subs.push(
       this.priceChartService.getProductsInitialized().subscribe(() => {
+        this.loading = false;
         if(this.productFromNav) {
           this.priceChartService.setNewProduct(this.productFromNav);
         }

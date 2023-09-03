@@ -134,7 +134,9 @@
   "emailConfig": {
     "emailOptions": "Email options",
     "reportEmail": "Email for product reports",
-    "enableReports": "Enable product reports"
+    "enableReports": "Enable product reports",
+    "createSuccess": "Email configuration created successfully",
+    "updateSuccess": "Email configuration updated successfully"
   },
   "profile": {
     "title": "Profile",
@@ -142,6 +144,7 @@
     "personalAccount": "Personal account",
     "profileInfo": "Profile information",
     "username": "Username",
-    "updateProfile": "Update profile"
+    "updateProfile": "Update profile",
+    "updateSuccess": "Profile updated successfully"
   }
 }

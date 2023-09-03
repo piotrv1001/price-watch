@@ -4,7 +4,7 @@ import { SERVER_API_URL } from "../app.constants";
 import { HttpClient } from "@angular/common/http";
 import { User } from '../models/user/user';
 
-export interface ProfilePic { profilePic?: string, email: string }
+export interface ProfilePic { profilePic?: string, email: string, displayName?: string }
 export interface UserId { id: number }
 
 @Injectable({

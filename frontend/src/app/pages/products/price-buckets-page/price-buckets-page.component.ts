@@ -59,7 +59,9 @@ export class PriceBucketsPageComponent implements OnInit, OnDestroy {
   getThemeChange(): void {
     this.subs.push(
       this.themeService.getTheme().subscribe(() => {
-        this.getChartOptions();
+        setTimeout(() => {
+          this.getChartOptions();
+        });
       })
     );
   }

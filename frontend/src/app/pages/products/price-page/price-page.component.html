@@ -1,3 +1,6 @@
+<ng-container *ngIf="loading">
+  <app-spinner></app-spinner>
+</ng-container>
 <div class="grid">
   <div class="col">
     <div class="card">
@@ -5,12 +8,16 @@
       <div class="mt-6">
         <app-product-multiselect (selectedProductsChange)="updateProductIdArray($event)"></app-product-multiselect>
       </div>
-      <div class="mt-6">
-        <app-price-legend [priceLegendArray]="priceLegendArray"></app-price-legend>
-      </div>
-      <div class="mt-6">
-        <app-price-chart [productIdArray]="productIdArray"></app-price-chart>
-      </div>
+      <ng-container *ngIf="!loading">
+        <div class="scalein animation-duration-200 animation-iteration-1">
+          <div class="mt-6">
+            <app-price-legend [priceLegendArray]="priceLegendArray"></app-price-legend>
+          </div>
+          <div class="mt-6">
+            <app-price-chart [productIdArray]="productIdArray"></app-price-chart>
+          </div>
+        </div>
+      </ng-container>
     </div>
   </div>
 </div>

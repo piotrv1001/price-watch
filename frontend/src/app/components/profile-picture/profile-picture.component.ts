@@ -33,8 +33,13 @@ export class ProfilePictureComponent implements OnInit, OnDestroy {
     this.subs.push(
       this.userService.getProfilePicture().subscribe((profilePic: ProfilePic) => {
         this.profilePic = profilePic.profilePic;
+        const displayName = profilePic.displayName;
         if(!this.profilePic) {
-          this.bigLetter = profilePic.email.charAt(0).toUpperCase();
+          if(displayName) {
+            this.bigLetter = displayName.charAt(0).toUpperCase();
+          } else {
+            this.bigLetter = profilePic.email.charAt(0).toUpperCase();
+          }
         }
       })
     );

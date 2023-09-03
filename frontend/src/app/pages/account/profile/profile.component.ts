@@ -18,6 +18,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
   bigLetter?: string;
   isGoogleAccount = false;
   subs: Subscription[] = [];
+  loading = false;
+  saving = false;
 
   constructor(
     private userService: UserService,
@@ -42,10 +44,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   updateProfile(): void {
     if(this.email && this.username) {
+      this.saving = true;
       this.subs.push(
         this.userService.updateProfile({ email: this.email, displayName: this.username }).subscribe({
           next: (user: User) => {
-            this.toastService.successMessage('Success!', 'Profile updated successfully!');
+            this.saving = false;
+            this.toastService.successMessage('msg.success', 'profile.updateSuccess');
             this.initialEmail = user.email;
             this.initialUsername = user.displayName;
             this.email = this.initialEmail;
@@ -60,6 +64,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   private getInitialData(): void {
+    this.loading = true;
     this.subs.push(
       this.userService.getProfile().subscribe(user => {
         this.isGoogleAccount = user.isGoogleAccount ?? false;
@@ -73,6 +78,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
         } else {
           this.bigLetter = user.email?.charAt(0).toUpperCase();
         }
+        this.loading = false;
       })
     );
   }

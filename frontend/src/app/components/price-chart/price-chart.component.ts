@@ -131,10 +131,8 @@ export class PriceChartComponent implements OnInit, OnChanges, OnDestroy {
       aspectRatio: 0.6,
       plugins: {
         legend: {
-          labels: {
-            color: textColor,
-          },
-        },
+          display: false
+        }
       },
       scales: {
         x: {
@@ -147,23 +145,23 @@ export class PriceChartComponent implements OnInit, OnChanges, OnDestroy {
               }
               return '';
             },
-            color: textColorSecondary,
+            color: textColorSecondary
           },
           grid: {
             color: surfaceBorder,
             drawBorder: false,
-          },
+          }
         },
         y: {
           ticks: {
-            color: textColorSecondary,
+            color: textColorSecondary
           },
           grid: {
             color: surfaceBorder,
-            drawBorder: false,
-          },
-        },
-      },
+            drawBorder: false
+          }
+        }
+      }
     };
   }
 
