@@ -4,5 +4,6 @@ export class NewProductDTO {
   imgSrc?: string;
   link?: string;
   promo?: boolean;
+  status?: number;
   currentPrice?: number;
 }

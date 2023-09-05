@@ -31,7 +31,7 @@ export class PricePageComponent implements OnInit, OnDestroy {
         index: 1,
         productName: product.name!,
         color: `var(${PRICE_CHART_COLORS[0]})`
-      })
+      });
     }
   }
 
@@ -52,7 +52,7 @@ export class PricePageComponent implements OnInit, OnDestroy {
           this.priceChartService.setNewProduct(this.productFromNav);
         }
       })
-    )
+    );
   }
 
   ngOnDestroy(): void {

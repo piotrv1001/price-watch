@@ -58,6 +58,7 @@
   "menu": {
     "home": "Strona główna",
     "dashboard": "Panel",
+    "products": "Produkty",
     "newProducts": "Nowe produkty",
     "prices": "Ceny",
     "priceBuckets": "Koszyki cenowe",
@@ -146,5 +147,11 @@
     "username": "Nazwa użytkownika",
     "updateProfile": "Aktualizuj profil",
     "updateSuccess": "Profil zaktualizowany pomyślnie"
+  },
+  "status": {
+    "available": "Dostępny",
+    "unavailable": "Niedostępny",
+    "withdrawn": "Wycofany",
+    "unknown": "Nieznany"
   }
 }

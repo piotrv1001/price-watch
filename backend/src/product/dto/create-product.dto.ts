@@ -4,4 +4,6 @@ export class CreateProductDTO {
   seller?: string;
   link?: string;
   imgSrc?: string;
+  promo?: boolean;
+  status?: number;
 }

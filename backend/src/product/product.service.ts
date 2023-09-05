@@ -28,6 +28,8 @@ export class ProductService {
     product.seller = createProductDTO.seller;
     product.link = createProductDTO.link;
     product.imgSrc = createProductDTO.imgSrc;
+    product.promo = createProductDTO.promo;
+    product.status = createProductDTO.status;
     return await this.productRepository.save(product);
   }
 
@@ -38,6 +40,8 @@ export class ProductService {
     product.seller = createProductDTO.seller;
     product.link = createProductDTO.link;
     product.imgSrc = createProductDTO.imgSrc;
+    product.promo = createProductDTO.promo;
+    product.status = createProductDTO.status;
     return await this.productRepository.save(product);
   }
 

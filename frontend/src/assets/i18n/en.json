@@ -58,6 +58,7 @@
   "menu": {
     "home": "Home",
     "dashboard": "Dashboard",
+    "products": "Products",
     "newProducts": "New products",
     "prices": "Prices",
     "priceBuckets": "Price buckets",
@@ -146,5 +147,11 @@
     "username": "Username",
     "updateProfile": "Update profile",
     "updateSuccess": "Profile updated successfully"
+  },
+  "status": {
+    "available": "Available",
+    "unavailable": "Unavailable",
+    "withdrawn": "Withdrawn",
+    "unknown": "Unknown"
   }
 }
