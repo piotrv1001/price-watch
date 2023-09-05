@@ -204,13 +204,22 @@ export class DashboardComponent implements OnInit, OnDestroy {
         },
         datalabels: {
           display: true,
-          color: textColor,
+          color: surfaceBorder,
           font: {
-            weight: 'bold'
+            weight: 'bold',
+            size: 18
           },
-          formatter: Math.round,
-          align: 'end',
-          anchor: 'end'
+          formatter: function(value: number, context: any) {
+            const data = context?.dataset?.data;
+            if(data) {
+              const sum = data.reduce((a: number, b: number) => a + b, 0);
+              const percentage = (value / sum) * 100;
+              return Math.round(percentage) + '%';
+            }
+            return value;
+          },
+          align: 'center',
+          anchor: 'center'
         }
       },
       scales: {
@@ -249,13 +258,22 @@ export class DashboardComponent implements OnInit, OnDestroy {
         },
         datalabels: {
           display: true,
-          color: textColor,
+          color: surfaceBorder,
           font: {
-            weight: 'bold'
+            weight: 'bold',
+            size: 18
           },
-          formatter: Math.round,
-          align: 'end',
-          anchor: 'end'
+          formatter: function(value: number, context: any) {
+            const data = context?.dataset?.data;
+            if(data) {
+              const sum = data.reduce((a: number, b: number) => a + b, 0);
+              const percentage = (value / sum) * 100;
+              return Math.round(percentage) + '%';
+            }
+            return value;
+          },
+          align: 'center',
+          anchor: 'center'
         }
       }
     };
