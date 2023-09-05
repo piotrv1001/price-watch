@@ -38,8 +38,11 @@ export class ChooseSellerComponent implements OnInit {
         logoLightTheme: 'led_lux_logo_light_theme.png',
         logoDarkTheme: 'led_lux_logo_dark_theme.png',
       },
-      { id: 3, name: 'ELE24' },
-      { id: 4, name: 'ledhouse_pl' },
+      { id: 3, name: 'ledhouse_pl' },
+      { id: 4, name: 'LightLogic' },
+      { id: 5, name: 'Dled_pl' },
+      { id: 6, name: 'superled-poland' },
+      { id: 7, name: 'ELE24' },
     ];
     this.currentSeller = this.sellers[0];
   }

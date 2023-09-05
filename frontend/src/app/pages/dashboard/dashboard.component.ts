@@ -213,6 +213,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
             const data = context?.dataset?.data;
             if(data) {
               const sum = data.reduce((a: number, b: number) => a + b, 0);
+              if(sum === 0) {
+                return '';
+              }
               const percentage = (value / sum) * 100;
               return Math.round(percentage) + '%';
             }
@@ -267,6 +270,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
             const data = context?.dataset?.data;
             if(data) {
               const sum = data.reduce((a: number, b: number) => a + b, 0);
+              if(sum === 0) {
+                return '';
+              }
               const percentage = (value / sum) * 100;
               return Math.round(percentage) + '%';
             }
