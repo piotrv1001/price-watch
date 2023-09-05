@@ -11,6 +11,7 @@
       <span class="p-input-icon-left mr-auto">
         <i class="pi pi-search"></i>
         <input
+          [style]="{'width': '300px'}"
           pInputText
           type="text"
           (input)="table.filterGlobal($any($event.target).value, 'contains')"
@@ -96,6 +97,19 @@
             </ng-container>
             <ng-container *ngSwitchCase="'name'">
               {{rowData[col.field] | stripPrice}}
+            </ng-container>
+            <ng-container *ngSwitchCase="'status'">
+              <ng-container [ngSwitch]="rowData[col.field]">
+                <ng-container *ngSwitchCase="0">
+                  <div class="border-round bg-green-100 text-green-600 p-2 font-semibold text-center">{{ 'status.available' | translate }}</div>
+                </ng-container>
+                <ng-container *ngSwitchCase="1">
+                  <div class="border-round bg-yellow-100 text-yellow-600 p-2 font-semibold text-center">{{ 'status.unavailable' | translate }}</div>
+                </ng-container>
+                <ng-container *ngSwitchCase="2">
+                  <div class="border-round bg-gray-100 text-gray-600 p-2 font-semibold text-center">{{ 'status.withdrawn' | translate }}</div>
+                </ng-container>
+              </ng-container>
             </ng-container>
             <ng-container *ngSwitchDefault>
               {{rowData[col.field]}}

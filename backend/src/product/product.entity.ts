@@ -21,6 +21,9 @@ export class Product {
   @Column({ type: 'tinyint', width: 1, default: 0, nullable: true })
   promo?: boolean;
 
+  @Column({ nullable: true, default: 0 })
+  status?: number;
+
   @OneToMany(() => Price, (price) => price.product, {
     nullable: true,
   })

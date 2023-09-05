@@ -8,5 +8,6 @@ export class Product {
   link?: string;
   imgSrc?: string;
   promo?: boolean;
+  status?: number;
   prices?: Price[];
 }

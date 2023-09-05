@@ -57,7 +57,7 @@
         </div>
       </div>
     </div>
-    <div class="col-12 xl:col-6 p-3">
+    <div class="col-12 p-3">
       <div class="card">
         <h5>{{ 'dashboard.newProducts' | translate }}</h5>
         <div class="mt-6">
@@ -70,13 +70,13 @@
         </div>
       </div>
     </div>
-    <div class="col-12 xl:col-6 p-3">
+    <div class="col-12 p-3">
       <div class="card">
         <h5>{{ 'dashboard.priceChanges' | translate }}</h5>
         <div class="mt-6">
           <app-product-table
             [products]="priceChanges"
-            [type]="'price-changes-min'"
+            [type]="'price-changes'"
             [showPaginator]="true"
             [paginatorRows]="5">
           </app-product-table>

@@ -118,6 +118,7 @@ export class PriceService {
       .addSelect('pr.name as name')
       .addSelect('pr.imgSrc as imgSrc')
       .addSelect('pr.promo as promo')
+      .addSelect('pr.status as status')
       .addSelect('pr.link as link')
       .innerJoin('p.product', 'pr')
       .where('pr.seller = :seller', { seller })
@@ -138,6 +139,7 @@ export class PriceService {
           name: curr.name,
           imgSrc: curr.imgSrc,
           promo: curr.promo,
+          status: curr.status,
           link: curr.link,
           prices: [curr],
         });
@@ -155,6 +157,7 @@ export class PriceService {
           imgSrc: product.imgSrc,
           link: product.link,
           promo: product.promo,
+          status: product.status,
           currentPrice: prices[0].price,
         });
         return {
@@ -163,6 +166,7 @@ export class PriceService {
           imgSrc: product.imgSrc,
           link: product.link,
           promo: product.promo,
+          status: product.status,
           prevPrice: null,
           currentPrice: prices[0].price,
           priceChange: null,
@@ -177,6 +181,7 @@ export class PriceService {
           imgSrc: product.imgSrc,
           link: product.link,
           promo: product.promo,
+          status: product.status,
           prevPrice: prices[lastIndex].price,
           currentPrice: prices[0].price,
           priceChange,
