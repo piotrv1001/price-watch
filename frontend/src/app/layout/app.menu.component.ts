@@ -45,6 +45,11 @@ export class AppMenuComponent implements OnInit {
             label: 'menu.priceChanges',
             icon: 'pi pi-chart-bar',
             routerLink: ['/products/price-changes']
+          },
+          {
+            label: 'menu.timeline',
+            icon: 'pi pi-stopwatch',
+            routerLink: ['/products/timeline']
           }
         ]
       },

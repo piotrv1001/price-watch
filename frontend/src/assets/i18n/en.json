@@ -63,6 +63,7 @@
     "prices": "Prices",
     "priceBuckets": "Price buckets",
     "priceChanges": "Price changes",
+    "timeline": "Timeline",
     "settings": "Settings"
   },
   "date": {
@@ -153,5 +154,12 @@
     "unavailable": "Unavailable",
     "withdrawn": "Withdrawn",
     "unknown": "Unknown"
+  },
+  "timeline": {
+    "title": "Product timeline",
+    "launch": "Launch",
+    "withdrawal": "Withdrawal",
+    "priceChange": "Price change",
+    "reActivated": "Restoration"
   }
 }
