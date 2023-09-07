@@ -5,6 +5,7 @@ import { Price } from './price.entity';
 import { CreatePriceDTO } from './dto/create-price.dto';
 import { PriceChangeDTO } from './dto/price-change.dto';
 import { NewProductDTO } from './dto/new-product.dto';
+import { ProductEventDTO } from './dto/product-event.dto';
 
 @Injectable()
 export class PriceService {
@@ -43,7 +44,26 @@ export class PriceService {
   }
 
   async findByProductId(productId: string): Promise<Price[]> {
-    return await this.priceRepository.findBy({ productId });
+    return await this.priceRepository.find({
+      where: {
+        productId: productId,
+      },
+      order: {
+        date: 'ASC',
+      },
+    });
+  }
+
+  async findByProductIdNested(productId: string): Promise<Price[]> {
+    return await this.priceRepository.find({
+      where: {
+        productId: productId,
+      },
+      order: {
+        date: 'ASC',
+      },
+      relations: ['product'],
+    });
   }
 
   async findByProductIdAndDates(
@@ -104,6 +124,71 @@ export class PriceService {
       pricesByProductId.set(productId, filledPrices);
     }
     return pricesByProductId;
+  }
+
+  async getProductEvents(productId: string): Promise<ProductEventDTO[]> {
+    const prices = await this.findByProductIdNested(productId);
+    const events: ProductEventDTO[] = [];
+    let hasLaunched = false;
+    let hasBeenWithdrawn = false;
+    let i = 0;
+    for (const price of prices) {
+      if (!hasLaunched) {
+        events.push({
+          type: 'new-product',
+          currentPrice: price.price,
+          date: price.date,
+          imgSrc: price.product.imgSrc,
+        });
+        hasLaunched = true;
+      } else {
+        if (hasBeenWithdrawn) {
+          events.push({
+            type: 're-activated',
+            currentPrice: price.price,
+            date: price.date,
+          });
+          hasBeenWithdrawn = false;
+        } else if (i > 0 && prices[i - 1].price !== price.price) {
+          const priceChange = price.price - prices[i - 1].price;
+          events.push({
+            type: 'price-change',
+            prevPrice: prices[i - 1].price,
+            currentPrice: price.price,
+            priceChangePercentage: Math.round(
+              (priceChange / prices[i - 1].price) * 100,
+            ),
+            date: price.date,
+          });
+        }
+      }
+      if (i === prices.length - 1) {
+        const today = new Date();
+        const lastDate = new Date(price.date);
+        const day = 24 * 60 * 60 * 1000;
+        if (today.getTime() - lastDate.getTime() > 14 * day) {
+          events.push({
+            type: 'withdrawn',
+            currentPrice: price.price,
+            date: lastDate,
+          });
+        }
+      } else {
+        const nextDate = new Date(prices[i + 1].date);
+        const lastDate = new Date(price.date);
+        const day = 24 * 60 * 60 * 1000;
+        if (nextDate.getTime() - lastDate.getTime() > 14 * day) {
+          events.push({
+            type: 'withdrawn',
+            currentPrice: price.price,
+            date: lastDate,
+          });
+          hasBeenWithdrawn = true;
+        }
+      }
+      i++;
+    }
+    return events;
   }
 
   private async analyzePriceChanges(
