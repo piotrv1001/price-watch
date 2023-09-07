@@ -13,6 +13,7 @@ import { Price } from './price.entity';
 import { NewProductDTO } from './dto/new-product.dto';
 import { PriceChangeDTO } from './dto/price-change.dto';
 import { CreatePriceDTO } from './dto/create-price.dto';
+import { ProductEventDTO } from './dto/product-event.dto';
 
 @Controller('prices')
 export class PriceController {
@@ -31,6 +32,13 @@ export class PriceController {
   @Get(':id')
   findById(@Param('id') id: number): Promise<Price> {
     return this.priceService.findById(id);
+  }
+
+  @Get('product-events/:productId')
+  getProductEvents(
+    @Param('productId') productId: string,
+  ): Promise<ProductEventDTO[]> {
+    return this.priceService.getProductEvents(productId);
   }
 
   @Get('new-products/:seller')

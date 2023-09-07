@@ -91,7 +91,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     },
     this.logo = this.currentSeller?.logoLightTheme;
     this.startDate = new Date();
-    this.startDate.setDate(this.startDate.getDate() - 14);
+    this.startDate.setDate(this.startDate.getDate() - 6);
     this.endDate = new Date();
   }
 

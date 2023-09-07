@@ -63,6 +63,7 @@
     "prices": "Ceny",
     "priceBuckets": "Koszyki cenowe",
     "priceChanges": "Zmiany cen",
+    "timeline": "Oś czasu",
     "settings": "Ustawienia"
   },
   "date": {
@@ -130,7 +131,8 @@
   },
   "productSelect": {
     "chooseProductsMax5": "Wybierz produkty (maks. 5)",
-    "selectedXProducts": "Wybrane produkty: {0}"
+    "selectedXProducts": "Wybrane produkty: {0}",
+    "chooseProduct": "Wybierz produkt"
   },
   "emailConfig": {
     "emailOptions": "Ustawienia e-mail",
@@ -153,5 +155,12 @@
     "unavailable": "Niedostępny",
     "withdrawn": "Wycofany",
     "unknown": "Nieznany"
+  },
+  "timeline": {
+    "title": "Oś czasu produktu",
+    "launch": "Wprowadzenie",
+    "withdrawal": "Wycofanie",
+    "priceChange": "Zmiana ceny",
+    "reActivated": "Przywrócenie"
   }
 }

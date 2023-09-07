@@ -1,4 +1,4 @@
-import { PriceChartService } from './../../services/price-chart.service';
+import { PriceChartService } from '../../services/price-chart.service';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
 import { MultiSelectChangeEvent } from "primeng/multiselect";
 import { Subscription } from "rxjs";
@@ -53,10 +53,15 @@ export class ProductMultiSelectComponent implements OnInit, OnDestroy {
   private getAllProducts(): void {
     this.loading = true;
     this.subs.push(
-      this.productService.getAllProducts().subscribe((products: Product[]) => {
-        this.loading = false;
-        this.priceChartService.setProductsInitialized();
-        this.products = products;
+      this.productService.getAllProducts().subscribe({
+        next: (products: Product[]) => {
+          this.loading = false;
+          this.priceChartService.setProductsInitialized();
+          this.products = products;
+        },
+        error: () => {
+          this.loading = false;
+        }
       })
     );
   }

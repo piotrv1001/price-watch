@@ -1,0 +1,21 @@
+<div *ngIf="showLabel" class="mb-1">{{ 'productSelect.chooseProduct' | translate }}</div>
+<p-dropdown
+  [style]="{'minWidth':'800px'}"
+  [options]="products"
+  [(ngModel)]="selectedProduct"
+  (onChange)="handleProductChange($event)"
+  optionLabel="name"
+  [virtualScroll]="true"
+  [virtualScrollItemSize]="43"
+  scrollHeight="400px"
+  [filter]="true"
+  [disabled]="loading"
+  [autoDisplayFirst]="false">
+  <ng-template let-product pTemplate="item">
+    <div class="flex align-items-center ml-3">
+      <img [src]="product.imgSrc" alt="Product image" height="36" width="36">
+      <div class="ml-3">{{product.name}}</div>
+    </div>
+  </ng-template>
+</p-dropdown>
+

@@ -6,6 +6,7 @@ import { Observable } from "rxjs";
 import { NewProductDTO } from "../models/dto/new-product.dto";
 import { PriceChangeDTO } from "../models/dto/price-change.dto";
 import { CreatePriceDTO } from "../models/dto/create-price.dto";
+import { ProductEvent } from "../models/event/product-event";
 
 @Injectable({
   providedIn: 'root',
@@ -35,5 +36,9 @@ export class PriceService {
       return this.http.get<PriceChangeDTO[]>(`${this.priceResourceUrl}/price-changes/${seller}`);
     }
     return this.http.get<PriceChangeDTO[]>(`${this.priceResourceUrl}/price-changes/${seller}?fromDate=${fromDate}&toDate=${toDate}`);
+  }
+
+  getProductEvents(productId: string): Observable<ProductEvent[]> {
+    return this.http.get<ProductEvent[]>(`${this.priceResourceUrl}/product-events/${productId}`);
   }
 }

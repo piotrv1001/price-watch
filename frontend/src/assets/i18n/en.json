@@ -63,6 +63,7 @@
     "prices": "Prices",
     "priceBuckets": "Price buckets",
     "priceChanges": "Price changes",
+    "timeline": "Timeline",
     "settings": "Settings"
   },
   "date": {
@@ -130,7 +131,8 @@
   },
   "productSelect": {
     "chooseProductsMax5": "Choose products (max 5)",
-    "selectedXProducts": "Selected products: {0}"
+    "selectedXProducts": "Selected products: {0}",
+    "chooseProduct": "Choose product"
   },
   "emailConfig": {
     "emailOptions": "Email options",
@@ -153,5 +155,12 @@
     "unavailable": "Unavailable",
     "withdrawn": "Withdrawn",
     "unknown": "Unknown"
+  },
+  "timeline": {
+    "title": "Product timeline",
+    "launch": "Launch",
+    "withdrawal": "Withdrawal",
+    "priceChange": "Price change",
+    "reActivated": "Restoration"
   }
 }
