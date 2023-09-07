@@ -1,54 +1,59 @@
-<ng-container *ngIf="loading; else defaultTemplate">
+<ng-container *ngIf="loading">
   <app-spinner></app-spinner>
 </ng-container>
-<ng-template #defaultTemplate>
-  <div class="card scalein animation-duration-200 animation-iteration-1">
-    <h5>{{ 'timeline.title' | translate }}</h5>
-    <div class="mt-6">
-      <p-timeline [value]="events" align="alternate">
-        <ng-template pTemplate="marker" let-event>
-          <span class="shadow-2 p-3 border-circle" [ngClass]="getBgColorFromEvent(event)">
-            <i [ngClass]="getIconFromEvent(event)" style="color: white;"></i>
-          </span>
-        </ng-template>
-        <ng-template pTemplate="content" let-event>
-          <ng-container [ngSwitch]="event.type">
-            <div *ngSwitchCase="'new-product'" class="card">
-              <div class="text-2xl font-bold mb-2">{{ 'timeline.launch' | translate }}</div>
-              <div class="mb-4">{{ event.date | date: 'dd-MM-yyyy' }}</div>
-              <img [src]="event.imgSrc" alt="Product image" width="160" height="120" class="shadow-4 pd-4 border-round mb-4">
-              <div class="text-3xl font-bold font-italic">{{ event.currentPrice | number:'1.2-2' }} zł</div>
-            </div>
-            <div *ngSwitchCase="'price-change'" class="card">
-              <div class="text-2xl font-bold mb-2">{{ 'timeline.priceChange' | translate }}</div>
-              <div class="mb-4">{{ event.date | date: 'dd-MM-yyyy' }}</div>
-              <div class="flex gap-4 justify-content-end align-items-center mb-4">
-                <div class="text-3xl font-bold font-italic">{{ event.prevPrice | number:'1.2-2' }} zł</div>
-                <i class="pi pi-arrow-right"></i>
+<div class="card">
+  <h5>{{ 'timeline.title' | translate }}</h5>
+  <div class="mt-6">
+    <div class="mb-6">
+      <app-product-single-select (selectedProductChange)="handleProductChange($event)"></app-product-single-select>
+    </div>
+    <ng-container *ngIf="!loading">
+      <div class="scalein animation-duration-200 animation-iteration-1">
+        <p-timeline [value]="events" align="alternate">
+          <ng-template pTemplate="marker" let-event>
+            <span class="shadow-2 p-3 border-circle" [ngClass]="getBgColorFromEvent(event)">
+              <i [ngClass]="getIconFromEvent(event)" style="color: white;"></i>
+            </span>
+          </ng-template>
+          <ng-template pTemplate="content" let-event>
+            <ng-container [ngSwitch]="event.type">
+              <div *ngSwitchCase="'new-product'" class="card">
+                <div class="text-2xl font-bold mb-2">{{ 'timeline.launch' | translate }}</div>
+                <div class="mb-4">{{ event.date | date: 'dd-MM-yyyy' }}</div>
+                <img [src]="event.imgSrc" alt="Product image" width="160" height="120" class="shadow-4 pd-4 border-round mb-4">
                 <div class="text-3xl font-bold font-italic">{{ event.currentPrice | number:'1.2-2' }} zł</div>
               </div>
-              <div class="flex gap-3 justify-content-end align-items-center">
-                <i
-                  [ngClass]="event.priceChangePercentage > 0 ? 'pi pi-arrow-up' : 'pi pi-arrow-down'"
-                  [ngStyle]="{ 'color': event.priceChangePercentage > 0 ? 'green' : 'red' }"></i>
-                <div class="text-3xl font-bold" [ngClass]="event.priceChangePercentage > 0 ? 'text-green-600' : 'text-red-600'">
-                  {{ (event.priceChangePercentage > 0 ? '+' : '') + (event.priceChangePercentage | number:'1.0-0') }} %
+              <div *ngSwitchCase="'price-change'" class="card">
+                <div class="text-2xl font-bold mb-2">{{ 'timeline.priceChange' | translate }}</div>
+                <div class="mb-4">{{ event.date | date: 'dd-MM-yyyy' }}</div>
+                <div class="flex gap-4 align-items-center mb-4">
+                  <div class="text-3xl font-bold font-italic">{{ event.prevPrice | number:'1.2-2' }} zł</div>
+                  <i class="pi pi-arrow-right"></i>
+                  <div class="text-3xl font-bold font-italic">{{ event.currentPrice | number:'1.2-2' }} zł</div>
+                </div>
+                <div class="flex gap-3 align-items-center">
+                  <i
+                    [ngClass]="event.priceChangePercentage > 0 ? 'pi pi-arrow-up' : 'pi pi-arrow-down'"
+                    [ngStyle]="{ 'color': event.priceChangePercentage > 0 ? 'green' : 'red' }"></i>
+                  <div class="text-3xl font-bold" [ngClass]="event.priceChangePercentage > 0 ? 'text-green-600' : 'text-red-600'">
+                    {{ (event.priceChangePercentage > 0 ? '+' : '') + (event.priceChangePercentage | number:'1.0-0') }} %
+                  </div>
                 </div>
               </div>
-            </div>
-            <div *ngSwitchCase="'withdrawn'" class="card">
-              <div class="text-2xl font-bold mb-2">{{ 'timeline.withdrawal' | translate }}</div>
-              <div>{{ event.date | date: 'dd-MM-yyyy' }}</div>
-            </div>
-            <div *ngSwitchCase="'re-activated'" class="card">
-              <div class="text-2xl font-bold mb-2">{{ 'timeline.reActivated' | translate }}</div>
-              <div class="mb-4">{{ event.date | date: 'dd-MM-yyyy' }}</div>
-              <div class="text-3xl font-bold font-italic">{{ event.currentPrice | number:'1.2-2' }} zł</div>
-            </div>
-          </ng-container>
-        </ng-template>
-      </p-timeline>
-    </div>
+              <div *ngSwitchCase="'withdrawn'" class="card">
+                <div class="text-2xl font-bold mb-2">{{ 'timeline.withdrawal' | translate }}</div>
+                <div>{{ event.date | date: 'dd-MM-yyyy' }}</div>
+              </div>
+              <div *ngSwitchCase="'re-activated'" class="card">
+                <div class="text-2xl font-bold mb-2">{{ 'timeline.reActivated' | translate }}</div>
+                <div class="mb-4">{{ event.date | date: 'dd-MM-yyyy' }}</div>
+                <div class="text-3xl font-bold font-italic">{{ event.currentPrice | number:'1.2-2' }} zł</div>
+              </div>
+            </ng-container>
+          </ng-template>
+        </p-timeline>
+      </div>
+    </ng-container>
   </div>
-</ng-template>
+</div>
 

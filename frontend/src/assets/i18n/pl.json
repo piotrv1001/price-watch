@@ -131,7 +131,8 @@
   },
   "productSelect": {
     "chooseProductsMax5": "Wybierz produkty (maks. 5)",
-    "selectedXProducts": "Wybrane produkty: {0}"
+    "selectedXProducts": "Wybrane produkty: {0}",
+    "chooseProduct": "Wybierz produkt"
   },
   "emailConfig": {
     "emailOptions": "Ustawienia e-mail",
