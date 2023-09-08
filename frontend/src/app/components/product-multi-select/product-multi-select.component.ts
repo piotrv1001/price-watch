@@ -56,8 +56,8 @@ export class ProductMultiSelectComponent implements OnInit, OnDestroy {
       this.productService.getAllProducts().subscribe({
         next: (products: Product[]) => {
           this.loading = false;
-          this.priceChartService.setProductsInitialized();
           this.products = products;
+          this.priceChartService.setProductsInitialized();
         },
         error: () => {
           this.loading = false;
