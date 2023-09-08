@@ -26,7 +26,8 @@ export interface Plugins {
     position?: string;
     labels?: LegendLabels;
   };
-  datalabels?: any
+  datalabels?: any;
+  tooltip?: any;
 }
 
 export interface ScalesTicks {
@@ -54,4 +55,8 @@ export interface HistogramOptions {
     y?: Scales;
     x?: Scales;
   };
+  interaction?: {
+    intersect?: boolean;
+    mode?: string;
+  }
 }
