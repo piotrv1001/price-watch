@@ -78,7 +78,8 @@
     "time": "Czas",
     "lastWeek": "Ostatni tydzień",
     "lastTwoWeeks": "Ostatnie 2 tygodnie",
-    "lastMonth": "Ostatni miesiąc"
+    "lastMonth": "Ostatni miesiąc",
+    "lastTwoMonths": "Ostatnie 2 miesiące"
   },
   "error": {
     "invalidUsernameOrPassword": "Nieprawidłowa nazwa użytkownika lub hasło",

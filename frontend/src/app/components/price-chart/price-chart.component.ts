@@ -234,13 +234,24 @@ export class PriceChartComponent implements OnInit, OnChanges, OnDestroy {
           backgroundColor: documentStyle.getPropertyValue(
             PRICE_CHART_COLORS_TRANSPARENT[index]
           ),
-          pointStyle: 'circle',
+          pointStyle: (context: any) => {
+            return this.getPointStyle(context.dataIndex, entry[1].length);
+          },
           pointRadius: this.getPointRadius(entry[1].length),
           pointHoverRadius: this.getPointHoverRadius(entry[1].length),
           tension: 0.2,
         })
       ),
     };
+  }
+
+  private getPointStyle(index: number, len: number): string | boolean {
+    const div = Math.floor(len / 30);
+    if (div === 0) {
+      return 'circle';
+    } else {
+      return index % (div + 1) === 0 ? 'circle' : false;
+    }
   }
 
   private getPointRadius(len: number): number {
@@ -287,6 +298,14 @@ export class PriceChartComponent implements OnInit, OnChanges, OnDestroy {
     if (tooltip.opacity === 0) {
       tooltipEl.style.opacity = 0;
       return;
+    }
+    const index = context?.tooltip?.dataPoints[0]?.dataIndex ?? -1;
+    const len = this.grouppedProducts.get(this.productIdArray[0])?.length ?? -1;
+    if(index !== -1 && len !== -1) {
+      const div = Math.floor(len / 30);
+      if (div !== 0 && index % (div + 1) !== 0) {
+        return;
+      }
     }
     if (tooltip.body) {
       const titleLines = tooltip.title ?? [];

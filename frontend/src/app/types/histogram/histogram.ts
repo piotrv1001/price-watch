@@ -11,7 +11,7 @@ export interface HistogramDataset {
   borderColor?: string | string[];
   borderWidth?: number;
   borderRadius?: number;
-  pointStyle?: string,
+  pointStyle?: any,
   pointRadius?: number,
   pointHoverRadius?: number,
 }
