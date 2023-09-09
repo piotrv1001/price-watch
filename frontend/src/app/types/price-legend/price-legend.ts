@@ -1,5 +1,7 @@
+import { Product } from "src/app/models/product/product";
+
 export interface PriceLegend {
   index: number;
-  productName: string;
+  product: Product;
   color: string;
 }

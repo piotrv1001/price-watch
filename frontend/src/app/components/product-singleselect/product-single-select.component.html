@@ -1,6 +1,6 @@
 <div *ngIf="showLabel" class="mb-1">{{ 'productSelect.chooseProduct' | translate }}</div>
 <p-dropdown
-  [style]="{'minWidth':'800px'}"
+  [style]="{'width':'100%'}"
   [options]="products"
   [(ngModel)]="selectedProduct"
   (onChange)="handleProductChange($event)"

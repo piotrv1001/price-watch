@@ -7,6 +7,10 @@
     <div class="mb-6">
       <app-product-single-select (selectedProductChange)="handleProductChange($event)"></app-product-single-select>
     </div>
+    <div class="mb-6 flex flex-row gap-4 align-items-center border-1 surface-border border-round p-2" *ngIf="selectedProduct">
+      <img [src]="selectedProduct.imgSrc" alt="Product image" width="36" height="36">
+      <app-product-name-with-seller [product]="selectedProduct"></app-product-name-with-seller>
+    </div>
     <ng-container *ngIf="!loading">
       <div class="scalein animation-duration-200 animation-iteration-1">
         <p-timeline [value]="events" align="alternate">

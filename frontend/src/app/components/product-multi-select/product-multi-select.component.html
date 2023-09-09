@@ -1,6 +1,6 @@
 <div *ngIf="showLabel" class="mb-1">{{ 'productSelect.chooseProductsMax5' | translate }}</div>
 <p-multiSelect
-  [style]="{'minWidth':'800px'}"
+  [style]="{'width':'100%'}"
   [options]="products"
   [(ngModel)]="selectedProducts"
   (onChange)="handleProductChange($event)"
