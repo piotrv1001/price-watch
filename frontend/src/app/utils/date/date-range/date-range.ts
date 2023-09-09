@@ -1,14 +1,13 @@
 import { CustomDateRangeStrategy } from "./strategy/custom.strategy";
 import { DateRangeStrategy } from "./strategy/date-range.strategy";
-import { LastMonthStrategy } from "./strategy/last-month.strategy";
-import { LastTwoWeeksStrategy } from "./strategy/last-two-weeks.strategy";
-import { LastWeekStrategy } from "./strategy/last-week.strategy";
-import { LastYearStrategy } from "./strategy/last-year.strategy";
+import { MonthStrategy } from "./strategy/month.strategy";
+import { WeekStrategy } from "./strategy/week.strategy";
 
 export type DateRangeType =
   | 'last-week'
   | 'last-two-weeks'
   | 'last-month'
+  | 'last-two-months'
   | 'last-year'
   | 'custom';
 
@@ -18,16 +17,19 @@ export class DateRange {
   setDateRangeStrategy(dateRangeType: DateRangeType): void {
     switch (dateRangeType) {
       case 'last-week':
-        this.dateRangeStrategy = new LastWeekStrategy();
+        this.dateRangeStrategy = new WeekStrategy(6);
         break;
       case 'last-two-weeks':
-        this.dateRangeStrategy = new LastTwoWeeksStrategy();
+        this.dateRangeStrategy = new WeekStrategy(13);
         break;
       case 'last-month':
-        this.dateRangeStrategy = new LastMonthStrategy();
+        this.dateRangeStrategy = new MonthStrategy(1);
+        break;
+      case 'last-two-months':
+        this.dateRangeStrategy = new MonthStrategy(2);
         break;
       case 'last-year':
-        this.dateRangeStrategy = new LastYearStrategy();
+        this.dateRangeStrategy = new MonthStrategy(12);
         break;
       case 'custom':
         this.dateRangeStrategy = new CustomDateRangeStrategy();

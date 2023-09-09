@@ -29,7 +29,7 @@ export class PricePageComponent implements OnInit, OnDestroy {
       this.productFromNav = product;
       this.priceLegendArray.push({
         index: 1,
-        productName: product.name!,
+        product: product,
         color: `var(${PRICE_CHART_COLORS[0]})`
       });
     }
@@ -64,7 +64,7 @@ export class PricePageComponent implements OnInit, OnDestroy {
     this.priceLegendArray = event.map((product: Product, index: number) => {
       return {
         index: index + 1,
-        productName: product.name!,
+        product: product,
         color: `var(${PRICE_CHART_COLORS[index]})`
       };
     });

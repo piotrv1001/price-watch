@@ -11,7 +11,7 @@ export interface HistogramDataset {
   borderColor?: string | string[];
   borderWidth?: number;
   borderRadius?: number;
-  pointStyle?: string,
+  pointStyle?: any,
   pointRadius?: number,
   pointHoverRadius?: number,
 }
@@ -26,12 +26,16 @@ export interface Plugins {
     position?: string;
     labels?: LegendLabels;
   };
-  datalabels?: any
+  datalabels?: any;
+  tooltip?: any;
 }
 
 export interface ScalesTicks {
   callback?: (value: any, index: number, values: any[]) => any;
   color?: string | (() => string);
+  autoskip?: boolean;
+  maxRotation?: number;
+  minRotation?: number;
 }
 
 export interface ScalesGrid {
@@ -54,4 +58,8 @@ export interface HistogramOptions {
     y?: Scales;
     x?: Scales;
   };
+  interaction?: {
+    intersect?: boolean;
+    mode?: string;
+  }
 }

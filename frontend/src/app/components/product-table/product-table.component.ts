@@ -72,11 +72,10 @@ export class ProductTableComponent implements OnInit, OnChanges, OnDestroy {
     switch(this.type) {
       case 'new-products':
         columns = [
-          { header: 'name', field: 'name', ngStyle: { width: '35%' }, filter: true },
+          { header: 'name', field: 'name', ngStyle: { width: '40%' }, filter: true },
           { header: 'image', field: 'imgSrc', ngStyle: { width: '10%' }, filter: false },
-          { header: 'price', field: 'currentPrice', ngStyle: { width: '15%' }, filter: false, formatOptions: { suffix: ' zł' } },
+          { header: 'price', field: 'currentPrice', ngStyle: { width: '20%' }, filter: false, formatOptions: { suffix: ' zł' } },
           { header: 'Promo', field: 'promo', ngStyle: { width: '10%' }, filter: false, translate: false },
-          { header: 'Link', field: 'link', ngStyle: { width: '10%' }, filter: false, translate: false },
           { header: 'chart', field: 'chart', ngStyle: { width: '10%' }, filter: false },
           { header: 'Status', field: 'status', ngStyle: { width: '10%' }, filter: false, translate: false }
         ];
@@ -94,12 +93,11 @@ export class ProductTableComponent implements OnInit, OnChanges, OnDestroy {
         break;
       case 'price-changes':
         columns = [
-          { header: 'name', field: 'name', ngStyle: { width: '30%' }, filter: true },
+          { header: 'name', field: 'name', ngStyle: { width: '40%' }, filter: true },
           { header: 'image', field: 'imgSrc', ngStyle: { width: '10%' }, filter: false },
           { header: 'oldPrice', field: 'prevPrice', ngStyle: { width: '10%' }, filter: false },
           { header: 'currentPrice', field: 'currentPrice', ngStyle: { width: '10%' }, filter: false },
           { header: '+/- [%]', field: 'priceChangePercentage', ngStyle: { width: '10%' }, filter: false, translate: false },
-          { header: 'Link', field: 'link', ngStyle: { width: '10%' }, filter: false, translate: false },
           { header: 'chart', field: 'chart', ngStyle: { width: '10%' }, filter: false },
           { header: 'Status', field: 'status', ngStyle: { width: '10%' }, filter: false, translate: false }
         ];

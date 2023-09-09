@@ -1,0 +1,11 @@
+<div class="flex flex-column gap-2">
+  <div>
+    <a [href]="product?.link" target="_blank" class="link product-link">{{ product?.name | stripPrice }}</a>
+  </div>
+  <a [href]="'https://allegro.pl/uzytkownik/' + product?.seller" target="_blank" class="link seller-link">
+    <div class="flex flex-row gap-2 align-items-center">
+      <i class="pi pi-user"></i>
+      <span>{{ product?.seller }}</span>
+    </div>
+  </a>
+</div>

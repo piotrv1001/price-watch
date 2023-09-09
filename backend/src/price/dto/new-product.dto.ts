@@ -5,4 +5,5 @@ export class NewProductDTO {
   link?: string;
   promo?: boolean;
   currentPrice?: number;
+  seller?: string;
 }

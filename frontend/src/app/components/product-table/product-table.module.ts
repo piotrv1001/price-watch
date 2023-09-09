@@ -11,19 +11,19 @@ import { TooltipModule } from "primeng/tooltip";
 import { ExcelExportBtnModule } from './../excel-export-btn/excel-export-btn.module';
 import { PdfExportBtnModule } from "../pdf-export-btn/pdf-export-btn.module";
 import { SharedModule } from "src/app/shared/shared.module";
-import { PipeModule } from "src/app/pipes/pipe.module";
+import { ProductNameWithSellerModule } from "../product-name-with-seller/product-name-with-seller.module";
 
 @NgModule({
   imports: [
     SharedModule,
-    PipeModule,
     TableModule,
     ExcelExportBtnModule,
     ProgressBarModule,
     ButtonModule,
     PdfExportBtnModule,
     InputTextModule,
-    TooltipModule
+    TooltipModule,
+    ProductNameWithSellerModule
   ],
   declarations: [
     ProductTableComponent

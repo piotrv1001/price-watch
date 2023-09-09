@@ -60,6 +60,7 @@ export class DateRangeWithOptionsComponent implements OnInit, OnDestroy {
       { label: this.translateService.instant('date.lastWeek'), value: 'last-week' },
       { label: this.translateService.instant('date.lastTwoWeeks'), value: 'last-two-weeks' },
       { label: this.translateService.instant('date.lastMonth'), value: 'last-month' },
+      { label: this.translateService.instant('date.lastTwoMonths'), value: 'last-two-months' },
     ];
     this.selectedDropdownOption = this.dateRangeDropdownOptions[0].value;
   }

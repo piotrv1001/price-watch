@@ -5,7 +5,10 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'stripPrice'
 })
 export class StripPricePipe implements PipeTransform {
-  transform(productName: string): string {
+  transform(productName?: string): string {
+    if (!productName) {
+      return '';
+    }
     return StringUtil.stripPrice(productName);
   }
 }
