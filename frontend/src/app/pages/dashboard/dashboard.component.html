@@ -20,7 +20,17 @@
   <div class="grid scalein animation-duration-200 animation-iteration-1">
     <div class="col-12 p-3">
       <div class="card">
-        <h5>{{ 'dashboard.priceBuckets' | translate }}</h5>
+        <div class="flex flex-row justify-content-between align-items-center">
+          <h5>{{ 'dashboard.priceBuckets' | translate }}</h5>
+          <p-selectButton [options]="formatOptions" [(ngModel)]="selectedFormatOption" optionValue="value" (ngModelChange)="handleFormatChange()">
+            <ng-template let-item pTemplate>
+              <span *ngIf="item.translate; else noTranslateTemplate" class="text-sm font-bold">{{ item.label | translate }}</span>
+              <ng-template #noTranslateTemplate>
+                <span class="text-sm font-bold">{{ item.label }}</span>
+              </ng-template>
+            </ng-template>
+          </p-selectButton>
+        </div>
         <div class="grid">
           <div class="col-12 xl:col-6">
             <div class="flex justify-content-end mt-6 mb-6">

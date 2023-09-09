@@ -7,11 +7,21 @@
       <h5>{{ 'menu.priceBuckets' | translate }}</h5>
       <div class="mt-6 mb-6 flex flex-row justify-content-between align-items-center">
         <app-choose-seller (sellerChange)="handleSellerChange($event)" [disabled]="loading"></app-choose-seller>
-        <p-selectButton [options]="chartOptions" [(ngModel)]="selectedChart" optionValue="value">
-          <ng-template let-item pTemplate>
-            <i [class]="item.icon"></i>
-          </ng-template>
-        </p-selectButton>
+        <div class="flex flex-row gap-6 align-items-center">
+          <p-selectButton [options]="formatOptions" [(ngModel)]="selectedFormatOption" optionValue="value" (ngModelChange)="handleFormatChange()">
+            <ng-template let-item pTemplate>
+              <span *ngIf="item.translate; else noTranslateTemplate" class="text-sm font-bold">{{ item.label | translate }}</span>
+              <ng-template #noTranslateTemplate>
+                <span class="text-sm font-bold">{{ item.label }}</span>
+              </ng-template>
+            </ng-template>
+          </p-selectButton>
+          <p-selectButton [options]="chartOptions" [(ngModel)]="selectedChart" optionValue="value">
+            <ng-template let-item pTemplate>
+              <i [class]="item.icon"></i>
+            </ng-template>
+          </p-selectButton>
+        </div>
       </div>
       <ng-container *ngIf="!loading">
         <ng-container *ngIf="selectedChart === 'bar'; else doughnutTemplate">

@@ -8,6 +8,12 @@ import { ToastService } from "src/app/services/toast.service";
 import { HistogramData, HistogramOptions } from "src/app/types/histogram/histogram";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
+export type FormatType = 'value' | 'percentage';
+export interface FormatOption {
+  value: FormatType;
+  label: string;
+  translate: boolean;
+}
 type ChartType = 'bar' | 'doughnut';
 interface ChartOption {
   value: ChartType;
@@ -22,6 +28,8 @@ interface ChartOption {
 export class PriceBucketsPageComponent implements OnInit, OnDestroy {
   chartOptions: ChartOption[] = [];
   selectedChart: ChartType = 'bar';
+  formatOptions: FormatOption[] = [];
+  selectedFormatOption: FormatType = 'value';
   currentSeller: Seller | null = null;
   loading = false;
   barData?: HistogramData;
@@ -41,6 +49,7 @@ export class PriceBucketsPageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getChartTypeOptions();
+    this.getFormatOptions();
     this.currentSeller = { id: 1, name: 'SmartLED' };
     this.getPrices();
     this.getThemeChange();
@@ -54,6 +63,10 @@ export class PriceBucketsPageComponent implements OnInit, OnDestroy {
   handleSellerChange(seller: Seller): void {
     this.currentSeller = seller;
     this.getPrices();
+  }
+
+  handleFormatChange(): void {
+    this.getChartOptions();
   }
 
   getThemeChange(): void {
@@ -83,6 +96,21 @@ export class PriceBucketsPageComponent implements OnInit, OnDestroy {
       {
         value: 'doughnut',
         icon: 'pi pi-chart-pie'
+      }
+    ];
+  }
+
+  private getFormatOptions(): void {
+    this.formatOptions = [
+      {
+        value: 'value',
+        label: 'chart.format.value',
+        translate: true
+      },
+      {
+        value: 'percentage',
+        label: '%',
+        translate: false
       }
     ];
   }
@@ -154,6 +182,24 @@ export class PriceBucketsPageComponent implements OnInit, OnDestroy {
     }
   }
 
+  private getFormatter(): any {
+    if(this.selectedFormatOption === 'percentage') {
+      return (value: number, context: any) => {
+        const data = context?.dataset?.data;
+        if(data) {
+          const sum = data.reduce((a: number, b: number) => a + b, 0);
+          if(sum === 0) {
+            return '';
+          }
+          const percentage = (value / sum) * 100;
+          return Math.round(percentage) + '%';
+        }
+        return value;
+      }
+    }
+    return (value: number) => value;
+  }
+
   private getChartOptions(): void {
     const documentStyle = getComputedStyle(document.documentElement);
     const textColor = documentStyle.getPropertyValue('--text-color');
@@ -174,18 +220,7 @@ export class PriceBucketsPageComponent implements OnInit, OnDestroy {
             weight: 'bold',
             size: 18
           },
-          formatter: function(value: number, context: any) {
-            const data = context?.dataset?.data;
-            if(data) {
-              const sum = data.reduce((a: number, b: number) => a + b, 0);
-              if(sum === 0) {
-                return '';
-              }
-              const percentage = (value / sum) * 100;
-              return Math.round(percentage) + '%';
-            }
-            return value;
-          },
+          formatter: this.getFormatter(),
           align: 'center',
           anchor: 'center'
         }
@@ -231,18 +266,7 @@ export class PriceBucketsPageComponent implements OnInit, OnDestroy {
             weight: 'bold',
             size: 18
           },
-          formatter: function(value: number, context: any) {
-            const data = context?.dataset?.data;
-            if(data) {
-              const sum = data.reduce((a: number, b: number) => a + b, 0);
-              if(sum === 0) {
-                return '';
-              }
-              const percentage = (value / sum) * 100;
-              return Math.round(percentage) + '%';
-            }
-            return value;
-          },
+          formatter: this.getFormatter(),
           align: 'center',
           anchor: 'center'
         }

@@ -128,6 +128,9 @@
       "medium": "Medium (20 - 50 zł)",
       "expensive": "Expensive (50 - 100 zł)",
       "veryExpensive": "Very expensive (100+ zł)"
+    },
+    "format": {
+      "value": "Value"
     }
   },
   "productSelect": {

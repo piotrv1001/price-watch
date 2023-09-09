@@ -12,6 +12,7 @@ import { HistogramData, HistogramOptions } from "src/app/types/histogram/histogr
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { ThemeService } from "src/app/services/theme.service";
 import { Theme } from 'src/app/types/common/theme';
+import { FormatOption, FormatType } from '../products/price-buckets-page/price-buckets-page.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,6 +21,8 @@ import { Theme } from 'src/app/types/common/theme';
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   newProducts: Product[] = [];
+  formatOptions: FormatOption[] = [];
+  selectedFormatOption: FormatType = 'value';
   priceChanges: PriceChangeDTO[] = [];
   currentSeller: Seller | null = null;
   loading = false;
@@ -44,6 +47,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+    this.getFormatOptions();
     this.init();
     const themeStorage = localStorage.getItem('theme');
     const darkTheme = themeStorage === Theme.DARK;
@@ -82,6 +86,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.getData();
   }
 
+  handleFormatChange(): void {
+    this.getChartOptions();
+  }
+
   private init(): void {
     this.currentSeller = {
       id: 1,
@@ -93,6 +101,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.startDate = new Date();
     this.startDate.setDate(this.startDate.getDate() - 6);
     this.endDate = new Date();
+  }
+
+  private getFormatOptions(): void {
+    this.formatOptions = [
+      {
+        value: 'value',
+        label: 'chart.format.value',
+        translate: true
+      },
+      {
+        value: 'percentage',
+        label: '%',
+        translate: false
+      }
+    ];
   }
 
   private updateColors(darkTheme: boolean): void {
@@ -189,6 +212,24 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
+  private getFormatter(): any {
+    if(this.selectedFormatOption === 'percentage') {
+      return (value: number, context: any) => {
+        const data = context?.dataset?.data;
+        if(data) {
+          const sum = data.reduce((a: number, b: number) => a + b, 0);
+          if(sum === 0) {
+            return '';
+          }
+          const percentage = (value / sum) * 100;
+          return Math.round(percentage) + '%';
+        }
+        return value;
+      }
+    }
+    return (value: number) => value;
+  }
+
   private getChartOptions(): void {
     const documentStyle = getComputedStyle(document.documentElement);
     const textColor = documentStyle.getPropertyValue('--text-color');
@@ -209,18 +250,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
             weight: 'bold',
             size: 18
           },
-          formatter: function(value: number, context: any) {
-            const data = context?.dataset?.data;
-            if(data) {
-              const sum = data.reduce((a: number, b: number) => a + b, 0);
-              if(sum === 0) {
-                return '';
-              }
-              const percentage = (value / sum) * 100;
-              return Math.round(percentage) + '%';
-            }
-            return value;
-          },
+          formatter: this.getFormatter(),
           align: 'center',
           anchor: 'center'
         }
@@ -266,18 +296,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
             weight: 'bold',
             size: 18
           },
-          formatter: function(value: number, context: any) {
-            const data = context?.dataset?.data;
-            if(data) {
-              const sum = data.reduce((a: number, b: number) => a + b, 0);
-              if(sum === 0) {
-                return '';
-              }
-              const percentage = (value / sum) * 100;
-              return Math.round(percentage) + '%';
-            }
-            return value;
-          },
+          formatter: this.getFormatter(),
           align: 'center',
           anchor: 'center'
         }
