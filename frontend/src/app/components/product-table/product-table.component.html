@@ -71,9 +71,6 @@
             <ng-container *ngSwitchCase="'imgSrc'">
               <img [src]="rowData[col.field]" alt="Product image" width="80" height="60" class="shadow-4 pd-4 border-round">
             </ng-container>
-            <ng-container *ngSwitchCase="'link'">
-              <p-button icon="pi pi-external-link" styleClass="p-button-rounded p-button-info p-button-text" (onClick)="navigateToUrl(rowData[col.field])"></p-button>
-            </ng-container>
             <ng-container *ngSwitchCase="'chart'">
               <p-button icon="pi pi-chart-line" styleClass="p-button-rounded p-button-help p-button-text" (onClick)="handleChartBtnClick(rowData)"></p-button>
             </ng-container>
@@ -96,7 +93,7 @@
               </span>
             </ng-container>
             <ng-container *ngSwitchCase="'name'">
-              {{rowData[col.field] | stripPrice}}
+              <app-product-name-with-seller [product]="rowData"></app-product-name-with-seller>
             </ng-container>
             <ng-container *ngSwitchCase="'status'">
               <ng-container [ngSwitch]="rowData[col.field]">

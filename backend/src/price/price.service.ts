@@ -226,6 +226,7 @@ export class PriceService {
           promo: curr.promo,
           status: curr.status,
           link: curr.link,
+          seller,
           prices: [curr],
         });
       }
@@ -243,6 +244,7 @@ export class PriceService {
           link: product.link,
           promo: product.promo,
           status: product.status,
+          seller,
           currentPrice: prices[0].price,
         });
         return {
@@ -255,6 +257,7 @@ export class PriceService {
           prevPrice: null,
           currentPrice: prices[0].price,
           priceChange: null,
+          seller,
           priceChangePercentage: null,
         };
       } else {
@@ -270,6 +273,7 @@ export class PriceService {
           prevPrice: prices[lastIndex].price,
           currentPrice: prices[0].price,
           priceChange,
+          seller,
           priceChangePercentage: Math.round(
             (priceChange / prices[lastIndex].price) * 100,
           ),
