@@ -33,6 +33,9 @@ export interface Plugins {
 export interface ScalesTicks {
   callback?: (value: any, index: number, values: any[]) => any;
   color?: string | (() => string);
+  autoskip?: boolean;
+  maxRotation?: number;
+  minRotation?: number;
 }
 
 export interface ScalesGrid {

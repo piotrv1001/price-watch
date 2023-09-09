@@ -6,7 +6,6 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
-import { UIChart } from 'primeng/chart';
 import { Subscription } from 'rxjs';
 import {
   PRICE_CHART_COLORS,
@@ -122,7 +121,6 @@ export class PriceChartComponent implements OnInit, OnChanges, OnDestroy {
 
   private getChartOptions(): void {
     const documentStyle = getComputedStyle(document.documentElement);
-    const textColor = documentStyle.getPropertyValue('--text-color');
     const textColorSecondary = documentStyle.getPropertyValue(
       '--text-color-secondary'
     );
@@ -168,8 +166,10 @@ export class PriceChartComponent implements OnInit, OnChanges, OnDestroy {
               if(index % (div + 1) === 0) {
                 return this.labels[index];
               }
-              return '';
+              return null;
             },
+            maxRotation: 0,
+            minRotation: 0,
             color: textColorSecondary
           },
           grid: {
@@ -235,12 +235,30 @@ export class PriceChartComponent implements OnInit, OnChanges, OnDestroy {
             PRICE_CHART_COLORS_TRANSPARENT[index]
           ),
           pointStyle: 'circle',
-          pointRadius: 10,
-          pointHoverRadius: 15,
-          tension: 0.4,
+          pointRadius: this.getPointRadius(entry[1].length),
+          pointHoverRadius: this.getPointHoverRadius(entry[1].length),
+          tension: 0.2,
         })
       ),
     };
+  }
+
+  private getPointRadius(len: number): number {
+    if (len >= 0 && len <= 7) {
+      return 8;
+    } else if (len > 7 && len <= 14) {
+      return 6;
+    }
+    return 4;
+  }
+
+  private getPointHoverRadius(len: number): number {
+    if (len >= 0 && len <= 7) {
+      return 10;
+    } else if (len > 7 && len <= 14) {
+      return 8;
+    }
+    return 6;
   }
 
   getOrCreateTooltip = (chart: any) => {
@@ -313,9 +331,18 @@ export class PriceChartComponent implements OnInit, OnChanges, OnDestroy {
       tableRoot.appendChild(tableHead);
       tableRoot.appendChild(tableBody);
     }
-    const {offsetLeft: positionX, offsetTop: positionY} = chart.canvas;
+    const { offsetLeft: positionX, offsetTop: positionY, width } = chart.canvas;
+    const tooltipWidth = tooltip.width;
+    const firstQuadrantThreshold = width / 4;
+    const thirdQuadrantThreshold = (width / 4) * 3;
+    if(tooltip.caretX > thirdQuadrantThreshold) {
+      tooltipEl.style.left = positionX + tooltip.caretX - (tooltipWidth / 2) + 'px';
+    } else if(tooltip.caretX < firstQuadrantThreshold) {
+      tooltipEl.style.left = positionX + tooltip.caretX + (tooltipWidth / 2) + 'px';
+    } else {
+      tooltipEl.style.left = positionX + tooltip.caretX + 'px';
+    }
     tooltipEl.style.opacity = 1;
-    tooltipEl.style.left = positionX + tooltip.caretX + 'px';
     tooltipEl.style.top = positionY + tooltip.caretY + 'px';
     tooltipEl.style.font = tooltip.options.bodyFont.string;
     tooltipEl.style.padding = tooltip.options.padding + 'px ' + tooltip.options.padding + 'px';
