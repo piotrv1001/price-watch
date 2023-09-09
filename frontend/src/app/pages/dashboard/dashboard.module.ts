@@ -5,6 +5,7 @@ import { DashboardsRoutingModule } from "./dashboard-routing.module";
 import { DashboardComponent } from "./dashboard.component";
 
 import { ChartModule } from "primeng/chart";
+import { SelectButtonModule } from "primeng/selectbutton";
 
 import { SharedModule } from "src/app/shared/shared.module";
 import { ChooseSellerModule } from "src/app/components/choose-seller/choose-seller.module";
@@ -22,7 +23,8 @@ import { ChartExportPngButtonModule } from "src/app/components/chart-export-png-
     SpinnerModule,
     ProductTableModule,
     ChartExportPngButtonModule,
-    ChartModule
+    ChartModule,
+    SelectButtonModule
   ],
   declarations: [
     DashboardComponent
