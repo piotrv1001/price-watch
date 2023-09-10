@@ -19,6 +19,7 @@ export class ProductTableComponent implements OnInit, OnChanges, OnDestroy {
   @Input() type: ProductTableType = 'new-products';
   @Input() showPaginator = true;
   @Input() paginatorRows = 10;
+  @Input() placeholderSize: 'small' | 'big' = 'small';
   columns: TableColumn[] = [];
   exportData: ExportDataDTO | null = null;
   downloadProgress = -1;

@@ -53,7 +53,9 @@
     "downloading": "Pobieranie ...",
     "done": "Gotowe",
     "saveChanges": "Zapisz zmiany",
-    "signOut": "Wyloguj się"
+    "signOut": "Wyloguj się",
+    "noData": "Nie znaleziono danych",
+    "noDataDesc": "Nie znaleziono danych do wyświetlenia. Spróbuj zmienić kryteria wyszukiwania."
   },
   "menu": {
     "home": "Strona główna",

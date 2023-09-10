@@ -53,7 +53,9 @@
     "downloading": "Downloading...",
     "done": "Done",
     "saveChanges": "Save changes",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "noData": "No results found",
+    "noDataDesc": "No results found. Try changing your search query."
   },
   "menu": {
     "home": "Home",
