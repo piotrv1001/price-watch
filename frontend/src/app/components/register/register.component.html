@@ -19,7 +19,7 @@
           <input id="repeatPassword" type="password" pinputtext="" placeholder="{{ 'register.confirmPassword' | translate }}" class="p-inputtext p-component p-element w-full md:w-25rem" formControlName="repeatPassword">
         </span>
         <span class="p-input-icon-left w-full mb-4">
-          <i class="pi pi-lock"></i>
+          <i class="pi pi-user"></i>
           <input id="displayName" type="text" pinputtext="" placeholder="{{ 'register.usernameOptional' | translate }}" class="p-inputtext p-component p-element w-full md:w-25rem" formControlName="displayName">
         </span>
         <button pbutton="" pripple="" class="p-element w-full p-button p-component mt-4" tabindex="0" [disabled]="!formGroup?.valid || !checkIfPasswordsMatch()" type="submit">

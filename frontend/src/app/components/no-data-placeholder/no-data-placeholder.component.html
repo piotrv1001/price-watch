@@ -1,0 +1,8 @@
+<div class="flex flex-column gap-4 wi-full justify-content-center align-items-center">
+  <div class="border-circle m-2 surface-ground flex align-items-center justify-content-center" [ngClass]="size === 'small' ? 'w-12rem h-12rem' : 'w-24rem h-24rem'">
+    <img src="assets/img/empty_folder_gray.png" alt="Empty folder image" [ngClass]="size === 'small' ? 'w-10rem' : 'w-20rem'" height="auto">
+  </div>
+  <span class="font-semibold" [ngClass]="size === 'small' ? 'text-xl' : 'text-2xl'">{{ 'global.noData' | translate }}</span>
+  <span class="text-color-secondary">{{ 'global.noDataDesc' | translate }}</span>
+</div>
+

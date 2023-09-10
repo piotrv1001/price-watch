@@ -6,4 +6,5 @@ export class NewProductDTO {
   promo?: boolean;
   currentPrice?: number;
   seller?: string;
+  status?: string;
 }

@@ -12,6 +12,7 @@ import { ExcelExportBtnModule } from './../excel-export-btn/excel-export-btn.mod
 import { PdfExportBtnModule } from "../pdf-export-btn/pdf-export-btn.module";
 import { SharedModule } from "src/app/shared/shared.module";
 import { ProductNameWithSellerModule } from "../product-name-with-seller/product-name-with-seller.module";
+import { NoDataPlaceHolderModule } from "../no-data-placeholder/no-data-placeholder.module";
 
 @NgModule({
   imports: [
@@ -23,7 +24,8 @@ import { ProductNameWithSellerModule } from "../product-name-with-seller/product
     PdfExportBtnModule,
     InputTextModule,
     TooltipModule,
-    ProductNameWithSellerModule
+    ProductNameWithSellerModule,
+    NoDataPlaceHolderModule
   ],
   declarations: [
     ProductTableComponent

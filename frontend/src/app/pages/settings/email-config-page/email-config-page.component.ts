@@ -148,9 +148,7 @@ export class EmailConfigPageComponent implements OnInit, OnDestroy {
       this.initialConfig = res;
       this.emptyInitialConfig = false;
       this.email = res.email ?? '';
-      if(this.dayOfWeek) {
-        this.dayOfWeek.value = res.dayOfWeek ?? 0;
-      }
+      this.dayOfWeek = this.weekDays.find((day) => day.value === res.dayOfWeek);
       this.hour = res.hour ?? 0;
       this.minute = res.minute ?? 0;
       if(typeof res.enabled === 'number') {

@@ -16,7 +16,7 @@ export class StringUtil {
     if (typeof price === 'number') {
       return price.toFixed(2);
     } else if (typeof price === 'string') {
-      const parsedPrice = parseFloat(price);
+      const parsedPrice = parseFloat(price.replace(/,/g, ''));
       if (!isNaN(parsedPrice)) {
         return parsedPrice.toFixed(2);
       } else {

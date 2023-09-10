@@ -1,124 +1,129 @@
-<p-table
-  #table
-  [value]="products"
-  [columns]="columns"
-  [paginator]="showPaginator && products.length > paginatorRows"
-  [rows]="paginatorRows"
-  [showCurrentPageReport]="false"
-  [globalFilterFields]="getFilterFields()">
-  <ng-template pTemplate="caption">
-    <div class="flex">
-      <span class="p-input-icon-left mr-auto">
-        <i class="pi pi-search"></i>
-        <input
-          [style]="{'width': '300px'}"
-          pInputText
-          type="text"
-          (input)="table.filterGlobal($any($event.target).value, 'contains')"
-          placeholder="{{ 'global.search' | translate }}"/>
-      </span>
-      <div class="w-10rem flex flex-column justify-content-around mr-2" *ngIf="downloadProgress > -1">
-        <span *ngIf="downloadProgress < 100" class="font-semibold text-sm">{{ 'global.downloading' | translate }}</span>
-        <div *ngIf="downloadProgress === 100" class="flex align-items-center">
-          <span class="mr-1 font-semibold text-sm text-green-600">{{ 'global.done' | translate }}</span>
-          <i class="pi pi-check text-sm font-semibold text-green-500"></i>
+<ng-container *ngIf="products.length === 0; else defaultTemplate">
+  <app-no-data-placeholder [size]="placeholderSize"></app-no-data-placeholder>
+</ng-container>
+<ng-template #defaultTemplate>
+  <p-table
+    #table
+    [value]="products"
+    [columns]="columns"
+    [paginator]="showPaginator && products.length > paginatorRows"
+    [rows]="paginatorRows"
+    [showCurrentPageReport]="false"
+    [globalFilterFields]="getFilterFields()">
+    <ng-template pTemplate="caption">
+      <div class="flex">
+        <span class="p-input-icon-left mr-auto">
+          <i class="pi pi-search"></i>
+          <input
+            [style]="{'width': '300px'}"
+            pInputText
+            type="text"
+            (input)="table.filterGlobal($any($event.target).value, 'contains')"
+            placeholder="{{ 'global.search' | translate }}"/>
+        </span>
+        <div class="w-10rem flex flex-column justify-content-around mr-2" *ngIf="downloadProgress > -1">
+          <span *ngIf="downloadProgress < 100" class="font-semibold text-sm">{{ 'global.downloading' | translate }}</span>
+          <div *ngIf="downloadProgress === 100" class="flex align-items-center">
+            <span class="mr-1 font-semibold text-sm text-green-600">{{ 'global.done' | translate }}</span>
+            <i class="pi pi-check text-sm font-semibold text-green-500"></i>
+          </div>
+          <p-progressBar
+            [value]="downloadProgress"
+            [showValue]="false"
+            [style]="{'height': '6px'}">
+          </p-progressBar>
         </div>
-        <p-progressBar
-          [value]="downloadProgress"
-          [showValue]="false"
-          [style]="{'height': '6px'}">
-        </p-progressBar>
+        <button
+          type="button"
+          pButton
+          icon="pi pi-file"
+          (click)="table.exportCSV()"
+          class="mr-2"
+          pTooltip="CSV"
+          tooltipPosition="bottom"
+          [disabled]="products.length === 0">
+        </button>
+        <app-excel-export-btn
+          [exportData]="exportData"
+          (downloadProgressChange)="handleDownloadProgressChange($event)">
+        </app-excel-export-btn>
+        <app-pdf-export-btn
+          [exportData]="exportData">
+        </app-pdf-export-btn>
       </div>
-      <button
-        type="button"
-        pButton
-        icon="pi pi-file"
-        (click)="table.exportCSV()"
-        class="mr-2"
-        pTooltip="CSV"
-        tooltipPosition="bottom"
-        [disabled]="products.length === 0">
-      </button>
-      <app-excel-export-btn
-        [exportData]="exportData"
-        (downloadProgressChange)="handleDownloadProgressChange($event)">
-      </app-excel-export-btn>
-      <app-pdf-export-btn
-        [exportData]="exportData">
-      </app-pdf-export-btn>
-    </div>
-  </ng-template>
-  <ng-template pTemplate="header" let-columns>
-    <tr>
-      <th *ngFor="let col of columns" [ngStyle]="col.ngStyle">
-        <ng-container *ngIf="col.translate === false; else defaultHeader">
-          {{ col.header }}
-        </ng-container>
-        <ng-template #defaultHeader>
-          {{ ('productTable.' + col.header) | translate }}
-        </ng-template>
-      </th>
-    </tr>
-  </ng-template>
-  <ng-template pTemplate="body" let-rowData let-columns="columns">
-    <tr>
-      <td *ngFor="let col of columns">
-        <ng-container *ngIf="col.field === 'currentPrice' || col.field === 'prevPrice'; else noPrice">
-          {{rowData[col.field] | number:'1.2-2'}} zł
-        </ng-container>
-        <ng-template #noPrice>
-          <ng-container [ngSwitch]="col.field">
-            <ng-container *ngSwitchCase="'imgSrc'">
-              <img [src]="rowData[col.field]" alt="Product image" width="80" height="60" class="shadow-4 pd-4 border-round">
-            </ng-container>
-            <ng-container *ngSwitchCase="'chart'">
-              <p-button icon="pi pi-chart-line" styleClass="p-button-rounded p-button-help p-button-text" (onClick)="handleChartBtnClick(rowData)"></p-button>
-            </ng-container>
-            <ng-container *ngSwitchCase="'promo'">
-              <ng-container *ngIf="rowData[col.field]; else noPromoTemplate">
-                <i class="pi pi-check-circle pi-button pi-button-success" style="color: #28a745;"></i>
-              </ng-container>
-              <ng-template #noPromoTemplate>
-                <i class="pi pi-minus-circle" style="color: #dc3545;"></i>
-              </ng-template>
-            </ng-container>
-            <ng-container *ngSwitchCase="'priceChange'">
-              <span [ngClass]="{'text-success': rowData[col.field] > 0, 'text-danger': rowData[col.field] < 0}">
-                {{ (rowData[col.field] > 0 ? '+' : '') + (rowData[col.field] | number:'1.2-2') }} zł
-              </span>
-            </ng-container>
-            <ng-container *ngSwitchCase="'priceChangePercentage'">
-              <span [ngClass]="{'text-success': rowData[col.field] > 0, 'text-danger': rowData[col.field] < 0}">
-                {{ (rowData[col.field] > 0 ? '+' : '') + (rowData[col.field] | number:'1.0-0') }} %
-              </span>
-            </ng-container>
-            <ng-container *ngSwitchCase="'name'">
-              <app-product-name-with-seller [product]="rowData"></app-product-name-with-seller>
-            </ng-container>
-            <ng-container *ngSwitchCase="'status'">
-              <ng-container [ngSwitch]="rowData[col.field]">
-                <ng-container *ngSwitchCase="0">
-                  <div class="border-round bg-green-100 text-green-600 p-2 font-semibold text-center">{{ 'status.available' | translate }}</div>
-                </ng-container>
-                <ng-container *ngSwitchCase="1">
-                  <div class="border-round bg-yellow-100 text-yellow-600 p-2 font-semibold text-center">{{ 'status.unavailable' | translate }}</div>
-                </ng-container>
-                <ng-container *ngSwitchCase="2">
-                  <div class="border-round bg-gray-100 text-gray-600 p-2 font-semibold text-center">{{ 'status.withdrawn' | translate }}</div>
-                </ng-container>
-              </ng-container>
-            </ng-container>
-            <ng-container *ngSwitchDefault>
-              {{rowData[col.field]}}
-            </ng-container>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th *ngFor="let col of columns" [ngStyle]="col.ngStyle">
+          <ng-container *ngIf="col.translate === false; else defaultHeader">
+            {{ col.header }}
           </ng-container>
-        </ng-template>
-      </td>
-    </tr>
-  </ng-template>
-  <ng-template pTemplate="footer">
-    <tr *ngIf="products.length === 0">
-      <td [attr.colspan]="columns.length" style="text-align: center; font-weight: normal;">No data</td>
-    </tr>
-  </ng-template>
-</p-table>
+          <ng-template #defaultHeader>
+            {{ ('productTable.' + col.header) | translate }}
+          </ng-template>
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+      <tr>
+        <td *ngFor="let col of columns">
+          <ng-container *ngIf="col.field === 'currentPrice' || col.field === 'prevPrice'; else noPrice">
+            {{rowData[col.field] | number:'1.2-2'}} zł
+          </ng-container>
+          <ng-template #noPrice>
+            <ng-container [ngSwitch]="col.field">
+              <ng-container *ngSwitchCase="'imgSrc'">
+                <img [src]="rowData[col.field]" alt="Product image" width="80" height="60" class="shadow-4 pd-4 border-round">
+              </ng-container>
+              <ng-container *ngSwitchCase="'chart'">
+                <p-button icon="pi pi-chart-line" styleClass="p-button-rounded p-button-help p-button-text" (onClick)="handleChartBtnClick(rowData)"></p-button>
+              </ng-container>
+              <ng-container *ngSwitchCase="'promo'">
+                <ng-container *ngIf="rowData[col.field]; else noPromoTemplate">
+                  <i class="pi pi-check-circle pi-button pi-button-success" style="color: #28a745;"></i>
+                </ng-container>
+                <ng-template #noPromoTemplate>
+                  <i class="pi pi-minus-circle" style="color: #dc3545;"></i>
+                </ng-template>
+              </ng-container>
+              <ng-container *ngSwitchCase="'priceChange'">
+                <span [ngClass]="{'text-success': rowData[col.field] > 0, 'text-danger': rowData[col.field] < 0}">
+                  {{ (rowData[col.field] > 0 ? '+' : '') + (rowData[col.field] | number:'1.2-2') }} zł
+                </span>
+              </ng-container>
+              <ng-container *ngSwitchCase="'priceChangePercentage'">
+                <span [ngClass]="{'text-success': rowData[col.field] > 0, 'text-danger': rowData[col.field] < 0}">
+                  {{ (rowData[col.field] > 0 ? '+' : '') + (rowData[col.field] | number:'1.0-0') }} %
+                </span>
+              </ng-container>
+              <ng-container *ngSwitchCase="'name'">
+                <app-product-name-with-seller [product]="rowData"></app-product-name-with-seller>
+              </ng-container>
+              <ng-container *ngSwitchCase="'status'">
+                <ng-container [ngSwitch]="rowData[col.field]">
+                  <ng-container *ngSwitchCase="0">
+                    <div class="border-round bg-green-100 text-green-600 p-2 font-semibold text-center">{{ 'status.available' | translate }}</div>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="1">
+                    <div class="border-round bg-yellow-100 text-yellow-600 p-2 font-semibold text-center">{{ 'status.unavailable' | translate }}</div>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="2">
+                    <div class="border-round bg-gray-100 text-gray-600 p-2 font-semibold text-center">{{ 'status.withdrawn' | translate }}</div>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+              <ng-container *ngSwitchDefault>
+                {{rowData[col.field]}}
+              </ng-container>
+            </ng-container>
+          </ng-template>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="footer">
+      <tr *ngIf="products.length === 0">
+        <td [attr.colspan]="columns.length" style="text-align: center; font-weight: normal;">No data</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</ng-template>

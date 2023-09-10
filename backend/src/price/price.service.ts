@@ -82,12 +82,15 @@ export class PriceService {
     });
   }
 
-  async getNewProducts(
-    seller: string,
-    fromDate: Date,
-    toDate: Date,
-  ): Promise<NewProductDTO[]> {
-    return await this.analyzePriceChanges(seller, fromDate, toDate, true);
+  async getLatestPriceByProductId(
+    productId: string,
+  ): Promise<Price | undefined> {
+    return this.priceRepository
+      .createQueryBuilder('price')
+      .where('price.productId = :productId', { productId })
+      .orderBy('price.date', 'DESC')
+      .limit(1)
+      .getOne();
   }
 
   async getPriceChanges(
@@ -95,7 +98,7 @@ export class PriceService {
     fromDate: Date,
     toDate: Date,
   ): Promise<PriceChangeDTO[]> {
-    return await this.analyzePriceChanges(seller, fromDate, toDate, false);
+    return await this.analyzePriceChanges(seller, fromDate, toDate);
   }
 
   async getPricesByProductIds(
@@ -191,12 +194,57 @@ export class PriceService {
     return events;
   }
 
+  async findNewProducts(
+    seller: string,
+    fromDate: Date,
+    toDate: Date,
+  ): Promise<NewProductDTO[]> {
+    const query = this.priceRepository
+      .createQueryBuilder('p')
+      .select('p.productId', 'productId')
+      .addSelect('MAX(p.date)', 'maxDate')
+      .addSelect('MIN(p.date)', 'minDate')
+      .addSelect('pr.name as name')
+      .addSelect('pr.imgSrc as imgSrc')
+      .addSelect('pr.promo as promo')
+      .addSelect('pr.status as status')
+      .addSelect('pr.link as link')
+      .innerJoin('p.product', 'pr')
+      .where('pr.seller = :seller', { seller })
+      .groupBy('p.productId')
+      .having('maxDate >= :fromDate', { fromDate })
+      .andHaving('maxDate <= :toDate', { toDate })
+      .andHaving('minDate >= :fromDate', { fromDate });
+
+    const limit = 100;
+    const newProducts: NewProductDTO[] = [];
+    const results = await query.getRawMany();
+    for (const result of results) {
+      if (newProducts.length >= limit) {
+        break;
+      }
+      const currentPrice = await this.getLatestPriceByProductId(
+        result.productId,
+      );
+      newProducts.push({
+        productId: result.productId,
+        name: result.name,
+        imgSrc: result.imgSrc,
+        link: result.link,
+        promo: result.promo,
+        status: result.status,
+        seller,
+        currentPrice: currentPrice?.price,
+      });
+    }
+    return newProducts;
+  }
+
   private async analyzePriceChanges(
     seller: string,
     fromDate: Date,
     toDate: Date,
-    returnNewProducts: boolean,
-  ): Promise<PriceChangeDTO[] | NewProductDTO[]> {
+  ): Promise<PriceChangeDTO[]> {
     const query = this.priceRepository
       .createQueryBuilder('p')
       .select('p.*')
@@ -232,53 +280,25 @@ export class PriceService {
       }
       return acc;
     }, []);
-    const newProducts = [];
     const priceChanges = products.map((product) => {
       const { prices } = product;
-      if (prices.length < 2) {
-        // New product detected, because we only have 1 price
-        newProducts.push({
-          productId: product.productId,
-          name: product.name,
-          imgSrc: product.imgSrc,
-          link: product.link,
-          promo: product.promo,
-          status: product.status,
-          seller,
-          currentPrice: prices[0].price,
-        });
-        return {
-          productId: product.productId,
-          name: product.name,
-          imgSrc: product.imgSrc,
-          link: product.link,
-          promo: product.promo,
-          status: product.status,
-          prevPrice: null,
-          currentPrice: prices[0].price,
-          priceChange: null,
-          seller,
-          priceChangePercentage: null,
-        };
-      } else {
-        const lastIndex = prices.length - 1;
-        const priceChange = prices[0].price - prices[lastIndex].price;
-        return {
-          productId: product.productId,
-          name: product.name,
-          imgSrc: product.imgSrc,
-          link: product.link,
-          promo: product.promo,
-          status: product.status,
-          prevPrice: prices[lastIndex].price,
-          currentPrice: prices[0].price,
-          priceChange,
-          seller,
-          priceChangePercentage: Math.round(
-            (priceChange / prices[lastIndex].price) * 100,
-          ),
-        };
-      }
+      const lastIndex = prices.length - 1;
+      const priceChange = prices[0].price - prices[lastIndex].price;
+      return {
+        productId: product.productId,
+        name: product.name,
+        imgSrc: product.imgSrc,
+        link: product.link,
+        promo: product.promo,
+        status: product.status,
+        prevPrice: prices[lastIndex].price,
+        currentPrice: prices[0].price,
+        priceChange,
+        seller,
+        priceChangePercentage: Math.round(
+          (priceChange / prices[lastIndex].price) * 100,
+        ),
+      };
     });
     const filteredPriceChanges = priceChanges.filter(
       (item) => item.priceChange !== null && item.priceChange !== 0,
@@ -290,7 +310,8 @@ export class PriceService {
         Math.abs(b.priceChangePercentage) - Math.abs(a.priceChangePercentage)
       );
     });
-    return returnNewProducts ? newProducts : priceChangesSorted;
+    const limit = 100;
+    return priceChangesSorted.slice(0, limit);
   }
 
   private fillMissingDates(

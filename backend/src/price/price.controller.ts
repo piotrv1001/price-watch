@@ -48,11 +48,16 @@ export class PriceController {
     @Query('toDate') toDate?: string,
   ): Promise<NewProductDTO[]> {
     const { fromDateParsed, toDateParsed } = this.parseDates(fromDate, toDate);
-    return this.priceService.getNewProducts(
+    return this.priceService.findNewProducts(
       seller,
       fromDateParsed,
       toDateParsed,
     );
+    // return this.priceService.getNewProducts(
+    //   seller,
+    //   fromDateParsed,
+    //   toDateParsed,
+    // );
   }
 
   @Get('price-changes/:seller')
