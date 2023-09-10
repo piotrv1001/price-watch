@@ -290,7 +290,10 @@ export class PriceService {
         Math.abs(b.priceChangePercentage) - Math.abs(a.priceChangePercentage)
       );
     });
-    return returnNewProducts ? newProducts : priceChangesSorted;
+    const limit = 100;
+    return returnNewProducts
+      ? newProducts.slice(0, limit)
+      : priceChangesSorted.slice(0, limit);
   }
 
   private fillMissingDates(
