@@ -5,8 +5,13 @@
   <div class="col-12 xl:col-6 p-3">
     <div class="card">
       <h5>{{ 'dashboard.sellers' | translate }}</h5>
-      <div class="mt-6">
+      <div class="mt-6 flex align-items-end justify-content-between">
         <app-choose-seller (sellerChange)="handleSellerChange($event)"></app-choose-seller>
+        <div class="flex flex-row gap-2">
+          <span>{{ startDate | date: 'dd-MM-yyyy' }}</span>
+          <span>-</span>
+          <span>{{ endDate | date: 'dd-MM-yyyy' }}</span>
+        </div>
       </div>
     </div>
   </div>
