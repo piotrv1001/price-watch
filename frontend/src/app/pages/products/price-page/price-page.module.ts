@@ -7,6 +7,7 @@ import { PriceChartModule } from "src/app/components/price-chart/price-chart.mod
 import { ProductMultiSelectModule } from "src/app/components/product-multi-select/product-multi-select.module";
 import { PriceLegendModule } from "src/app/components/price-legend/price-legend.module";
 import { SpinnerModule } from "src/app/components/spinner/spinner.module";
+import { ProductFilterModule } from "src/app/components/product-filter/product-filter.module";
 
 @NgModule({
   imports: [
@@ -14,7 +15,8 @@ import { SpinnerModule } from "src/app/components/spinner/spinner.module";
     PriceChartModule,
     ProductMultiSelectModule,
     PriceLegendModule,
-    SpinnerModule
+    SpinnerModule,
+    ProductFilterModule
   ],
   declarations: [
     PricePageComponent

@@ -168,5 +168,9 @@
     "withdrawal": "Withdrawal",
     "priceChange": "Price change",
     "reActivated": "Restoration"
+  },
+  "filter": {
+    "chooseStatus": "Choose status",
+    "selectedXStatuses": "Selected statuses: {0}"
   }
 }

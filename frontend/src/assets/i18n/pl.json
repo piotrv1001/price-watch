@@ -168,5 +168,9 @@
     "withdrawal": "Wycofanie",
     "priceChange": "Zmiana ceny",
     "reActivated": "Przywrócenie"
+  },
+  "filter": {
+    "chooseStatus": "Wybierz status",
+    "selectedXStatuses": "Wybrane statusy: {0}"
   }
 }

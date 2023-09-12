@@ -1,0 +1,6 @@
+<div class="mb-1">{{ 'productTable.price' | translate }}</div>
+<div class="flex flex-row justify-content-between align-items-center">
+  <p-inputNumber [(ngModel)]="min" [useGrouping]="false" [min]="0" [max]="10000000" [style]="{'width': '100%'}" placeholder="min"></p-inputNumber>
+  <span>-</span>
+  <p-inputNumber [(ngModel)]="max" [useGrouping]="false" [min]="0" [max]="10000000" [style]="{'width': '100%'}" placeholder="max"></p-inputNumber>
+</div>
