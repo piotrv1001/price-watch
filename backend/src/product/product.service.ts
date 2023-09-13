@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './product.entity';
-import { Repository } from 'typeorm';
+import { Between, In, Repository } from 'typeorm';
 import { CreateProductDTO } from './dto/create-product.dto';
 import { Price } from 'src/price/price.entity';
 import { Bucket } from 'src/bucket';
+import { ProductFilterDTO } from './dto/product-filter';
 
 @Injectable()
 export class ProductService {
@@ -56,6 +57,54 @@ export class ProductService {
     });
   }
 
+  async filter(productFilter: ProductFilterDTO): Promise<Product[]> {
+    const {
+      sellers,
+      statusList,
+      minPrice,
+      maxPrice,
+      minBuyers,
+      maxBuyers,
+      promo,
+      priceChangesOnly,
+    } = productFilter;
+    const products = await this.productRepository.find({
+      where: {
+        seller: In(sellers),
+        status: In(statusList),
+        numberOfPeople: Between(minBuyers, maxBuyers),
+      },
+      relations: ['prices'],
+    });
+    const productsWithCurrentPrice = products.map((product) => ({
+      ...product,
+      currentPrice: this.getCurrentPrice(product.prices),
+    }));
+    const filteredProducts = productsWithCurrentPrice.filter(
+      async (product) => {
+        const price = product.currentPrice;
+        let priceChangeCondition = true;
+        if (priceChangesOnly) {
+          priceChangeCondition = await this.didPriceEverChange(product.prices);
+        }
+        return (
+          (!minPrice || price >= minPrice) &&
+          (!maxPrice || price <= maxPrice) &&
+          (!promo ||
+            promo === 'all' ||
+            (promo === 'promo' && product.promo) ||
+            (promo === 'non-promo' && !product.promo)) &&
+          priceChangeCondition
+        );
+      },
+    );
+    return filteredProducts.map((product) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { prices, ...rest } = product;
+      return rest;
+    });
+  }
+
   async getPriceBuckets(seller: string): Promise<number[]> {
     const products = await this.findBySeller(seller);
     const productWithCurrentPrice = products.map((product) => ({
@@ -63,6 +112,18 @@ export class ProductService {
       currentPrice: this.getCurrentPrice(product.prices),
     }));
     return this.groupProducts(productWithCurrentPrice);
+  }
+
+  private async didPriceEverChange(prices: Price[]): Promise<boolean> {
+    if (!prices || prices.length === 0) {
+      return false;
+    }
+    const pricesSortedByPrice = prices.sort((a, b) => {
+      return b.price - a.price;
+    });
+    const highestPrice = pricesSortedByPrice[0].price;
+    const lowestPrice = pricesSortedByPrice[prices.length - 1].price;
+    return highestPrice !== lowestPrice;
   }
 
   private groupProducts(products: any[]): number[] {
@@ -96,7 +157,11 @@ export class ProductService {
       }
       return 0;
     });
-    return pricesSortedByDate[0].price;
+    const price = pricesSortedByDate[0].price;
+    if (typeof price === 'string') {
+      return parseFloat(price);
+    }
+    return price;
   }
 
   private getDate(date: string | Date | undefined): Date | null {

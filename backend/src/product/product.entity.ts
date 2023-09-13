@@ -24,6 +24,9 @@ export class Product {
   @Column({ nullable: true, default: 0 })
   status?: number;
 
+  @Column({ nullable: true })
+  numberOfPeople?: number;
+
   @OneToMany(() => Price, (price) => price.product, {
     nullable: true,
   })

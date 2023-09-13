@@ -1,4 +1,5 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, EventEmitter, OnInit, Output } from "@angular/core";
+import { MultiSelectChangeEvent } from "primeng/multiselect";
 import { ProductStatus } from "src/app/models/product/status";
 
 interface StatusItem {
@@ -14,9 +15,14 @@ interface StatusItem {
 export class StatusFilterComponent implements OnInit {
   statusList: StatusItem[] = [];
   selectedStatuses: ProductStatus[] = [];
+  @Output() selectedStatusesChange: EventEmitter<ProductStatus[]> = new EventEmitter<ProductStatus[]>();
 
   ngOnInit(): void {
     this.getStatusList();
+  }
+
+  handleStatusesChange(event: MultiSelectChangeEvent): void {
+    this.selectedStatusesChange.emit(event.value);
   }
 
   private getStatusList(): void {

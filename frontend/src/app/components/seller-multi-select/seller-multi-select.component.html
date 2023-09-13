@@ -1,0 +1,11 @@
+<div class="mb-1">{{ 'global.seller' | translate }}</div>
+<p-multiSelect
+  [style]="{'width':'100%'}"
+  [options]="sellers"
+  [optionLabel]="'name'"
+  [(ngModel)]="selectedSellers"
+  (onChange)="handleSellersChange($event)"
+  [showClear]="false"
+  [maxSelectedLabels]="1"
+  selectedItemsLabel="{{ 'filter.seller.selectedXSeller' | translate }}">
+</p-multiSelect>

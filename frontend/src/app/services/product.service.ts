@@ -6,6 +6,7 @@ import { Observable, map } from "rxjs";
 import { Price } from "../models/price/price";
 import { DateUtil } from "../utils/date/date.util";
 import { ProductWithPrice } from "../models/product/product-with-price";
+import { ProductFilterDTO } from "../models/dto/product-filter.dto";
 
 @Injectable({
   providedIn: 'root',
@@ -28,6 +29,10 @@ export class ProductService {
     .pipe(
       map(products => products.map(product => ({...product, currentPrice: this.getCurrentPrice(product.prices) })
     )));
+  }
+
+  getFilteredProducts(productFilter: ProductFilterDTO): Observable<ProductWithPrice[]> {
+    return this.http.post<ProductWithPrice[]>(`${this.productResourceUrl}/filter`, productFilter);
   }
 
   private getCurrentPrice(prices: Price[] | undefined): number | undefined {

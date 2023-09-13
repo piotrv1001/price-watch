@@ -1,6 +1,6 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, EventEmitter, OnInit, Output } from "@angular/core";
 
-type Promo = 'all' | 'promo' | 'non-promo';
+export type Promo = 'all' | 'promo' | 'non-promo';
 
 interface PromoItem {
   value: Promo;
@@ -15,9 +15,14 @@ interface PromoItem {
 export class PromoFilterComponent implements OnInit {
   promoItems: PromoItem[] = [];
   selectedPromo?: Promo;
+  @Output() selectedPromoChange: EventEmitter<Promo> = new EventEmitter<Promo>();
 
   ngOnInit(): void {
     this.getPromoItems();
+  }
+
+  handleSelectedPromoChange(): void {
+    this.selectedPromoChange.emit(this.selectedPromo ?? 'all');
   }
 
   private getPromoItems(): void {

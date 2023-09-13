@@ -14,12 +14,12 @@ import { PanelModule } from 'primeng/panel';
 import { ButtonModule } from "primeng/button";
 
 import { SharedModule } from "src/app/shared/shared.module";
-import { ChooseSellerModule } from "../choose-seller/choose-seller.module";
+import { SellerMultiSelectModule } from "../seller-multi-select/seller-multi-select.module";
 
 @NgModule({
   imports: [
     SharedModule,
-    ChooseSellerModule,
+    SellerMultiSelectModule,
     DropdownModule,
     MultiSelectModule,
     InputNumberModule,

@@ -49,6 +49,7 @@
   "global": {
     "search": "Wyszukaj",
     "products": "Produkty",
+    "seller": "Sprzedawca",
     "chooseSeller": "Wybierz sprzedawcę",
     "downloading": "Pobieranie ...",
     "done": "Gotowe",
@@ -174,17 +175,20 @@
     "applyFilters": "Zastosuj filtry",
     "saveFilter": "Zapisz",
     "clearFilter": "Wyczyść",
-    "numberOfPeople": "Liczba osób",
+    "numberOfPeople": "Kupujący",
     "newProductsOnly": "Tylko nowe produkty",
     "priceChangeOnly": "Tylko zmienione ceny",
     "status": {
-      "chooseStatus": "Wybierz status",
+      "chooseStatus": "Status",
       "selectedXStatuses": "Wybrane statusy: {0}"
     },
     "promo": {
       "all": "Wszystkie",
       "promo": "Promowane",
       "nonPromo": "Niepromowane"
+    },
+    "seller": {
+      "selectedXSeller": "Wybrani sprzedawcy: {0}"
     }
   }
 }

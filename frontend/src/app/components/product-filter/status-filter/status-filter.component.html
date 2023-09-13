@@ -5,6 +5,7 @@
   [optionLabel]="'name'"
   [optionValue]="'value'"
   [(ngModel)]="selectedStatuses"
+  (onChange)="handleStatusesChange($event)"
   placeholder="{{ 'filter.status.chooseStatus' | translate }}"
   [maxSelectedLabels]="0"
   selectedItemsLabel="{{ 'filter.status.selectedXStatuses' | translate }}"
