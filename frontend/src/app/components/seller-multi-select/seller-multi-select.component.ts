@@ -31,5 +31,6 @@ export class SellerMultiSelectComponent implements OnInit {
       { id: 7, name: 'ELE24' },
     ];
     this.selectedSellers = [...this.sellers];
+    this.selectedSellersChange.emit(this.selectedSellers);
   }
 }

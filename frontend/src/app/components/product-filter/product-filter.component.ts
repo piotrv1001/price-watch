@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from "@angular/core";
+import { Component, EventEmitter, OnDestroy, Output } from "@angular/core";
 import { Subscription } from "rxjs";
 import { ProductService } from "src/app/services/product.service";
 import { Promo } from "./promo-filter/promo-filter.component";
@@ -6,6 +6,7 @@ import { Seller } from "src/app/models/seller/seller";
 import { Range } from "./range-filter/range-filter.component";
 import { ProductFilterDTO } from "src/app/models/dto/product-filter.dto";
 import { ToastService } from "src/app/services/toast.service";
+import { ProductWithPrice } from "src/app/models/product/product-with-price";
 
 @Component({
   selector: 'app-product-filter',
@@ -13,6 +14,8 @@ import { ToastService } from "src/app/services/toast.service";
   styleUrls: ['./product-filter.component.scss']
 })
 export class ProductFilterComponent implements OnDestroy {
+  @Output() loadingChange: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() productsChange: EventEmitter<ProductWithPrice[]> = new EventEmitter<ProductWithPrice[]>();
   sellers: string[] = [];
   statusList: number[] = [];
   minPrice: number = 0;
@@ -22,6 +25,8 @@ export class ProductFilterComponent implements OnDestroy {
   promo: Promo = 'all';
   newProductsOnly: boolean = false;
   priceChangesOnly: boolean = false;
+  filteredProducts: ProductWithPrice[] = [];
+  loading = false;
   subs: Subscription[] = [];
 
   constructor(
@@ -37,6 +42,19 @@ export class ProductFilterComponent implements OnDestroy {
     this.getFilteredProducts();
   }
 
+  handleResetBtnClick(): void {
+    this.sellers = [];
+    this.statusList = [];
+    this.minPrice = 0;
+    this.maxPrice = 10000000;
+    this.minBuyers = 0;
+    this.maxBuyers = 10000000;
+    this.promo = 'all';
+    this.newProductsOnly = false;
+    this.priceChangesOnly = false;
+    this.filteredProducts = [];
+  }
+
   handleSellersChange(sellers: Seller[]): void {
     this.sellers = sellers.map((seller: Seller) => seller.name ?? '');
   }
@@ -46,13 +64,13 @@ export class ProductFilterComponent implements OnDestroy {
   }
 
   handlePriceRangeChange(range: Range): void {
-    this.minPrice = range.min;
-    this.maxPrice = range.max;
+    this.minPrice = range.min ?? 0;
+    this.maxPrice = range.max ?? 10000000;
   }
 
   handleBuyersRangeChange(range: Range): void {
-    this.minBuyers = range.min;
-    this.maxBuyers = range.max;
+    this.minBuyers = range.min ?? 0;
+    this.maxBuyers = range.max ?? 10000000;
   }
 
   handleSelectedPromoChange(promo: Promo): void {
@@ -70,16 +88,24 @@ export class ProductFilterComponent implements OnDestroy {
       promo: this.promo,
       priceChangesOnly: this.priceChangesOnly
     };
-    console.log('productFilter', productFilter);
+    this.updateLoading(true);
     this.subs.push(
       this.productService.getFilteredProducts(productFilter).subscribe({
         next: (products) => {
-          console.log('products', products);
+          this.updateLoading(false);
+          this.filteredProducts = products;
+          this.productsChange.emit(products);
         },
         error: (error: any) => {
+          this.updateLoading(false);
           this.toastService.handleError(error);
         }
       })
     );
+  }
+
+  private updateLoading(loading: boolean): void {
+    this.loading = loading;
+    this.loadingChange.emit(loading);
   }
 }

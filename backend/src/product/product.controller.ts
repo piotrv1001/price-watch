@@ -26,7 +26,7 @@ export class ProductController {
 
   @UseGuards(AuthGuard)
   @Post('filter')
-  filter(@Body() filterDTO: ProductFilterDTO): Promise<Product[]> {
+  filter(@Body() filterDTO: ProductFilterDTO): Promise<any[]> {
     return this.productService.filter(filterDTO);
   }
 

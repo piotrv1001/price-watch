@@ -32,5 +32,6 @@ export class StatusFilterComponent implements OnInit {
       { label: 'status.withdrawn', value: ProductStatus.UNAVAILABLE }
     ];
     this.selectedStatuses = this.statusList.map((status) => status.value);
+    this.selectedStatusesChange.emit(this.selectedStatuses);
   }
 }

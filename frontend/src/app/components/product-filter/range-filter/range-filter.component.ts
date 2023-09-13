@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 
 export interface Range {
-  min: number;
-  max: number;
+  min?: number;
+  max?: number;
 }
 
 @Component({
@@ -20,8 +20,6 @@ export class RangeFilterComponent {
   max?: number;
 
   handleRangeChange(): void {
-    if(this.min !== undefined && this.max !== undefined) {
-      this.rangeChange.emit({ min: this.min, max: this.max });
-    }
+    this.rangeChange.emit({ min: this.min, max: this.max });
   }
 }
