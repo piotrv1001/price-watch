@@ -49,6 +49,7 @@
   "global": {
     "search": "Search",
     "products": "Products",
+    "seller": "Seller",
     "chooseSeller": "Choose seller",
     "downloading": "Downloading...",
     "done": "Done",
@@ -168,5 +169,26 @@
     "withdrawal": "Withdrawal",
     "priceChange": "Price change",
     "reActivated": "Restoration"
+  },
+  "filter": {
+    "filters": "Filters",
+    "applyFilters": "Apply filters",
+    "saveFilter": "Save",
+    "clearFilter": "Clear",
+    "numberOfPeople": "Buyers",
+    "newProductsOnly": "New products only",
+    "priceChangeOnly": "Price change only",
+    "status": {
+      "chooseStatus": "Status",
+      "selectedXStatuses": "Selected statuses: {0}"
+    },
+    "promo": {
+      "all": "All",
+      "promo": "Promo",
+      "nonPromo": "Non-promo"
+    },
+    "seller": {
+      "selectedXSeller": "Selected sellers: {0}"
+    }
   }
 }

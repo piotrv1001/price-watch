@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './product.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { CreateProductDTO } from './dto/create-product.dto';
 import { Price } from 'src/price/price.entity';
 import { Bucket } from 'src/bucket';
+import { ProductFilterDTO } from './dto/product-filter';
 
 @Injectable()
 export class ProductService {
@@ -56,6 +57,57 @@ export class ProductService {
     });
   }
 
+  async filter(productFilter: ProductFilterDTO): Promise<any[]> {
+    const {
+      sellers,
+      statusList,
+      minPrice,
+      maxPrice,
+      minBuyers,
+      maxBuyers,
+      promo,
+      priceChangesOnly,
+    } = productFilter;
+
+    const queryBuilder = this.productRepository.createQueryBuilder('product');
+    queryBuilder.where({
+      seller: In(sellers),
+      status: In(statusList),
+    });
+    queryBuilder.leftJoinAndSelect('product.prices', 'prices');
+
+    const filteredProducts = (await queryBuilder.getMany()) as any[];
+
+    for (const product of filteredProducts) {
+      product.currentPrice = this.getCurrentPrice(product.prices);
+      if (priceChangesOnly) {
+        product.didPriceChange = await this.didPriceEverChange(product.prices);
+      }
+    }
+
+    const finalFilteredProducts = filteredProducts.filter((product) => {
+      const price = product.currentPrice;
+      const numberOfPeople = product.numberOfPeople;
+      return (
+        (!minPrice || price >= minPrice) &&
+        (!maxPrice || price <= maxPrice) &&
+        (!promo ||
+          promo === 'all' ||
+          (promo === 'promo' && product.promo) ||
+          (promo === 'non-promo' && !product.promo)) &&
+        (!priceChangesOnly || product.didPriceChange) &&
+        (!minBuyers || !numberOfPeople || numberOfPeople >= minBuyers) &&
+        (!maxBuyers || !numberOfPeople || numberOfPeople <= maxBuyers)
+      );
+    });
+
+    return finalFilteredProducts.map((product) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { prices, ...rest } = product;
+      return rest;
+    });
+  }
+
   async getPriceBuckets(seller: string): Promise<number[]> {
     const products = await this.findBySeller(seller);
     const productWithCurrentPrice = products.map((product) => ({
@@ -63,6 +115,18 @@ export class ProductService {
       currentPrice: this.getCurrentPrice(product.prices),
     }));
     return this.groupProducts(productWithCurrentPrice);
+  }
+
+  private async didPriceEverChange(prices: Price[]): Promise<boolean> {
+    if (!prices || prices.length === 0) {
+      return false;
+    }
+    const pricesSortedByPrice = prices.sort((a, b) => {
+      return b.price - a.price;
+    });
+    const highestPrice = pricesSortedByPrice[0].price;
+    const lowestPrice = pricesSortedByPrice[prices.length - 1].price;
+    return highestPrice !== lowestPrice;
   }
 
   private groupProducts(products: any[]): number[] {
@@ -96,7 +160,11 @@ export class ProductService {
       }
       return 0;
     });
-    return pricesSortedByDate[0].price;
+    const price = pricesSortedByDate[0].price;
+    if (typeof price === 'string') {
+      return parseFloat(price);
+    }
+    return price;
   }
 
   private getDate(date: string | Date | undefined): Date | null {

@@ -1,0 +1,11 @@
+<div class="mb-1">{{ 'filter.promo.promo' | translate }}</div>
+<p-selectButton
+  [options]="promoItems"
+  [(ngModel)]="selectedPromo"
+  optionLabel="label"
+  optionValue="value"
+  (ngModelChange)="handleSelectedPromoChange()">
+  <ng-template let-item pTemplate>
+    {{ item.label | translate }}
+  </ng-template>
+</p-selectButton>

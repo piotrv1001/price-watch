@@ -1,5 +1,4 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { CustomTemplate } from 'src/app/models/dto/column.dto';
@@ -7,11 +6,14 @@ import { ExportDataDTO } from 'src/app/models/dto/export-data.dto';
 import { Product } from 'src/app/models/product/product';
 import { TableColumn } from 'src/app/types/table/column';
 import { ProductTableType } from 'src/app/types/table/product-table-type';
+import { DialogService } from 'primeng/dynamicdialog';
+import { PriceChartDialogComponent } from '../price-chart-dialog/price-chart-dialog.component';
 
 @Component({
   selector: 'app-product-table',
   templateUrl: './product-table.component.html',
-  styleUrls: ['./product-table.component.scss']
+  styleUrls: ['./product-table.component.scss'],
+  providers: [DialogService]
 })
 export class ProductTableComponent implements OnInit, OnChanges, OnDestroy {
 
@@ -26,8 +28,8 @@ export class ProductTableComponent implements OnInit, OnChanges, OnDestroy {
   subs: Subscription[] = [];
 
   constructor(
-    private router: Router,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private dialogService: DialogService
   ) { }
 
   ngOnInit(): void {
@@ -61,7 +63,13 @@ export class ProductTableComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   handleChartBtnClick(product: Product): void {
-    this.router.navigate(['/products/prices'], { state: { product: product } });
+    this.dialogService.open(PriceChartDialogComponent, {
+      data: {
+        productId: product?.id ?? product.productId
+      },
+      header: product.name,
+      width: '80%'
+    });
   }
 
   getFilterFields(): string[] {

@@ -6,16 +6,17 @@
     <div class="card">
       <h5>{{ 'menu.prices' | translate }}</h5>
       <div class="mt-6">
-        <app-product-multiselect (selectedProductsChange)="updateProductIdArray($event)"></app-product-multiselect>
+        <app-product-filter (loadingChange)="handleLoadingChange($event)" (productsChange)="handleProductsChange($event)"></app-product-filter>
       </div>
       <ng-container *ngIf="!loading">
-        <div class="scalein animation-duration-200 animation-iteration-1">
-          <div class="mt-6">
+        <div class="scalein animation-duration-200 animation-iteration-1 mt-6">
+          <app-product-table [products]="filteredProducts" [paginatorRows]="5"></app-product-table>
+          <!-- <div class="mt-6">
             <app-price-legend [priceLegendArray]="priceLegendArray"></app-price-legend>
           </div>
           <div class="mt-6">
             <app-price-chart [productIdArray]="productIdArray"></app-price-chart>
-          </div>
+          </div> -->
         </div>
       </ng-container>
     </div>

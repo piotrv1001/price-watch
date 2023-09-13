@@ -1,0 +1,27 @@
+<div class="mb-1">{{ 'filter.status.chooseStatus' | translate }}</div>
+<p-multiSelect
+  [style]="{'width':'100%'}"
+  [options]="statusList"
+  [optionLabel]="'name'"
+  [optionValue]="'value'"
+  [(ngModel)]="selectedStatuses"
+  (onChange)="handleStatusesChange($event)"
+  placeholder="{{ 'filter.status.chooseStatus' | translate }}"
+  [maxSelectedLabels]="0"
+  selectedItemsLabel="{{ 'filter.status.selectedXStatuses' | translate }}"
+  [showClear]="false"
+  [filter]="false">
+  <ng-template let-status pTemplate="item">
+    <ng-container [ngSwitch]="status.value">
+      <ng-container *ngSwitchCase="0">
+        <div class="w-full ml-3 border-round bg-green-100 text-green-600 p-2 font-semibold text-center">{{ 'status.available' | translate }}</div>
+      </ng-container>
+      <ng-container *ngSwitchCase="1">
+        <div class="w-full ml-3 border-round bg-yellow-100 text-yellow-600 p-2 font-semibold text-center">{{ 'status.unavailable' | translate }}</div>
+      </ng-container>
+      <ng-container *ngSwitchCase="2">
+        <div class="w-full ml-3 border-round bg-gray-100 text-gray-600 p-2 font-semibold text-center">{{ 'status.withdrawn' | translate }}</div>
+      </ng-container>
+    </ng-container>
+  </ng-template>
+</p-multiSelect>

@@ -12,6 +12,7 @@ import { ProductService } from './product.service';
 import { Product } from './product.entity';
 import { CreateProductDTO } from './dto/create-product.dto';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { ProductFilterDTO } from './dto/product-filter';
 
 @Controller('products')
 export class ProductController {
@@ -21,6 +22,12 @@ export class ProductController {
   @Get()
   findAll(): Promise<Product[]> {
     return this.productService.findAll();
+  }
+
+  @UseGuards(AuthGuard)
+  @Post('filter')
+  filter(@Body() filterDTO: ProductFilterDTO): Promise<any[]> {
+    return this.productService.filter(filterDTO);
   }
 
   @UseGuards(AuthGuard)

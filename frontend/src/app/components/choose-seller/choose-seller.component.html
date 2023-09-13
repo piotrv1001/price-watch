@@ -1,11 +1,12 @@
 <div *ngIf="showLabel" class="mb-1">{{  'global.chooseSeller' | translate }}</div>
 <p-dropdown
   [disabled]="disabled"
-  [style]="{'minWidth':'300px'}"
+  [style]="{'width':'100%'}"
   [options]="sellers"
   [optionLabel]="'name'"
   [(ngModel)]="currentSeller"
   (ngModelChange)="handleSellerChange()"
   placeholder="{{  'global.chooseSeller' | translate }}"
-  [showClear]="false">
+  [showClear]="false"
+  >
 </p-dropdown>

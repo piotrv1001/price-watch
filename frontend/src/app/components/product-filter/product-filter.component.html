@@ -1,0 +1,47 @@
+<p-panel header="{{ 'filter.filters' | translate }}" [toggleable]="true">
+  <div class="grid">
+    <div class="col-4">
+      <app-seller-multi-select (selectedSellersChange)="handleSellersChange($event)"></app-seller-multi-select>
+    </div>
+    <div class="col-4">
+      <app-status-filter (selectedStatusesChange)="handleStatusesChange($event)"></app-status-filter>
+    </div>
+    <div class="col-4">
+      <app-range-filter label="productTable.price" (rangeChange)="handlePriceRangeChange($event)"></app-range-filter>
+    </div>
+    <div class="col-4 mt-1">
+      <app-promo-filter (selectedPromoChange)="handleSelectedPromoChange($event)"></app-promo-filter>
+    </div>
+    <div class="col-4 mt-1">
+      <app-range-filter label="filter.numberOfPeople" (rangeChange)="handleBuyersRangeChange($event)"></app-range-filter>
+    </div>
+    <div class="col-4 flex align-items-center mt-1">
+      <div class="flex align-items-center gap-1 cursor-pointer">
+        <p-checkbox [(ngModel)]="newProductsOnly" [binary]="true" label="{{ 'filter.newProductsOnly' | translate }}" class="mr-4"></p-checkbox>
+        <p-checkbox [(ngModel)]="priceChangesOnly" [binary]="true" label="{{ 'filter.priceChangeOnly' | translate }}"></p-checkbox>
+      </div>
+    </div>
+    <div class="col-12 flex justify-content-between mt-4">
+      <div class="flex flex-row gap-2">
+        <p-button
+          label="{{ 'filter.saveFilter' | translate }}"
+          styleClass="p-button-outlined p-button-secondary"
+          icon="pi pi-check">
+        </p-button>
+        <p-button
+          label="{{ 'filter.clearFilter' | translate }}"
+          styleClass="p-button-outlined p-button-secondary"
+          icon="pi pi-times"
+          (onClick)="handleResetBtnClick()">
+        </p-button>
+      </div>
+      <p-button
+        label="{{ 'filter.applyFilters' | translate }}"
+        styleClass="p-button-warning"
+        icon="pi pi-search"
+        (onClick)="handleFilterApplyBtnClick()"
+        [loading]="loading">
+      </p-button>
+    </div>
+  </div>
+</p-panel>

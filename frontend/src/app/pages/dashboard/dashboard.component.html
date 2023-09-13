@@ -6,7 +6,9 @@
     <div class="card">
       <h5>{{ 'dashboard.sellers' | translate }}</h5>
       <div class="mt-6 flex align-items-end justify-content-between">
-        <app-choose-seller (sellerChange)="handleSellerChange($event)"></app-choose-seller>
+        <div class="w-6">
+          <app-choose-seller (sellerChange)="handleSellerChange($event)"></app-choose-seller>
+        </div>
         <div class="flex flex-row gap-2">
           <span>{{ startDate | date: 'dd-MM-yyyy' }}</span>
           <span>-</span>

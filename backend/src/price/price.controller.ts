@@ -53,11 +53,6 @@ export class PriceController {
       fromDateParsed,
       toDateParsed,
     );
-    // return this.priceService.getNewProducts(
-    //   seller,
-    //   fromDateParsed,
-    //   toDateParsed,
-    // );
   }
 
   @Get('price-changes/:seller')
