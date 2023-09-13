@@ -43,16 +43,7 @@ export class ProductFilterComponent implements OnDestroy {
   }
 
   handleResetBtnClick(): void {
-    this.sellers = [];
-    this.statusList = [];
-    this.minPrice = 0;
-    this.maxPrice = 10000000;
-    this.minBuyers = 0;
-    this.maxBuyers = 10000000;
-    this.promo = 'all';
-    this.newProductsOnly = false;
-    this.priceChangesOnly = false;
-    this.filteredProducts = [];
+    // TODO
   }
 
   handleSellersChange(sellers: Seller[]): void {
