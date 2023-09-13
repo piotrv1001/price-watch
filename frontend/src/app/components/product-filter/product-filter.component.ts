@@ -6,5 +6,6 @@ import { Component } from "@angular/core";
   styleUrls: ['./product-filter.component.scss']
 })
 export class ProductFilterComponent {
-
+  newProductsOnly: boolean = false;
+  priceChangeOnly: boolean = false;
 }

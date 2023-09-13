@@ -170,7 +170,21 @@
     "reActivated": "Przywrócenie"
   },
   "filter": {
-    "chooseStatus": "Wybierz status",
-    "selectedXStatuses": "Wybrane statusy: {0}"
+    "filters": "Filtry",
+    "applyFilters": "Zastosuj filtry",
+    "saveFilter": "Zapisz",
+    "clearFilter": "Wyczyść",
+    "numberOfPeople": "Liczba osób",
+    "newProductsOnly": "Tylko nowe produkty",
+    "priceChangeOnly": "Tylko zmienione ceny",
+    "status": {
+      "chooseStatus": "Wybierz status",
+      "selectedXStatuses": "Wybrane statusy: {0}"
+    },
+    "promo": {
+      "all": "Wszystkie",
+      "promo": "Promowane",
+      "nonPromo": "Niepromowane"
+    }
   }
 }

@@ -1,0 +1,7 @@
+:host ::ng-deep .p-checkbox-label {
+  user-select: none;
+}
+
+:host ::ng-deep .p-checkbox-label:hover {
+  cursor: pointer;
+}

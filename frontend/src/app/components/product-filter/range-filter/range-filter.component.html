@@ -1,0 +1,24 @@
+<div class="mb-1" *ngIf="label">{{ label | translate }}</div>
+<div class="flex flex-row align-items-center">
+  <p-inputNumber
+    [(ngModel)]="min"
+    [useGrouping]="false"
+    [min]="minThreshold"
+    [max]="max"
+    [style]="{'width': '100%'}"
+    placeholder="min"
+    [showButtons]="true"
+    [step]="step">
+  </p-inputNumber>
+  <span class="mx-2">-</span>
+  <p-inputNumber
+    [(ngModel)]="max"
+    [useGrouping]="false"
+    [min]="min"
+    [max]="maxThreshold"
+    [style]="{'width': '100%'}"
+    placeholder="max"
+    [showButtons]="true"
+    [step]="step">
+  </p-inputNumber>
+</div>

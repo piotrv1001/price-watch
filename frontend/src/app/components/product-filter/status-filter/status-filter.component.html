@@ -1,13 +1,13 @@
-<div class="mb-1">{{ 'filter.chooseStatus' | translate }}</div>
+<div class="mb-1">{{ 'filter.status.chooseStatus' | translate }}</div>
 <p-multiSelect
   [style]="{'width':'100%'}"
   [options]="statusList"
   [optionLabel]="'name'"
   [optionValue]="'value'"
   [(ngModel)]="selectedStatuses"
-  placeholder="{{ 'filter.chooseStatus' | translate }}"
+  placeholder="{{ 'filter.status.chooseStatus' | translate }}"
   [maxSelectedLabels]="0"
-  selectedItemsLabel="{{ 'filter.selectedXStatuses' | translate }}"
+  selectedItemsLabel="{{ 'filter.status.selectedXStatuses' | translate }}"
   [showClear]="false"
   [filter]="false">
   <ng-template let-status pTemplate="item">

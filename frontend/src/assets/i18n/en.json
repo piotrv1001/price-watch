@@ -170,7 +170,21 @@
     "reActivated": "Restoration"
   },
   "filter": {
-    "chooseStatus": "Choose status",
-    "selectedXStatuses": "Selected statuses: {0}"
+    "filters": "Filters",
+    "applyFilters": "Apply filters",
+    "saveFilter": "Save",
+    "clearFilter": "Clear",
+    "numberOfPeople": "Number of people",
+    "newProductsOnly": "New products only",
+    "priceChangeOnly": "Price change only",
+    "status": {
+      "chooseStatus": "Choose status",
+      "selectedXStatuses": "Selected statuses: {0}"
+    },
+    "promo": {
+      "all": "All",
+      "promo": "Promo",
+      "nonPromo": "Non-promo"
+    }
   }
 }
