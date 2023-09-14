@@ -52,8 +52,8 @@ export class ProductFilterComponent implements OnInit, OnDestroy {
   }
 
   handleResetBtnClick(): void {
-    this.selectedSellers = [];
-    this.selectedStatuses = [];
+    this.getSellers();
+    this.getStatusList();
     this.newProductsOnly = false;
     this.priceChangesOnly = false;
     this.selectedPromo = 'all';

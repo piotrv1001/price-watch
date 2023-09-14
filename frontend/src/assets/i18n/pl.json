@@ -120,6 +120,7 @@
   "productTable": {
     "name": "Nazwa",
     "image": "Obraz",
+    "numberOfPeople": "Kupujący",
     "oldPrice": "Stara cena",
     "currentPrice": "Aktualna cena",
     "price": "Cena",
@@ -175,7 +176,6 @@
     "applyFilters": "Zastosuj filtry",
     "saveFilter": "Zapisz",
     "clearFilter": "Wyczyść",
-    "numberOfPeople": "Kupujący",
     "newProductsOnly": "Tylko nowe produkty",
     "priceChangeOnly": "Tylko zmienione ceny",
     "status": {

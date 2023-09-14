@@ -120,6 +120,7 @@
   "productTable": {
     "name": "Name",
     "image": "Image",
+    "numberOfPeople": "Buyers",
     "oldPrice": "Old price",
     "currentPrice": "Current price",
     "price": "Price",
@@ -175,7 +176,6 @@
     "applyFilters": "Apply filters",
     "saveFilter": "Save",
     "clearFilter": "Clear",
-    "numberOfPeople": "Buyers",
     "newProductsOnly": "New products only",
     "priceChangeOnly": "Price change only",
     "status": {

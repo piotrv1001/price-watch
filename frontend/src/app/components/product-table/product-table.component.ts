@@ -83,9 +83,10 @@ export class ProductTableComponent implements OnInit, OnChanges, OnDestroy {
         columns = [
           { header: 'name', field: 'name', ngStyle: { width: '40%' }, filter: true },
           { header: 'image', field: 'imgSrc', ngStyle: { width: '10%' }, filter: false },
-          { header: 'price', field: 'currentPrice', ngStyle: { width: '20%' }, filter: false, formatOptions: { suffix: ' zł' } },
+          { header: 'numberOfPeople', field: 'numberOfPeople', ngStyle: { width: '10%' }, filter: false },
+          { header: 'price', field: 'currentPrice', ngStyle: { width: '10%' }, filter: false, formatOptions: { suffix: ' zł' } },
           { header: 'Promo', field: 'promo', ngStyle: { width: '10%' }, filter: false, translate: false },
-          { header: 'chart', field: 'chart', ngStyle: { width: '10%' }, filter: false },
+          { header: 'chart', field: 'chart', ngStyle: { width: '10%' }, filter: false, ignoreNull: true },
           { header: 'Status', field: 'status', ngStyle: { width: '10%' }, filter: false, translate: false }
         ];
         this.exportData = {
@@ -102,12 +103,13 @@ export class ProductTableComponent implements OnInit, OnChanges, OnDestroy {
         break;
       case 'price-changes':
         columns = [
-          { header: 'name', field: 'name', ngStyle: { width: '40%' }, filter: true },
+          { header: 'name', field: 'name', ngStyle: { width: '30%' }, filter: true },
           { header: 'image', field: 'imgSrc', ngStyle: { width: '10%' }, filter: false },
+          { header: 'numberOfPeople', field: 'numberOfPeople', ngStyle: { width: '10%' }, filter: false },
           { header: 'oldPrice', field: 'prevPrice', ngStyle: { width: '10%' }, filter: false },
           { header: 'currentPrice', field: 'currentPrice', ngStyle: { width: '10%' }, filter: false },
           { header: '+/- [%]', field: 'priceChangePercentage', ngStyle: { width: '10%' }, filter: false, translate: false },
-          { header: 'chart', field: 'chart', ngStyle: { width: '10%' }, filter: false },
+          { header: 'chart', field: 'chart', ngStyle: { width: '10%' }, filter: false, ignoreNull: true },
           { header: 'Status', field: 'status', ngStyle: { width: '10%' }, filter: false, translate: false }
         ];
         this.exportData = {
@@ -122,27 +124,6 @@ export class ProductTableComponent implements OnInit, OnChanges, OnDestroy {
             { header: 'Status', key: 'status', width: 16 }
           ],
           data: this.products.map(product => ({...product, status: this.getStatusTranslation(product.status)}))
-        };
-        break;
-      case 'price-changes-min':
-        columns = [
-          { header: 'name', field: 'name', ngStyle: { width: '40%' }, filter: true },
-          { header: 'image', field: 'imgSrc', ngStyle: { width: '15%' }, filter: false },
-          { header: 'oldPrice', field: 'prevPrice', ngStyle: { width: '15%' }, filter: false },
-          { header: 'price', field: 'currentPrice', ngStyle: { width: '15%' }, filter: false },
-          { header: '+/- [%]', field: 'priceChangePercentage', ngStyle: { width: '15%' }, filter: false, translate: false },
-        ];
-        this.exportData = {
-          title: this.translateService.instant('menu.priceChanges'),
-          columns: [
-            { header: '', key: 'imgSrc', isImage: true },
-            { header: 'Name', key: 'name', width: 64 },
-            { header: 'Old price', key: 'prevPrice', width: 16, formatOptions: { suffix: ' zł' } },
-            { header: 'Current price', key: 'currentPrice', width: 16, formatOptions: { suffix: ' zł' } },
-            { header: '+/- [%]', key: 'priceChangePercentage', width: 12, formatOptions: { suffix: ' %' }, customTemplate: CustomTemplate.PriceChange },
-            { header: 'Link', key: 'link', width: 10, isLink: true }
-          ],
-          data: this.products
         };
         break;
     }
