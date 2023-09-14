@@ -1,5 +1,13 @@
 import { EmailConfig } from 'src/email-config/email-config.entity';
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Filter } from 'src/filter/filter.entity';
+import {
+  Column,
+  Entity,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+  Relation,
+} from 'typeorm';
 
 @Entity({ name: 'user' })
 export class User {
@@ -23,4 +31,9 @@ export class User {
 
   @OneToOne(() => EmailConfig, { nullable: true })
   emailConfig?: EmailConfig;
+
+  @OneToMany(() => Filter, (filter) => filter.user, {
+    nullable: true,
+  })
+  filters?: Relation<Filter[]>;
 }

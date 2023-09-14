@@ -172,10 +172,12 @@
     "reActivated": "Przywrócenie"
   },
   "filter": {
+    "createSuccess": "Filtr utworzony pomyślnie",
     "filters": "Filtry",
     "applyFilters": "Zastosuj filtry",
     "saveFilter": "Zapisz",
     "clearFilter": "Wyczyść",
+    "name": "Nazwa",
     "newProductsOnly": "Tylko nowe produkty",
     "priceChangeOnly": "Tylko zmienione ceny",
     "status": {

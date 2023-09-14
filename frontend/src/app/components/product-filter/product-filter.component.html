@@ -23,7 +23,23 @@
     </div>
     <div class="col-12 flex justify-content-between mt-4">
       <div class="flex flex-row gap-2">
+        <p-overlayPanel #op>
+          <div class="flex flex-column w-16rem">
+            <div class="mb-1">{{ 'filter.name' | translate }}</div>
+            <input pInputText type="text" [(ngModel)]="newFilterName" />
+            <div class="mt-4">
+              <p-button
+                [style]="{ width: '100%' }"
+                label="{{ 'filter.saveFilter' | translate }}"
+                [disabled]="!newFilterName"
+                [loading]="newFilterSaving"
+                (onClick)="handleNewFilterBtnClick()">
+              </p-button>
+            </div>
+          </div>
+        </p-overlayPanel>
         <p-button
+          (onClick)="op.toggle($event)"
           label="{{ 'filter.saveFilter' | translate }}"
           styleClass="p-button-outlined p-button-secondary"
           icon="pi pi-check">

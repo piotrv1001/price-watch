@@ -172,10 +172,12 @@
     "reActivated": "Restoration"
   },
   "filter": {
+    "createSuccess": "Filter created successfully",
     "filters": "Filters",
     "applyFilters": "Apply filters",
     "saveFilter": "Save",
     "clearFilter": "Clear",
+    "name": "Name",
     "newProductsOnly": "New products only",
     "priceChangeOnly": "Price change only",
     "status": {

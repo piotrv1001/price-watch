@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from "@angular/core";
 import { Subscription } from "rxjs";
 import { ProductService } from "src/app/services/product.service";
 import { Promo, PromoItem } from "./promo-filter/promo-filter.component";
@@ -9,6 +9,9 @@ import { ToastService } from "src/app/services/toast.service";
 import { ProductWithPrice } from "src/app/models/product/product-with-price";
 import { StatusItem } from "./status-filter/status-filter.component";
 import { ProductStatus } from "src/app/models/product/status";
+import { FilterService } from "src/app/services/filter.service";
+import { CreateFilterDTO } from "src/app/models/dto/create-filter.dto";
+import { OverlayPanel } from "primeng/overlaypanel";
 
 @Component({
   selector: 'app-product-filter',
@@ -16,6 +19,7 @@ import { ProductStatus } from "src/app/models/product/status";
   styleUrls: ['./product-filter.component.scss']
 })
 export class ProductFilterComponent implements OnInit, OnDestroy {
+  @ViewChild('op') op?: OverlayPanel;
   @Output() loadingChange: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() productsChange: EventEmitter<ProductWithPrice[]> = new EventEmitter<ProductWithPrice[]>();
   sellers: Seller[] = [];
@@ -31,10 +35,13 @@ export class ProductFilterComponent implements OnInit, OnDestroy {
   filteredProducts: ProductWithPrice[] = [];
   loading = false;
   subs: Subscription[] = [];
+  newFilterName = '';
+  newFilterSaving = false;
 
   constructor(
     private productService: ProductService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private filterService: FilterService
   ) { }
 
   ngOnInit(): void {
@@ -49,6 +56,38 @@ export class ProductFilterComponent implements OnInit, OnDestroy {
 
   handleFilterApplyBtnClick(): void {
     this.getFilteredProducts();
+  }
+
+  handleNewFilterBtnClick(): void {
+    this.newFilterSaving = true;
+    const createFilterDTO: CreateFilterDTO = {
+      name: this.newFilterName,
+      jsonFilter: JSON.stringify({
+        sellers: this.selectedSellers,
+        statusList: this.selectedStatuses,
+        minPrice: this.selectedPriceRange.min,
+        maxPrice: this.selectedPriceRange.max,
+        minBuyers: this.selectedBuyerRange.min,
+        maxBuyers: this.selectedBuyerRange.max,
+        promo: this.selectedPromo,
+        priceChangesOnly: this.priceChangesOnly,
+        newProductsOnly: this.newProductsOnly
+      })
+    };
+    this.subs.push(
+      this.filterService.createFilter(createFilterDTO).subscribe({
+        next: () => {
+          this.toastService.successMessage('msg.success', 'filter.createSuccess');
+          this.newFilterSaving = false;
+          this.op?.hide();
+        },
+        error: (error: any) => {
+          this.toastService.handleError(error);
+          this.newFilterSaving = false;
+          this.op?.hide();
+        }
+      })
+    );
   }
 
   handleResetBtnClick(): void {
