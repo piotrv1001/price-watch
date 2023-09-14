@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from "@angular/core";
-import { Subscription } from "rxjs";
+import { Subscription, switchMap } from "rxjs";
 import { ProductService } from "src/app/services/product.service";
 import { Promo, PromoItem } from "./promo-filter/promo-filter.component";
 import { Seller } from "src/app/models/seller/seller";
@@ -79,9 +79,12 @@ export class ProductFilterComponent implements OnInit, OnDestroy {
       })
     };
     this.subs.push(
-      this.filterService.createFilter(createFilterDTO).subscribe({
-        next: () => {
+      this.filterService.createFilter(createFilterDTO).pipe(
+        switchMap(() => this.filterService.getFilters())
+      ).subscribe({
+        next: (filters) => {
           this.toastService.successMessage('msg.success', 'filter.createSuccess');
+          this.userFilters = filters;
           this.newFilterSaving = false;
           this.op?.hide();
         },
@@ -106,7 +109,7 @@ export class ProductFilterComponent implements OnInit, OnDestroy {
   }
 
   handleDeleteFilterBtnClick(filter: Filter): void {
-    if(!filter.id) {
+    if(filter.id === undefined) {
       return;
     }
     this.subs.push(
