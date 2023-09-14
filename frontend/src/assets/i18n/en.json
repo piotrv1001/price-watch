@@ -172,6 +172,8 @@
     "reActivated": "Restoration"
   },
   "filter": {
+    "savedFilters": "Saved filters",
+    "deleteSuccess": "Filter deleted successfully",
     "createSuccess": "Filter created successfully",
     "filters": "Filters",
     "applyFilters": "Apply filters",

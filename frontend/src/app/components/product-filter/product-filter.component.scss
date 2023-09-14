@@ -5,3 +5,9 @@
 :host ::ng-deep .p-checkbox-label:hover {
   cursor: pointer;
 }
+
+.divider {
+  margin: 1rem 0;
+  background-color: var(--surface-border);
+  height: 1px;
+}

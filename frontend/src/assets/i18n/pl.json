@@ -172,7 +172,9 @@
     "reActivated": "Przywrócenie"
   },
   "filter": {
+    "savedFilters": "Zapisane filtry",
     "createSuccess": "Filtr utworzony pomyślnie",
+    "deleteSuccess": "Filtr usunięty pomyślnie",
     "filters": "Filtry",
     "applyFilters": "Zastosuj filtry",
     "saveFilter": "Zapisz",

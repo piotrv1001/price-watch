@@ -12,6 +12,7 @@ import { ProductStatus } from "src/app/models/product/status";
 import { FilterService } from "src/app/services/filter.service";
 import { CreateFilterDTO } from "src/app/models/dto/create-filter.dto";
 import { OverlayPanel } from "primeng/overlaypanel";
+import { Filter } from "src/app/models/filter/filter";
 
 @Component({
   selector: 'app-product-filter',
@@ -22,6 +23,8 @@ export class ProductFilterComponent implements OnInit, OnDestroy {
   @ViewChild('op') op?: OverlayPanel;
   @Output() loadingChange: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() productsChange: EventEmitter<ProductWithPrice[]> = new EventEmitter<ProductWithPrice[]>();
+  selectedFilter?: Filter;
+  userFilters: Filter[] = [];
   sellers: Seller[] = [];
   selectedSellers: string[] = [];
   statusList: StatusItem[] = [];
@@ -48,6 +51,7 @@ export class ProductFilterComponent implements OnInit, OnDestroy {
     this.getSellers();
     this.getStatusList();
     this.getPromoItems();
+    this.getUserFilters();
   }
 
   ngOnDestroy(): void {
@@ -98,6 +102,48 @@ export class ProductFilterComponent implements OnInit, OnDestroy {
     this.selectedPromo = 'all';
     this.selectedPriceRange = {};
     this.selectedBuyerRange = {};
+    this.selectedFilter = undefined;
+  }
+
+  handleDeleteFilterBtnClick(filter: Filter): void {
+    if(!filter.id) {
+      return;
+    }
+    this.subs.push(
+      this.filterService.deleteFilter(filter.id).subscribe({
+        next: () => {
+          this.toastService.successMessage('msg.success', 'filter.deleteSuccess');
+          this.userFilters = this.userFilters.filter((f: Filter) => f.id !== filter.id);
+        },
+        error: (error: any) => {
+          this.toastService.handleError(error);
+        }
+      })
+    );
+  }
+
+  loadUserFilter(): void {
+    const jsonFilter = this.selectedFilter?.jsonFilter;
+    if(jsonFilter) {
+      try {
+        const filter = JSON.parse(jsonFilter);
+        this.selectedSellers = filter.sellers;
+        this.selectedStatuses = filter.statusList;
+        this.selectedPriceRange = {
+          min: filter.minPrice,
+          max: filter.maxPrice
+        };
+        this.selectedBuyerRange = {
+          min: filter.minBuyers,
+          max: filter.maxBuyers
+        };
+        this.selectedPromo = filter.promo;
+        this.priceChangesOnly = filter.priceChangesOnly;
+        this.newProductsOnly = filter.newProductsOnly;
+      } catch(error) {
+        this.toastService.handleError(error);
+      }
+    }
   }
 
   private getSellers(): void {
@@ -129,6 +175,19 @@ export class ProductFilterComponent implements OnInit, OnDestroy {
       { value: 'non-promo', label: 'filter.promo.nonPromo' }
     ];
     this.selectedPromo = this.promoItems[0].value;
+  }
+
+  private getUserFilters(): void {
+    this.subs.push(
+      this.filterService.getFilters().subscribe({
+        next: (filters) => {
+          this.userFilters = filters;
+        },
+        error: (error: any) => {
+          this.toastService.handleError(error);
+        }
+      })
+    );
   }
 
   private getFilteredProducts(): void {

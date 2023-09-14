@@ -13,8 +13,8 @@ export class FilterService {
 
   constructor(private http: HttpClient) {}
 
-  getFilters(): Observable<Filter> {
-    return this.http.get<Filter>(this.filterResourceUrl);
+  getFilters(): Observable<Filter[]> {
+    return this.http.get<Filter[]>(this.filterResourceUrl);
   }
 
   createFilter(createFilterDTO: CreateFilterDTO): Observable<Filter> {
