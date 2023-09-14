@@ -120,6 +120,7 @@
   "productTable": {
     "name": "Name",
     "image": "Image",
+    "numberOfPeople": "Buyers",
     "oldPrice": "Old price",
     "currentPrice": "Current price",
     "price": "Price",
@@ -171,11 +172,14 @@
     "reActivated": "Restoration"
   },
   "filter": {
+    "savedFilters": "Saved filters",
+    "deleteSuccess": "Filter deleted successfully",
+    "createSuccess": "Filter created successfully",
     "filters": "Filters",
     "applyFilters": "Apply filters",
     "saveFilter": "Save",
     "clearFilter": "Clear",
-    "numberOfPeople": "Buyers",
+    "name": "Name",
     "newProductsOnly": "New products only",
     "priceChangeOnly": "Price change only",
     "status": {

@@ -67,6 +67,7 @@ export class ProductService {
       maxBuyers,
       promo,
       priceChangesOnly,
+      newProductsOnly,
     } = productFilter;
 
     const queryBuilder = this.productRepository.createQueryBuilder('product');
@@ -83,6 +84,9 @@ export class ProductService {
       if (priceChangesOnly) {
         product.didPriceChange = await this.didPriceEverChange(product.prices);
       }
+      if (newProductsOnly) {
+        product.isNew = await this.isNewProduct(product.prices);
+      }
     }
 
     const finalFilteredProducts = filteredProducts.filter((product) => {
@@ -96,6 +100,7 @@ export class ProductService {
           (promo === 'promo' && product.promo) ||
           (promo === 'non-promo' && !product.promo)) &&
         (!priceChangesOnly || product.didPriceChange) &&
+        (!newProductsOnly || product.isNew) &&
         (!minBuyers || !numberOfPeople || numberOfPeople >= minBuyers) &&
         (!maxBuyers || !numberOfPeople || numberOfPeople <= maxBuyers)
       );
@@ -127,6 +132,32 @@ export class ProductService {
     const highestPrice = pricesSortedByPrice[0].price;
     const lowestPrice = pricesSortedByPrice[prices.length - 1].price;
     return highestPrice !== lowestPrice;
+  }
+
+  private async isNewProduct(prices: Price[]): Promise<boolean> {
+    if (!prices || prices.length === 0) {
+      return false;
+    }
+    const pricesSortedByDate = prices.sort((a, b) => {
+      const aDate = this.getDate(a.date);
+      const bDate = this.getDate(b.date);
+      if (aDate && bDate) {
+        return bDate.getTime() - aDate.getTime();
+      }
+      return 0;
+    });
+    const firstPriceDate = this.getDate(pricesSortedByDate[0].date);
+    const lastPriceDate = this.getDate(
+      pricesSortedByDate[pricesSortedByDate.length - 1].date,
+    );
+    if (firstPriceDate && lastPriceDate) {
+      const timeDiff = Math.abs(
+        firstPriceDate.getTime() - lastPriceDate.getTime(),
+      );
+      const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+      return diffDays <= 7;
+    }
+    return false;
   }
 
   private groupProducts(products: any[]): number[] {

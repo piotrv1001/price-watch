@@ -120,6 +120,7 @@
   "productTable": {
     "name": "Nazwa",
     "image": "Obraz",
+    "numberOfPeople": "Kupujący",
     "oldPrice": "Stara cena",
     "currentPrice": "Aktualna cena",
     "price": "Cena",
@@ -171,11 +172,14 @@
     "reActivated": "Przywrócenie"
   },
   "filter": {
+    "savedFilters": "Zapisane filtry",
+    "createSuccess": "Filtr utworzony pomyślnie",
+    "deleteSuccess": "Filtr usunięty pomyślnie",
     "filters": "Filtry",
     "applyFilters": "Zastosuj filtry",
     "saveFilter": "Zapisz",
     "clearFilter": "Wyczyść",
-    "numberOfPeople": "Kupujący",
+    "name": "Nazwa",
     "newProductsOnly": "Tylko nowe produkty",
     "priceChangeOnly": "Tylko zmienione ceny",
     "status": {

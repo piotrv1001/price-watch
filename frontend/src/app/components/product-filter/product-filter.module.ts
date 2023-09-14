@@ -12,6 +12,8 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { CheckboxModule } from 'primeng/checkbox';
 import { PanelModule } from 'primeng/panel';
 import { ButtonModule } from "primeng/button";
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { InputTextModule } from "primeng/inputtext";
 
 import { SharedModule } from "src/app/shared/shared.module";
 import { SellerMultiSelectModule } from "../seller-multi-select/seller-multi-select.module";
@@ -26,7 +28,9 @@ import { SellerMultiSelectModule } from "../seller-multi-select/seller-multi-sel
     SelectButtonModule,
     CheckboxModule,
     PanelModule,
-    ButtonModule
+    ButtonModule,
+    OverlayPanelModule,
+    InputTextModule
   ],
   declarations: [
     ProductFilterComponent,

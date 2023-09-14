@@ -5,6 +5,7 @@ export interface TableColumn {
   filter?: boolean;
   formatOptions?: FormatOptions;
   translate?: boolean;
+  ignoreNull?: boolean;
 }
 
 export class FormatOptions {

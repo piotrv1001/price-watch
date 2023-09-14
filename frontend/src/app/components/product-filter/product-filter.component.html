@@ -1,19 +1,19 @@
 <p-panel header="{{ 'filter.filters' | translate }}" [toggleable]="true">
   <div class="grid">
     <div class="col-4">
-      <app-seller-multi-select (selectedSellersChange)="handleSellersChange($event)"></app-seller-multi-select>
+      <app-seller-multi-select [(selectedSellers)]="selectedSellers" [sellers]="sellers"></app-seller-multi-select>
     </div>
     <div class="col-4">
-      <app-status-filter (selectedStatusesChange)="handleStatusesChange($event)"></app-status-filter>
+      <app-status-filter [(selectedStatuses)]="selectedStatuses" [statusList]="statusList"></app-status-filter>
     </div>
     <div class="col-4">
-      <app-range-filter label="productTable.price" (rangeChange)="handlePriceRangeChange($event)"></app-range-filter>
+      <app-range-filter label="productTable.price" [(range)]="selectedPriceRange"></app-range-filter>
     </div>
     <div class="col-4 mt-1">
-      <app-promo-filter (selectedPromoChange)="handleSelectedPromoChange($event)"></app-promo-filter>
+      <app-promo-filter [(selectedPromo)]="selectedPromo" [promoItems]="promoItems"></app-promo-filter>
     </div>
     <div class="col-4 mt-1">
-      <app-range-filter label="filter.numberOfPeople" (rangeChange)="handleBuyersRangeChange($event)"></app-range-filter>
+      <app-range-filter label="productTable.numberOfPeople" [(range)]="selectedBuyerRange"></app-range-filter>
     </div>
     <div class="col-4 flex align-items-center mt-1">
       <div class="flex align-items-center gap-1 cursor-pointer">
@@ -21,9 +21,43 @@
         <p-checkbox [(ngModel)]="priceChangesOnly" [binary]="true" label="{{ 'filter.priceChangeOnly' | translate }}"></p-checkbox>
       </div>
     </div>
-    <div class="col-12 flex justify-content-between mt-4">
-      <div class="flex flex-row gap-2">
+    <div class="col-12 flex justify-content-between align-items-center mt-4">
+      <div class="col-4 flex flex-row gap-2">
+        <div class="flex-auto">
+          <p-dropdown
+            [style]="{'width':'100%'}"
+            [options]="userFilters"
+            [(ngModel)]="selectedFilter"
+            (ngModelChange)="loadUserFilter()"
+            optionLabel="name"
+            placeholder="{{ 'filter.savedFilters' | translate }}"
+            [filter]="false"
+            [disabled]="loading">
+            <ng-template let-filter pTemplate="item">
+              <div class="flex align-items-center justify-content-between">
+                <span>{{filter.name}}</span>
+                <i class="pi pi-trash cursor-pointer" style="font-size: 1rem" (click)="handleDeleteFilterBtnClick(filter)"></i>
+              </div>
+            </ng-template>
+          </p-dropdown>
+        </div>
+        <p-overlayPanel #op>
+          <div class="flex flex-column w-16rem">
+            <div class="mb-1">{{ 'filter.name' | translate }}</div>
+            <input pInputText type="text" [(ngModel)]="newFilterName" />
+            <div class="mt-4">
+              <p-button
+                [style]="{ width: '100%' }"
+                label="{{ 'filter.saveFilter' | translate }}"
+                [disabled]="!newFilterName"
+                [loading]="newFilterSaving"
+                (onClick)="handleNewFilterBtnClick()">
+              </p-button>
+            </div>
+          </div>
+        </p-overlayPanel>
         <p-button
+          (onClick)="op.toggle($event)"
           label="{{ 'filter.saveFilter' | translate }}"
           styleClass="p-button-outlined p-button-secondary"
           icon="pi pi-check">
