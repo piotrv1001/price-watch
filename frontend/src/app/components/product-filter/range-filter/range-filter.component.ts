@@ -15,11 +15,10 @@ export class RangeFilterComponent {
   @Input() maxThreshold = 10000000;
   @Input() step = 10;
   @Input() label?: string;
+  @Input() range: Range = {};
   @Output() rangeChange: EventEmitter<Range> = new EventEmitter<Range>();
-  min?: number;
-  max?: number;
 
   handleRangeChange(): void {
-    this.rangeChange.emit({ min: this.min, max: this.max });
+    this.rangeChange.emit({ min: this.range?.min, max: this.range?.max });
   }
 }

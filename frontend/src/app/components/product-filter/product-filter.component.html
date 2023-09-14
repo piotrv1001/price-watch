@@ -1,19 +1,19 @@
 <p-panel header="{{ 'filter.filters' | translate }}" [toggleable]="true">
   <div class="grid">
     <div class="col-4">
-      <app-seller-multi-select (selectedSellersChange)="handleSellersChange($event)"></app-seller-multi-select>
+      <app-seller-multi-select [(selectedSellers)]="selectedSellers" [sellers]="sellers"></app-seller-multi-select>
     </div>
     <div class="col-4">
-      <app-status-filter (selectedStatusesChange)="handleStatusesChange($event)"></app-status-filter>
+      <app-status-filter [(selectedStatuses)]="selectedStatuses" [statusList]="statusList"></app-status-filter>
     </div>
     <div class="col-4">
-      <app-range-filter label="productTable.price" (rangeChange)="handlePriceRangeChange($event)"></app-range-filter>
+      <app-range-filter label="productTable.price" [(range)]="selectedPriceRange"></app-range-filter>
     </div>
     <div class="col-4 mt-1">
-      <app-promo-filter (selectedPromoChange)="handleSelectedPromoChange($event)"></app-promo-filter>
+      <app-promo-filter [(selectedPromo)]="selectedPromo" [promoItems]="promoItems"></app-promo-filter>
     </div>
     <div class="col-4 mt-1">
-      <app-range-filter label="filter.numberOfPeople" (rangeChange)="handleBuyersRangeChange($event)"></app-range-filter>
+      <app-range-filter label="filter.numberOfPeople" [(range)]="selectedBuyerRange"></app-range-filter>
     </div>
     <div class="col-4 flex align-items-center mt-1">
       <div class="flex align-items-center gap-1 cursor-pointer">

@@ -3,9 +3,11 @@
   [style]="{'width':'100%'}"
   [options]="sellers"
   [optionLabel]="'name'"
+  [optionValue]="'name'"
   [(ngModel)]="selectedSellers"
   (onChange)="handleSellersChange($event)"
   [showClear]="false"
+  placeholder="{{ 'global.seller' | translate }}"
   [maxSelectedLabels]="1"
   selectedItemsLabel="{{ 'filter.seller.selectedXSeller' | translate }}">
 </p-multiSelect>

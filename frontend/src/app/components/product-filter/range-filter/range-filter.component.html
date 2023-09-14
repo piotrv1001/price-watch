@@ -1,10 +1,10 @@
 <div class="mb-1" *ngIf="label">{{ label | translate }}</div>
 <div class="flex flex-row align-items-center">
   <p-inputNumber
-    [(ngModel)]="min"
+    [(ngModel)]="range.min"
     [useGrouping]="false"
     [min]="minThreshold"
-    [max]="max"
+    [max]="range.max"
     (ngModelChange)="handleRangeChange()"
     [style]="{'width': '100%'}"
     placeholder="min"
@@ -13,9 +13,9 @@
   </p-inputNumber>
   <span class="mx-2">-</span>
   <p-inputNumber
-    [(ngModel)]="max"
+    [(ngModel)]="range.max"
     [useGrouping]="false"
-    [min]="min"
+    [min]="range.min"
     [max]="maxThreshold"
     (ngModelChange)="handleRangeChange()"
     [style]="{'width': '100%'}"
