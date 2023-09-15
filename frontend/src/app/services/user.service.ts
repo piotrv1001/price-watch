@@ -3,6 +3,8 @@ import { Injectable } from "@angular/core";
 import { SERVER_API_URL } from "../app.constants";
 import { HttpClient } from "@angular/common/http";
 import { User } from '../models/user/user';
+import { Product } from '../models/product/product';
+import { ProductWithPrice } from '../models/product/product-with-price';
 
 export interface ProfilePic { profilePic?: string, email: string, displayName?: string }
 export interface UserId { id: number }
@@ -31,5 +33,17 @@ export class UserService {
 
   updateProfile(user: User): Observable<User> {
     return this.http.put<User>(this.profileResourceUrl, user);
+  }
+
+  getFavoriteProducts(): Observable<ProductWithPrice[]> {
+    return this.http.get<ProductWithPrice[]>(`${this.userResourceUrl}/favorite-products`);
+  }
+
+  addNewFavoriteProduct(productId: string): Observable<ProductWithPrice[]> {
+    return this.http.post<ProductWithPrice[]>(`${this.userResourceUrl}/favorite-products/${productId}`, null);
+  }
+
+  deleteFavoriteProduct(productId: string): Observable<ProductWithPrice[]> {
+    return this.http.delete<ProductWithPrice[]>(`${this.userResourceUrl}/favorite-products/${productId}`);
   }
 }

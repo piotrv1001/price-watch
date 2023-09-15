@@ -50,6 +50,11 @@ export class AppMenuComponent implements OnInit {
             label: 'menu.timeline',
             icon: 'pi pi-stopwatch',
             routerLink: ['/products/timeline']
+          },
+          {
+            label: 'menu.favoriteProducts',
+            icon: 'pi pi-star',
+            routerLink: ['/products/favorite-products']
           }
         ]
       },

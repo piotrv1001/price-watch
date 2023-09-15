@@ -1,5 +1,5 @@
 export interface TableColumn {
-  header: string;
+  header?: string;
   field: string;
   ngStyle?: any;
   filter?: boolean;

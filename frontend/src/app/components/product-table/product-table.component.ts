@@ -8,6 +8,8 @@ import { TableColumn } from 'src/app/types/table/column';
 import { ProductTableType } from 'src/app/types/table/product-table-type';
 import { DialogService } from 'primeng/dynamicdialog';
 import { PriceChartDialogComponent } from '../price-chart-dialog/price-chart-dialog.component';
+import { UserService } from 'src/app/services/user.service';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-product-table',
@@ -18,21 +20,27 @@ import { PriceChartDialogComponent } from '../price-chart-dialog/price-chart-dia
 export class ProductTableComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() products: Product[] = [];
+  @Input() isFavoriteProductPage = false;
   @Input() type: ProductTableType = 'new-products';
   @Input() showPaginator = true;
   @Input() paginatorRows = 10;
   @Input() placeholderSize: 'small' | 'big' = 'small';
+  favoriteProductIds: string[] = [];
   columns: TableColumn[] = [];
   exportData: ExportDataDTO | null = null;
   downloadProgress = -1;
+  productId2Favorite: Map<string, boolean> = new Map<string, boolean>();
   subs: Subscription[] = [];
 
   constructor(
     private translateService: TranslateService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private userService: UserService,
+    private toastService: ToastService
   ) { }
 
   ngOnInit(): void {
+    this.getFavoriteProducts();
     this.columns = this.getColumns();
     this.subs.push(
       this.translateService.onLangChange.subscribe(() => {
@@ -49,6 +57,54 @@ export class ProductTableComponent implements OnInit, OnChanges, OnDestroy {
     if(changes['products'] && this.exportData) {
       this.exportData.data = this.products;
     }
+  }
+
+  handleFavoriteBtnClick(product: Product): void {
+    const productId = product?.id ?? product.productId;
+    if(!productId) {
+      return;
+    }
+    const isFavorite = this.isProductFavorite(product);
+    if(isFavorite) {
+      this.subs.push(
+        this.userService.deleteFavoriteProduct(productId).subscribe({
+          next: (products: Product[]) => {
+            if(this.isFavoriteProductPage) {
+              this.products = products;
+            }
+            this.favoriteProductIds = products.map((p: Product) => p.id ?? '');
+            if(productId) {
+              this.productId2Favorite.set(productId, false);
+            }
+          },
+          error: (error: any) => {
+            this.toastService.handleError(error);
+          }
+        })
+      );
+    } else {
+      this.subs.push(
+        this.userService.addNewFavoriteProduct(productId).subscribe({
+          next: (products: Product[]) => {
+            if(this.isFavoriteProductPage) {
+              this.products = products;
+            }
+            this.favoriteProductIds = products.map((p: Product) => p.id ?? '');
+            if(productId) {
+              this.productId2Favorite.set(productId, true);
+            }
+          },
+          error: (error: any) => {
+            this.toastService.handleError(error);
+          }
+        })
+      );
+    }
+  }
+
+  isProductFavorite(product: Product): boolean {
+    const productId = product?.id ?? product.productId;
+    return productId !== undefined && this.productId2Favorite.get(productId) === true;
   }
 
   navigateToUrl(url: string): void {
@@ -76,18 +132,40 @@ export class ProductTableComponent implements OnInit, OnChanges, OnDestroy {
     return this.columns.filter(column => column.filter).map(column => column.field);
   }
 
+  private getFavoriteProducts(): void {
+    if(this.isFavoriteProductPage) {
+      this.favoriteProductIds = this.products.map((p: Product) => p.id ?? '');
+      this.productId2Favorite.clear();
+      this.favoriteProductIds.forEach(productId => this.productId2Favorite.set(productId, true));
+      return;
+    }
+    this.subs.push(
+      this.userService.getFavoriteProducts().subscribe({
+        next: (products: Product[]) => {
+          this.favoriteProductIds = products.map((p: Product) => p.id ?? '');
+          this.productId2Favorite.clear();
+          this.favoriteProductIds.forEach(productId => this.productId2Favorite.set(productId, true));
+        },
+        error: (error: any) => {
+          this.toastService.handleError(error);
+        }
+      })
+    );
+  }
+
   private getColumns(): TableColumn[] {
     let columns: TableColumn[] = [];
     switch(this.type) {
       case 'new-products':
         columns = [
-          { header: 'name', field: 'name', ngStyle: { width: '40%' }, filter: true },
+          { header: 'name', field: 'name', ngStyle: { width: '35%' }, filter: true },
           { header: 'image', field: 'imgSrc', ngStyle: { width: '10%' }, filter: false },
           { header: 'numberOfPeople', field: 'numberOfPeople', ngStyle: { width: '10%' }, filter: false },
           { header: 'price', field: 'currentPrice', ngStyle: { width: '10%' }, filter: false, formatOptions: { suffix: ' zł' } },
           { header: 'Promo', field: 'promo', ngStyle: { width: '10%' }, filter: false, translate: false },
           { header: 'chart', field: 'chart', ngStyle: { width: '10%' }, filter: false, ignoreNull: true },
-          { header: 'Status', field: 'status', ngStyle: { width: '10%' }, filter: false, translate: false }
+          { header: 'Status', field: 'status', ngStyle: { width: '10%' }, filter: false, translate: false },
+          { field: 'favorite', ngStyle: { width: '5%' }, filter: false, ignoreNull: true }
         ];
         this.exportData = {
           title: this.translateService.instant('menu.newProducts'),
@@ -103,14 +181,15 @@ export class ProductTableComponent implements OnInit, OnChanges, OnDestroy {
         break;
       case 'price-changes':
         columns = [
-          { header: 'name', field: 'name', ngStyle: { width: '30%' }, filter: true },
+          { header: 'name', field: 'name', ngStyle: { width: '25%' }, filter: true },
           { header: 'image', field: 'imgSrc', ngStyle: { width: '10%' }, filter: false },
           { header: 'numberOfPeople', field: 'numberOfPeople', ngStyle: { width: '10%' }, filter: false },
           { header: 'oldPrice', field: 'prevPrice', ngStyle: { width: '10%' }, filter: false },
           { header: 'currentPrice', field: 'currentPrice', ngStyle: { width: '10%' }, filter: false },
           { header: '+/- [%]', field: 'priceChangePercentage', ngStyle: { width: '10%' }, filter: false, translate: false },
           { header: 'chart', field: 'chart', ngStyle: { width: '10%' }, filter: false, ignoreNull: true },
-          { header: 'Status', field: 'status', ngStyle: { width: '10%' }, filter: false, translate: false }
+          { header: 'Status', field: 'status', ngStyle: { width: '10%' }, filter: false, translate: false },
+          { field: 'favorite', ngStyle: { width: '5%' }, filter: false, ignoreNull: true }
         ];
         this.exportData = {
           title: this.translateService.instant('menu.priceChanges'),
