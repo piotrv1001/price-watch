@@ -4,6 +4,7 @@ import { SERVER_API_URL } from "../app.constants";
 import { HttpClient } from "@angular/common/http";
 import { User } from '../models/user/user';
 import { Product } from '../models/product/product';
+import { ProductWithPrice } from '../models/product/product-with-price';
 
 export interface ProfilePic { profilePic?: string, email: string, displayName?: string }
 export interface UserId { id: number }
@@ -34,15 +35,15 @@ export class UserService {
     return this.http.put<User>(this.profileResourceUrl, user);
   }
 
-  getFavoriteProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.userResourceUrl}/favorite-products`);
+  getFavoriteProducts(): Observable<ProductWithPrice[]> {
+    return this.http.get<ProductWithPrice[]>(`${this.userResourceUrl}/favorite-products`);
   }
 
-  addNewFavoriteProduct(productId: string): Observable<Product[]> {
-    return this.http.post<Product[]>(`${this.userResourceUrl}/favorite-products/${productId}`, null);
+  addNewFavoriteProduct(productId: string): Observable<ProductWithPrice[]> {
+    return this.http.post<ProductWithPrice[]>(`${this.userResourceUrl}/favorite-products/${productId}`, null);
   }
 
-  deleteFavoriteProduct(productId: string): Observable<Product[]> {
-    return this.http.delete<Product[]>(`${this.userResourceUrl}/favorite-products/${productId}`);
+  deleteFavoriteProduct(productId: string): Observable<ProductWithPrice[]> {
+    return this.http.delete<ProductWithPrice[]>(`${this.userResourceUrl}/favorite-products/${productId}`);
   }
 }

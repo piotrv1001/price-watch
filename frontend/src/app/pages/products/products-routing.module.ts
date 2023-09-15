@@ -6,6 +6,7 @@ import { NewProductsPageComponent } from './new-products-page/new-products-page.
 import { PriceBucketsPageComponent } from './price-buckets-page/price-buckets-page.component';
 import { PriceChangesPageComponent } from './price-changes-page/price-changes-page.component';
 import { TimelinePageComponent } from './timeline-page/timeline-page.component';
+import { FavoriteProductsPageComponent } from './favorite-products-page/favorite-products-page.component';
 
 @NgModule({
   imports: [RouterModule.forChild([
@@ -13,7 +14,8 @@ import { TimelinePageComponent } from './timeline-page/timeline-page.component';
     { path: 'new-products', component: NewProductsPageComponent, loadChildren: () => import('./new-products-page/new-products-page.module').then(m => m.NewProductsPageModule )},
     { path: 'price-buckets', component: PriceBucketsPageComponent, loadChildren: () => import('./price-buckets-page/price-buckets-page.module').then(m => m.PriceBucketsPageModule )},
     { path: 'price-changes', component: PriceChangesPageComponent, loadChildren: () => import('./price-changes-page/price-changes-page.module').then(m => m.PriceChangesPageModule ) },
-    { path: 'timeline', component: TimelinePageComponent, loadChildren: () => import('./timeline-page/timeline-page.module').then(m => m.TimelinePageModule ) }
+    { path: 'timeline', component: TimelinePageComponent, loadChildren: () => import('./timeline-page/timeline-page.module').then(m => m.TimelinePageModule ) },
+    { path: 'favorite-products', component: FavoriteProductsPageComponent, loadChildren: () => import('./favorite-products-page/favorite-products-page.module').then(m => m.FavoriteProductsPageModule ) }
   ])],
   exports: [RouterModule]
 })

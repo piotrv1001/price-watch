@@ -5,14 +5,14 @@ import { User } from './user.entity';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/create-user.dto';
 import { Product } from 'src/product/product.entity';
+import { ProductService } from 'src/product/product.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-    @InjectRepository(Product)
-    private readonly productRepository: Repository<Product>,
+    private readonly productService: ProductService,
   ) {}
 
   async getUserFromRequest(user: any): Promise<User | null> {
@@ -62,7 +62,7 @@ export class UserService {
     return this.userRepository.save(user);
   }
 
-  async findFavoriteProductsByUserId(userId: number): Promise<Product[]> {
+  async findFavoriteProductsByUserId(userId: number): Promise<any[]> {
     const user = await this.userRepository
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.favoriteProducts', 'favoriteProducts')
@@ -71,24 +71,33 @@ export class UserService {
     if (!user) {
       return null;
     }
-    return user.favoriteProducts;
+    const result: any[] = [];
+    for (const product of user.favoriteProducts) {
+      const currentProduct = await this.productService.findById(product.id);
+      const currentPrice = this.productService.getCurrentPrice(
+        currentProduct.prices,
+      );
+      result.push({ ...product, currentPrice });
+    }
+    return result;
   }
 
   async addNewFavoriteProduct(
     userId: number,
     productId: string,
-  ): Promise<Product[]> {
+  ): Promise<any[]> {
     const user = await this.userRepository.findOne({
       where: { id: userId },
       relations: ['favoriteProducts'],
     });
-    const product = await this.productRepository.findOneBy({ id: productId });
+    const product = await this.productService.findById(productId);
     if (!user || !product) {
       return null;
     }
+    const currentPrice = this.productService.getCurrentPrice(product.prices);
     user.favoriteProducts.push(product);
     await this.userRepository.save(user);
-    return user.favoriteProducts;
+    return user.favoriteProducts.map((p) => ({ ...p, currentPrice }));
   }
 
   async deleteFavoriteProduct(
@@ -99,14 +108,15 @@ export class UserService {
       where: { id: userId },
       relations: ['favoriteProducts'],
     });
-    const product = await this.productRepository.findOneBy({ id: productId });
+    const product = await this.productService.findById(productId);
     if (!user || !product) {
       return null;
     }
+    const currentPrice = this.productService.getCurrentPrice(product.prices);
     user.favoriteProducts = user.favoriteProducts.filter(
       (favoriteProduct) => favoriteProduct.id != product.id,
     );
     await this.userRepository.save(user);
-    return user.favoriteProducts;
+    return user.favoriteProducts.map((p) => ({ ...p, currentPrice }));
   }
 }

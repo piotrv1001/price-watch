@@ -19,7 +19,10 @@ export class ProductService {
   }
 
   async findById(id: string): Promise<Product> {
-    return await this.productRepository.findOneBy({ id });
+    return await this.productRepository.findOne({
+      where: { id: id },
+      relations: ['prices'],
+    });
   }
 
   async create(createProductDTO: CreateProductDTO): Promise<Product> {
@@ -122,6 +125,25 @@ export class ProductService {
     return this.groupProducts(productWithCurrentPrice);
   }
 
+  getCurrentPrice(prices: Price[] | undefined): number | undefined {
+    if (!prices || prices.length === 0) {
+      return undefined;
+    }
+    const pricesSortedByDate = prices.sort((a, b) => {
+      const aDate = this.getDate(a.date);
+      const bDate = this.getDate(b.date);
+      if (aDate && bDate) {
+        return bDate.getTime() - aDate.getTime();
+      }
+      return 0;
+    });
+    const price = pricesSortedByDate[0].price;
+    if (typeof price === 'string') {
+      return parseFloat(price);
+    }
+    return price;
+  }
+
   private async didPriceEverChange(prices: Price[]): Promise<boolean> {
     if (!prices || prices.length === 0) {
       return false;
@@ -177,25 +199,6 @@ export class ProductService {
       }
     });
     return grouppedProducts;
-  }
-
-  private getCurrentPrice(prices: Price[] | undefined): number | undefined {
-    if (!prices || prices.length === 0) {
-      return undefined;
-    }
-    const pricesSortedByDate = prices.sort((a, b) => {
-      const aDate = this.getDate(a.date);
-      const bDate = this.getDate(b.date);
-      if (aDate && bDate) {
-        return bDate.getTime() - aDate.getTime();
-      }
-      return 0;
-    });
-    const price = pricesSortedByDate[0].price;
-    if (typeof price === 'string') {
-      return parseFloat(price);
-    }
-    return price;
   }
 
   private getDate(date: string | Date | undefined): Date | null {
