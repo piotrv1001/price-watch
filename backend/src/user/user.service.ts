@@ -4,12 +4,15 @@ import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/create-user.dto';
+import { Product } from 'src/product/product.entity';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @InjectRepository(Product)
+    private readonly productRepository: Repository<Product>,
   ) {}
 
   async getUserFromRequest(user: any): Promise<User | null> {
@@ -57,5 +60,53 @@ export class UserService {
 
   async partialUpdate(user: User): Promise<User> {
     return this.userRepository.save(user);
+  }
+
+  async findFavoriteProductsByUserId(userId: number): Promise<Product[]> {
+    const user = await this.userRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.favoriteProducts', 'favoriteProducts')
+      .where('user.id = :userId', { userId })
+      .getOne();
+    if (!user) {
+      return null;
+    }
+    return user.favoriteProducts;
+  }
+
+  async addNewFavoriteProduct(
+    userId: number,
+    productId: string,
+  ): Promise<Product[]> {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['favoriteProducts'],
+    });
+    const product = await this.productRepository.findOneBy({ id: productId });
+    if (!user || !product) {
+      return null;
+    }
+    user.favoriteProducts.push(product);
+    await this.userRepository.save(user);
+    return user.favoriteProducts;
+  }
+
+  async deleteFavoriteProduct(
+    userId: number,
+    productId: string,
+  ): Promise<Product[]> {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['favoriteProducts'],
+    });
+    const product = await this.productRepository.findOneBy({ id: productId });
+    if (!user || !product) {
+      return null;
+    }
+    user.favoriteProducts = user.favoriteProducts.filter(
+      (favoriteProduct) => favoriteProduct.id != product.id,
+    );
+    await this.userRepository.save(user);
+    return user.favoriteProducts;
   }
 }

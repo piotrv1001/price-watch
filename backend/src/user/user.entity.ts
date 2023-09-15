@@ -1,8 +1,11 @@
 import { EmailConfig } from 'src/email-config/email-config.entity';
 import { Filter } from 'src/filter/filter.entity';
+import { Product } from 'src/product/product.entity';
 import {
   Column,
   Entity,
+  JoinTable,
+  ManyToMany,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -36,4 +39,8 @@ export class User {
     nullable: true,
   })
   filters?: Relation<Filter[]>;
+
+  @ManyToMany(() => Product)
+  @JoinTable({ name: 'favorite_products' })
+  favoriteProducts?: Product[];
 }
