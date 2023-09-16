@@ -14,6 +14,8 @@ import { EmailConfig } from './email-config/email-config.entity';
 import { EmailConfigModule } from './email-config/email-config.module';
 import { Filter } from './filter/filter.entity';
 import { FilterModule } from './filter/filter.module';
+import { PasswordResetModule } from './password-reset/password-reset.module';
+import { PasswordReset } from './password-reset/password-reset.entity';
 
 @Module({
   imports: [
@@ -29,7 +31,7 @@ import { FilterModule } from './filter/filter.module';
         username: configService.get<string>('DB_USERNAME'),
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_NAME'),
-        entities: [Product, Price, User, EmailConfig, Filter],
+        entities: [Product, Price, User, EmailConfig, Filter, PasswordReset],
         synchronize: false,
       }),
     }),
@@ -39,6 +41,7 @@ import { FilterModule } from './filter/filter.module';
     ExportModule,
     AuthModule,
     FilterModule,
+    PasswordResetModule,
   ],
   controllers: [AppController],
   providers: [AppService],
