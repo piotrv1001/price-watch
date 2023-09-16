@@ -39,7 +39,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.validateJWT();
+    // this.validateJWT();
     this.observeFirebaseUser();
     this.observeSignOut();
     this.observeTokenExpired();

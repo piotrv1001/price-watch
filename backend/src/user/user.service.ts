@@ -50,6 +50,13 @@ export class UserService {
     return this.userRepository.findOneBy({ email: email });
   }
 
+  async getByEmailNoGoogleUser(email: string): Promise<User> {
+    return this.userRepository.findOneBy({
+      email: email,
+      u_id: null,
+    });
+  }
+
   async getById(id: number): Promise<User> {
     return this.userRepository.findOneBy({ id: id });
   }

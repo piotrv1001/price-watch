@@ -203,5 +203,11 @@
     "provideEmail": "Wprowadź adres e-mail, aby zresetować hasło",
     "sendEmail": "Wyślij e-mail",
     "checkEmail": "Sprawdź swoją skrzynkę e-mail, aby zresetować hasło"
+  },
+  "resetPassword": {
+    "title": "Zmień hasło",
+    "provideNewPassword": "Wprowadź nowe hasło",
+    "resetSuccess": "Hasło zostało zresetowane pomyślnie",
+    "continue": "Kontynuuj"
   }
 }

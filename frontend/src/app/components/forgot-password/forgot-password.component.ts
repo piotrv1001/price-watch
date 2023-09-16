@@ -24,26 +24,25 @@ export class ForgotPasswordComponent implements OnDestroy {
   }
 
   handleForgotPasswordBtnClick(): void {
-    this.emailSent = true;
-    // if (!this.email) {
-    //   return;
-    // }
-    // this.loading = true;
-    // this.subs.push(
-    //   this.passwordResetService.forgotPassword(this.email).subscribe({
-    //     next: () => {
-    //       this.emailSent = true;
-    //       this.loading = false;
-    //     },
-    //     error: (error: any) => {
-    //       this.loading = false;
-    //       if(error.status === 404) {
-    //         this.toastService.errorMessage('error.invalidEmail');
-    //       } else {
-    //         this.toastService.handleError(error);
-    //       }
-    //     }
-    //   })
-    // );
+    if (!this.email) {
+      return;
+    }
+    this.loading = true;
+    this.subs.push(
+      this.passwordResetService.forgotPassword(this.email).subscribe({
+        next: () => {
+          this.emailSent = true;
+          this.loading = false;
+        },
+        error: (error: any) => {
+          this.loading = false;
+          if(error.status === 404) {
+            this.toastService.errorMessage('error.invalidEmail');
+          } else {
+            this.toastService.handleError(error);
+          }
+        }
+      })
+    );
   }
 }

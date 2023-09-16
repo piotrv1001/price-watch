@@ -16,7 +16,7 @@ export class PasswordResetController {
 
   @Post('forgot')
   async forgotPassword(@Body('email') email: string, @Res() res) {
-    const user = await this.userService.getByEmail(email);
+    const user = await this.userService.getByEmailNoGoogleUser(email);
     if (!user) {
       return res.status(404).send();
     }

@@ -203,5 +203,11 @@
     "provideEmail": "Please provide your email address",
     "sendEmail": "Send email",
     "checkEmail": "Please check your email to reset password"
+  },
+  "resetPassword": {
+    "title": "Reset password",
+    "provideNewPassword": "Please provide your new password",
+    "resetSuccess": "Password reset successfully",
+    "continue": "Continue"
   }
 }
