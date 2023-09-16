@@ -16,6 +16,10 @@ export class PasswordResetController {
 
   @Post('forgot')
   async forgotPassword(@Body('email') email: string, @Res() res) {
+    const user = await this.userService.getByEmail(email);
+    if (!user) {
+      return res.status(404).send();
+    }
     const randomToken = await this.generateUniqueToken();
     await this.passwordResetService.create(email, randomToken);
     const frontendUrl = process.env.FRONTEND_URL;

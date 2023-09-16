@@ -85,4 +85,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   registerBtnClicked(): void {
     this.router.navigate(['/register']);
   }
+
+  forgotBtnClicked(): void {
+    this.router.navigate(['/forgot-password']);
+  }
 }
