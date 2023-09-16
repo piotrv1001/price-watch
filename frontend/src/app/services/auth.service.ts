@@ -20,18 +20,18 @@ export class AuthService {
   LOGIN_ROUTE = 'auth/login';
   AUTH_ROUTE = 'authenticate';
   VERIFY_FIREBASE_TOKEN_ROUTE = 'auth/verify-token';
-  isAuthSubject: Subject<boolean> = new Subject<boolean>();
+  tokenExpiredSubject: Subject<void> = new Subject<void>();
 
   getToken(): string | null {
     return this.firebaseToken ?? localStorage.getItem('token');
   }
 
-  getAuthObs(): Observable<boolean> {
-    return this.isAuthSubject.asObservable();
+  getTokenExpired(): Observable<void> {
+    return this.tokenExpiredSubject.asObservable();
   }
 
-  authenticate(): void {
-    this.isAuthSubject.next(true);
+  setTokenExpired(): void {
+    this.tokenExpiredSubject.next();
   }
 
   isAuthenticated(): Observable<JwtPayload> {

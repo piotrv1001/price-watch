@@ -14,6 +14,9 @@ export class ToastService {
   ) {}
 
   handleError(error: any): void {
+    if(error.status === 401) {
+      return;
+    }
     const message = ErrorUtil.getErrorMessage(error);
     const msgTr = this.translateService.instant(`error.${message}`);
     this.messageService.add({

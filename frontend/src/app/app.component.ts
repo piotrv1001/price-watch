@@ -7,6 +7,7 @@ import { SharedService } from './services/shared.service';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { PrimeNGConfig } from 'primeng/api';
+import { ToastService } from './services/toast.service';
 
 @Component({
   selector: 'app-root',
@@ -18,15 +19,14 @@ export class AppComponent implements OnInit, OnDestroy {
   user$ = user(this.auth);
   subs: Subscription[] = [];
   isFirebaseUser = false;
-  isAuthenticated = false;
-  createNewAccount = false;
 
   constructor(
     private authService: AuthService,
     private sharedService: SharedService,
     private router: Router,
     private translateService: TranslateService,
-    private config: PrimeNGConfig
+    private config: PrimeNGConfig,
+    private toastService: ToastService
   ) {
     this.translateService.addLangs(['en', 'pl']);
     this.translateService.setDefaultLang('pl');
@@ -41,20 +41,12 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.validateJWT();
     this.observeFirebaseUser();
-    this.observeAuth();
     this.observeSignOut();
+    this.observeTokenExpired();
   }
 
   ngOnDestroy(): void {
     this.subs.forEach(sub => sub.unsubscribe());
-  }
-
-  handleRegisterBtnClick(): void {
-    this.createNewAccount = true;
-  }
-
-  handleLoginBtnClick(): void {
-    this.createNewAccount = false;
   }
 
   private async signOut(): Promise<void> {
@@ -63,18 +55,18 @@ export class AppComponent implements OnInit, OnDestroy {
       this.authService.removeFirebaseToken();
     }
     await this.authService.logout();
-    this.router.navigate(['/']);
+    this.router.navigate(['/login']);
   }
 
   private validateJWT(): void {
     this.subs.push(
       this.authService.isAuthenticated().subscribe({
         next: () => {
-          this.isAuthenticated = true;
+          this.router.navigate(['/']);
         },
         error: () => {
           if(!this.isFirebaseUser) {
-            this.isAuthenticated = false;
+            this.router.navigate(['/login']);
           }
         }
       })
@@ -98,8 +90,8 @@ export class AppComponent implements OnInit, OnDestroy {
         })
       ).subscribe((verificationResult) => {
         this.isFirebaseUser = verificationResult;
-        if(verificationResult) {
-          this.isAuthenticated = true;
+        if(this.isFirebaseUser) {
+          this.router.navigate(['/']);
         }
       })
     );
@@ -109,16 +101,17 @@ export class AppComponent implements OnInit, OnDestroy {
     this.subs.push(
       this.sharedService.getSignOut().subscribe(async () => {
         await this.signOut();
-        this.isAuthenticated = false;
-        this.createNewAccount = false;
+        this.router.navigate(['/login']);
       })
     );
   }
 
-  private observeAuth(): void {
+  private observeTokenExpired(): void {
     this.subs.push(
-      this.authService.getAuthObs().subscribe(auth => {
-        this.isAuthenticated = auth;
+      this.authService.getTokenExpired().subscribe(async () => {
+        await this.authService.logout();
+        this.router.navigate(['/login']);
+        this.toastService.errorMessage('error.tokenExpired');
       })
     );
   }

@@ -86,6 +86,7 @@
     "lastTwoMonths": "Last 2 months"
   },
   "error": {
+    "tokenExpired": "Your session has expired. Please log in again.",
     "invalidUsernameOrPassword": "Invalid username or password",
     "notAuthorized": "You are not authorized to access this resource",
     "notFound": "Resource not found",

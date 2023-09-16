@@ -55,7 +55,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
             this.email = this.initialEmail;
             this.username = this.initialUsername;
           },
-          error: (error) => {
+          error: (error: any) => {
             this.toastService.handleError(error);
           }
         })
@@ -66,19 +66,24 @@ export class ProfileComponent implements OnInit, OnDestroy {
   private getInitialData(): void {
     this.loading = true;
     this.subs.push(
-      this.userService.getProfile().subscribe(user => {
-        this.isGoogleAccount = user.isGoogleAccount ?? false;
-        this.initialEmail = user.email;
-        this.initialUsername = user.displayName;
-        this.profilePic = user.profilePic;
-        this.email = this.initialEmail;
-        this.username = this.initialUsername;
-        if(user.displayName) {
-          this.bigLetter = user.displayName.charAt(0).toUpperCase();
-        } else {
-          this.bigLetter = user.email?.charAt(0).toUpperCase();
+      this.userService.getProfile().subscribe({
+        next: user => {
+          this.isGoogleAccount = user.isGoogleAccount ?? false;
+          this.initialEmail = user.email;
+          this.initialUsername = user.displayName;
+          this.profilePic = user.profilePic;
+          this.email = this.initialEmail;
+          this.username = this.initialUsername;
+          if(user.displayName) {
+            this.bigLetter = user.displayName.charAt(0).toUpperCase();
+          } else {
+            this.bigLetter = user.email?.charAt(0).toUpperCase();
+          }
+          this.loading = false;
+        },
+        error: (error: any) => {
+          this.toastService.handleError(error);
         }
-        this.loading = false;
       })
     );
   }

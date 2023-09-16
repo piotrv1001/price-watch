@@ -11,8 +11,10 @@ const routes: Routes = [
       { path: 'account', loadChildren: () => import('./pages/account/account.module').then(m => m.AccountModule) },
       { path: 'products', loadChildren: () => import('./pages/products/products.module').then(m => m.ProductsModule) },
       { path: 'settings', loadChildren: () => import('./pages/settings/settings.module').then(m => m.SettingsModule) }
-    ]
-  }
+    ],
+  },
+  { path: 'login', loadChildren: () => import('./components/login/login.module').then(m => m.LoginModule) },
+  { path: 'register', loadChildren: () => import('./components/register/register.module').then(m => m.RegisterModule) }
 ];
 
 @NgModule({
