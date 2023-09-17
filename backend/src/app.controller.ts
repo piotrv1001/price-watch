@@ -10,6 +10,7 @@ import {
 import { AuthService } from './auth/auth.service';
 import { LocalAuthGuard } from './auth/guards/local-auth.guard';
 import { AuthGuard } from './auth/guards/auth.guard';
+import { RtAuthGuard } from './auth/guards/rt-auth.guard';
 
 @Controller()
 export class AppController {
@@ -24,6 +25,18 @@ export class AppController {
   @Post('auth/login')
   async login(@Request() req) {
     return this.authService.login(req.user);
+  }
+
+  @UseGuards(AuthGuard)
+  @Post('auth/logout')
+  async logout(@Request() req) {
+    return this.authService.logout(req.user.sub);
+  }
+
+  @UseGuards(RtAuthGuard)
+  @Post('auth/refresh')
+  async refresh(@Request() req) {
+    return this.authService.refreshTokens(req.user.sub, req.user.refreshToken);
   }
 
   @UseGuards(AuthGuard)

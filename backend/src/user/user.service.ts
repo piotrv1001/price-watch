@@ -127,14 +127,30 @@ export class UserService {
     return user.favoriteProducts.map((p) => ({ ...p, currentPrice }));
   }
 
-  async updateRtHash(userId: number, rtHash: string): Promise<void> {
+  async updateRtHash(
+    userId: number,
+    refreshToken: string | null,
+  ): Promise<void> {
     const user = await this.userRepository.findOne({
       where: { id: userId },
     });
     if (!user) {
       return;
     }
-    user.rtHash = rtHash;
+    if (refreshToken) {
+      const salt = await bcrypt.genSalt(10);
+      const newRtHash = await bcrypt.hash(refreshToken, salt);
+      user.rtHash = newRtHash;
+    } else {
+      user.rtHash = refreshToken;
+    }
     await this.userRepository.save(user);
+  }
+
+  async getUserByIdWithNullRtHash(userId: number): Promise<User> {
+    return this.userRepository.findOneBy({
+      id: userId,
+      rtHash: null,
+    });
   }
 }

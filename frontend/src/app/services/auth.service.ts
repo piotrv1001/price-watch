@@ -4,8 +4,10 @@ import { Subject, Observable, map, catchError, of } from "rxjs";
 import { User } from "../models/user/user";
 import { SERVER_API_URL } from "../app.constants";
 
-type JwtToken = { access_token: string };
-type JwtPayload = { id: number, username: string };
+export type Tokens = {
+  access_token: string;
+  refresh_token: string;
+};
 
 @Injectable({
   providedIn: 'root'
@@ -22,8 +24,12 @@ export class AuthService {
   VERIFY_FIREBASE_TOKEN_ROUTE = 'auth/verify-token';
   tokenExpiredSubject: Subject<void> = new Subject<void>();
 
-  getToken(): string | null {
-    return this.firebaseToken ?? localStorage.getItem('token');
+  getAccessToken(): string | null {
+    return this.firebaseToken ?? localStorage.getItem('access_token');
+  }
+
+  getRefreshToken(): string | null {
+    return localStorage.getItem('refresh_token');
   }
 
   getTokenExpired(): Observable<void> {
@@ -34,8 +40,16 @@ export class AuthService {
     this.tokenExpiredSubject.next();
   }
 
-  isAuthenticated(): Observable<JwtPayload> {
-    return this.http.get<JwtPayload>(`${SERVER_API_URL}/${this.AUTH_ROUTE}`);
+  isAuthenticated(): Observable<any> {
+    return this.http.get<any>(`${SERVER_API_URL}/${this.AUTH_ROUTE}`);
+  }
+
+  refreshTokens(): Observable<Tokens> {
+    return this.http.post<Tokens>(`${SERVER_API_URL}/auth/refresh`, {}, {
+      headers: {
+        Authorization: `Bearer ${this.getRefreshToken()}`
+      }
+    });
   }
 
   register(userDTO: User): Observable<User> {
@@ -43,15 +57,13 @@ export class AuthService {
   }
 
   login(userDTO: User): Observable<void> {
-    return this.http.post<JwtToken>(`${SERVER_API_URL}/${this.LOGIN_ROUTE}`, userDTO)
-      .pipe(map(response => this.saveTokenToLocalStorage(response)));
+    return this.http.post<Tokens>(`${SERVER_API_URL}/${this.LOGIN_ROUTE}`, userDTO)
+      .pipe(map(response => this.saveTokensToLocalStorage(response)));
   }
 
-  logout(): Promise<void> {
-    return new Promise(resolve => {
-      localStorage.clear();
-      resolve();
-    });
+  logout(): Observable<void> {
+    return this.http.post<void>(`${SERVER_API_URL}/auth/logout`, {})
+      .pipe(map(() => localStorage.clear()));
   }
 
   verifyFirebaseToken(idToken: string): Observable<boolean> {
@@ -62,9 +74,10 @@ export class AuthService {
       );
   }
 
-  saveTokenToLocalStorage(response: JwtToken): void {
-    const { access_token } = response;
-    localStorage.setItem('token', access_token);
+  saveTokensToLocalStorage(response: Tokens): void {
+    const { access_token, refresh_token } = response;
+    localStorage.setItem('access_token', access_token);
+    localStorage.setItem('refresh_token', refresh_token);
   }
 
   setFirebaseToken(token?: string): void {

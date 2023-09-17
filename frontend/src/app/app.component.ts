@@ -53,8 +53,11 @@ export class AppComponent implements OnInit, OnDestroy {
     if(this.isFirebaseUser) {
       await this.auth.signOut();
       this.authService.removeFirebaseToken();
+    } else {
+      this.subs.push(
+        this.authService.logout().subscribe()
+      );
     }
-    await this.authService.logout();
     this.router.navigate(['/login']);
   }
 

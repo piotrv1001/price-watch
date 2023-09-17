@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { Inject } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
@@ -41,6 +41,14 @@ export class AuthService {
     return await this.userService.create(createUserDTO);
   }
 
+  async logout(userId: number): Promise<void> {
+    const user = await this.userService.getUserByIdWithNullRtHash(userId);
+    if (!user) {
+      return;
+    }
+    await this.updateRtHash(userId, null);
+  }
+
   async verifyFirebaseToken(
     idToken: string,
   ): Promise<admin.auth.DecodedIdToken> {
@@ -77,11 +85,11 @@ export class AuthService {
   async getTokens(userId: number): Promise<Tokens> {
     const payload = { sub: userId };
     const atPromise = this.jwtService.signAsync(payload, {
-      expiresIn: '60 * 15',
+      expiresIn: '15m',
       secret: process.env.JWT_SECRET,
     });
     const rtPromise = this.jwtService.signAsync(payload, {
-      expiresIn: '60 * 60 * 24 * 7',
+      expiresIn: '7d',
       secret: process.env.JWT_REFRESH_SECRET,
     });
     const [accessToken, refreshToken] = await Promise.all([
@@ -94,7 +102,25 @@ export class AuthService {
     };
   }
 
-  async updateRtHash(userId: number, rtHash: string): Promise<void> {
-    await this.userService.updateRtHash(userId, rtHash);
+  async refreshTokens(userId: number, refreshToken: string): Promise<Tokens> {
+    const user = await this.userService.getById(userId);
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+    const rtHash = user.rtHash;
+    const hashMatches = await bcrypt.compare(refreshToken, rtHash);
+    if (!hashMatches) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+    const tokens = await this.getTokens(userId);
+    await this.updateRtHash(userId, tokens.refresh_token);
+    return tokens;
+  }
+
+  async updateRtHash(
+    userId: number,
+    refreshToken: string | null,
+  ): Promise<void> {
+    await this.userService.updateRtHash(userId, refreshToken);
   }
 }

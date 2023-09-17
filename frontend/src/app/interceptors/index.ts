@@ -1,16 +1,10 @@
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AuthInterceptor } from './auth-interceptor';
-import { TokenInterceptor } from './token-interceptor';
+import { HttpRequestInterceptor } from './http-request-interceptor';
 
 export const httpInterceptorProviders = [
   {
     provide: HTTP_INTERCEPTORS,
-    useClass: AuthInterceptor,
-    multi: true
-  },
-  {
-    provide: HTTP_INTERCEPTORS,
-    useClass: TokenInterceptor,
+    useClass: HttpRequestInterceptor,
     multi: true,
   }
 ];

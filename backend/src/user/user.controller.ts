@@ -35,7 +35,7 @@ export class UserController {
       return res.status(404).send();
     } else {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { id, u_id, password, ...strippedUser } = user;
+      const { id, u_id, password, rtHash, ...strippedUser } = user;
       let isGoogleAccount = false;
       if (u_id != null) {
         isGoogleAccount = true;
@@ -71,7 +71,7 @@ export class UserController {
       user.displayName = req.body.displayName;
       user.email = req.body.email;
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { id, u_id, password, ...updatedUser } =
+      const { id, u_id, password, rtHash, ...updatedUser } =
         await this.userService.partialUpdate(user);
       return res.status(200).json(updatedUser);
     }

@@ -15,9 +15,10 @@ export class RtStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
   }
 
   async validate(req: Request, payload: any) {
-    const refreshToken = req.get('authorization').replace('Bearer ', '').trim();
+    const [type, token] = req.headers.authorization?.split(' ') ?? [];
+    const refreshToken = type === 'Bearer' ? token : undefined;
     return {
-      userId: payload.sub,
+      ...payload,
       refreshToken,
     };
   }

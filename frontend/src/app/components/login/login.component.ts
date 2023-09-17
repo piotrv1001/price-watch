@@ -51,7 +51,11 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.router.navigate(['/']);
         },
         error: (error) => {
-          this.toastService.handleError(error);
+          if(error.status === 400) {
+            this.toastService.errorMessage('error.invalidUsernameOrPassword');
+          } else {
+            this.toastService.handleError(error);
+          }
         }
       })
     );
