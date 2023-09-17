@@ -39,7 +39,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // this.validateJWT();
     this.observeFirebaseUser();
     this.observeSignOut();
     this.observeTokenExpired();
@@ -59,21 +58,6 @@ export class AppComponent implements OnInit, OnDestroy {
       );
     }
     this.router.navigate(['/login']);
-  }
-
-  private validateJWT(): void {
-    this.subs.push(
-      this.authService.isAuthenticated().subscribe({
-        next: () => {
-          this.router.navigate(['/']);
-        },
-        error: () => {
-          if(!this.isFirebaseUser) {
-            this.router.navigate(['/login']);
-          }
-        }
-      })
-    );
   }
 
   private observeFirebaseUser(): void {
@@ -112,9 +96,11 @@ export class AppComponent implements OnInit, OnDestroy {
   private observeTokenExpired(): void {
     this.subs.push(
       this.authService.getTokenExpired().subscribe(async () => {
-        await this.authService.logout();
+        // IMPORTANT: DO NOT MAKE ANY API CALLS HERE
+        // IF THEY RETURN 401, THIS WILL CAUSE AN INFINITE LOOP!
         this.router.navigate(['/login']);
         this.toastService.errorMessage('error.tokenExpired');
+        localStorage.clear();
       })
     );
   }

@@ -14,13 +14,9 @@ export class HttpRequestInterceptor implements HttpInterceptor {
   ) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const authToken = this.authService.getAccessToken() ?? '';
-    const request = req.clone({
-      headers: req.headers.set('Authorization', `Bearer ${authToken}`)
-    });
-    return next.handle(request).pipe(
+    return next.handle(req).pipe(
       catchError((error) => {
-        if (error.status === 401) {
+        if (error.status === 401 && !req.url.includes('auth/refresh')) {
           return this.handle401Error(req, next);
         }
         return throwError(() => error);
