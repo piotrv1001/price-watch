@@ -14,6 +14,9 @@
           <i class="pi pi-lock"></i>
           <input id="password" type="password" pinputtext="" placeholder="{{ 'login.password' | translate }}" class="p-inputtext p-component p-element w-full md:w-25rem" formControlName="password">
         </span>
+        <button pbutton="" pripple="" class="p-element w-full p-button p-button-link p-component text-left pl-0" tabindex="0" type="button" (click)="forgotBtnClicked()">
+          <span class="p-button-label">{{ 'forgotPassword.title' | translate }}</span>
+        </button>
         <button pbutton="" pripple="" class="p-element w-full p-button p-component mt-4" tabindex="0" [disabled]="!formGroup?.valid" type="submit">
           <span class="p-button-label">{{ 'login.logIn' | translate }}</span>
         </button>
@@ -23,7 +26,7 @@
           <span class="thin-gray-line"></span>
         </div>
         <button type="button" class="google-sign-in-button mt-4 flex align-items-center justify-content-center gap-4" (click)="signInWithGoogle()">
-          <img src="../../../assets/img/Google.png" height="20">{{ 'login.googleSignIn' | translate }}
+          <img src="assets/img/Google.png" height="20">{{ 'login.googleSignIn' | translate }}
         </button>
         <button pbutton="" pripple="" class="p-element w-full p-button p-button-link p-component mt-4" tabindex="0" type="button" (click)="registerBtnClicked()">
           <span class="p-button-label">{{ 'login.noAccount' | translate }}</span>

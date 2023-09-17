@@ -86,11 +86,13 @@
     "lastTwoMonths": "Last 2 months"
   },
   "error": {
+    "tokenExpired": "Your session has expired. Please log in again.",
     "invalidUsernameOrPassword": "Invalid username or password",
     "notAuthorized": "You are not authorized to access this resource",
     "notFound": "Resource not found",
     "serverError": "Server error",
-    "unexpectedError": "Unexpected error"
+    "unexpectedError": "Unexpected error",
+    "invalidEmail": "Invalid email address"
   },
   "msg": {
     "error": "Error",
@@ -195,5 +197,17 @@
     "seller": {
       "selectedXSeller": "Selected sellers: {0}"
     }
+  },
+  "forgotPassword": {
+    "title": "Forgot password?",
+    "provideEmail": "Please provide your email address",
+    "sendEmail": "Send email",
+    "checkEmail": "Please check your email to reset password"
+  },
+  "resetPassword": {
+    "title": "Reset password",
+    "provideNewPassword": "Please provide your new password",
+    "resetSuccess": "Password reset successfully",
+    "continue": "Continue"
   }
 }

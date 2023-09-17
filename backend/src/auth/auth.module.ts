@@ -8,6 +8,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { UsersModule } from 'src/user/user.module';
 import * as admin from 'firebase-admin';
 import { readFileSync } from 'fs';
+import { RtStrategy } from './strategies/rt.strategy';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { readFileSync } from 'fs';
     AuthService,
     LocalStrategy,
     JwtStrategy,
+    RtStrategy,
     {
       provide: 'FirebaseAdmin',
       useFactory: async () => {

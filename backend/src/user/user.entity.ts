@@ -32,6 +32,9 @@ export class User {
   @Column({ nullable: true })
   displayName?: string;
 
+  @Column({ nullable: true })
+  rtHash?: string;
+
   @OneToOne(() => EmailConfig, { nullable: true })
   emailConfig?: EmailConfig;
 

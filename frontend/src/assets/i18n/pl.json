@@ -86,11 +86,13 @@
     "lastTwoMonths": "Ostatnie 2 miesiące"
   },
   "error": {
+    "tokenExpired": "Sesja wygasła. Zaloguj się ponownie",
     "invalidUsernameOrPassword": "Nieprawidłowa nazwa użytkownika lub hasło",
     "notAuthorized": "Nie masz uprawnień do wykonania tej operacji",
     "notFound": "Nie znaleziono",
     "serverError": "Błąd serwera",
-    "unexpectedError": "Nieoczekiwany błąd"
+    "unexpectedError": "Nieoczekiwany błąd",
+    "invalidEmail": "Nieprawidłowy adres e-mail"
   },
   "msg": {
     "error": "Błąd",
@@ -195,5 +197,17 @@
     "seller": {
       "selectedXSeller": "Wybrani sprzedawcy: {0}"
     }
+  },
+  "forgotPassword": {
+    "title": "Zapomniałeś hasła?",
+    "provideEmail": "Wprowadź adres e-mail, aby zresetować hasło",
+    "sendEmail": "Wyślij e-mail",
+    "checkEmail": "Sprawdź swoją skrzynkę e-mail, aby zresetować hasło"
+  },
+  "resetPassword": {
+    "title": "Zmień hasło",
+    "provideNewPassword": "Wprowadź nowe hasło",
+    "resetSuccess": "Hasło zostało zresetowane pomyślnie",
+    "continue": "Kontynuuj"
   }
 }

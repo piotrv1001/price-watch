@@ -1,6 +1,7 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output, inject } from "@angular/core";
+import { Component, OnDestroy, OnInit, inject } from "@angular/core";
 import { Auth, GoogleAuthProvider, signInWithPopup } from "@angular/fire/auth";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { Router } from "@angular/router";
 import { Subscription } from "rxjs";
 import { User } from "src/app/models/user/user";
 import { AuthService } from "src/app/services/auth.service";
@@ -14,10 +15,10 @@ import { ToastService } from "src/app/services/toast.service";
 export class LoginComponent implements OnInit, OnDestroy {
   formGroup?: FormGroup;
   subs: Subscription[] = [];
-  @Output() registerBtnClick: EventEmitter<void> = new EventEmitter<void>();
   private auth: Auth = inject(Auth);
 
   constructor(
+    private router: Router,
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private toastService: ToastService
@@ -47,10 +48,14 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.subs.push(
       this.authService.login(user).subscribe({
         next: () => {
-          this.authService.authenticate();
+          this.router.navigate(['/']);
         },
         error: (error) => {
-          this.toastService.handleError(error);
+          if(error.status === 400) {
+            this.toastService.errorMessage('error.invalidUsernameOrPassword');
+          } else {
+            this.toastService.handleError(error);
+          }
         }
       })
     );
@@ -66,7 +71,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           next: (authResult) => {
             if(authResult) {
               this.authService.setFirebaseToken(idToken);
-              this.authService.authenticate();
+              this.router.navigate(['/']);
             } else {
               this.toastService.errorMessage('Google sign in error');
             }
@@ -82,6 +87,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   registerBtnClicked(): void {
-    this.registerBtnClick.emit();
+    this.router.navigate(['/register']);
+  }
+
+  forgotBtnClicked(): void {
+    this.router.navigate(['/forgot-password']);
   }
 }

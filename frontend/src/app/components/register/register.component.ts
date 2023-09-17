@@ -3,6 +3,7 @@ import { OnInit } from '@angular/core';
 import { Component } from '@angular/core';
 import { Auth, GoogleAuthProvider, signInWithPopup } from '@angular/fire/auth';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Subscription, switchMap } from 'rxjs';
 import { User } from 'src/app/models/user/user';
 import { AuthService } from 'src/app/services/auth.service';
@@ -17,9 +18,9 @@ export class RegisterComponent implements OnInit, OnDestroy {
   private auth: Auth = inject(Auth);
   formGroup?: FormGroup;
   subs: Subscription[] = [];
-  @Output() loginBtnClick: EventEmitter<void> = new EventEmitter<void>();
 
   constructor(
+    private router: Router,
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private toastService: ToastService
@@ -64,7 +65,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
         switchMap(() => this.authService.login(user))
       ).subscribe({
         next: () => {
-          this.authService.authenticate();
+          this.router.navigate(['/']);
         },
         error: (error) => {
           this.toastService.handleError(error);
@@ -83,7 +84,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
           next: (authResult) => {
             if(authResult) {
               this.authService.setFirebaseToken(idToken);
-              this.authService.authenticate();
+              this.router.navigate(['/']);
             } else {
               this.toastService.errorMessage('Google sign in error');
             }
@@ -103,6 +104,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   loginBtnClicked(): void {
-    this.loginBtnClick.emit();
+    this.router.navigate(['/login']);
   }
 }

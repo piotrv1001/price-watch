@@ -1,8 +1,8 @@
 import { NgModule } from "@angular/core";
 
-import { RegisterRoutingModule } from "./register-routing.module";
+import { ForgotPasswordRoutingModule } from "./forgot-password-routing.module";
 
-import { RegisterComponent } from "./register.component";
+import { ForgotPasswordComponent } from "./forgot-password.component";
 
 import { ButtonModule } from "primeng/button";
 
@@ -11,16 +11,13 @@ import { SharedModule } from "src/app/shared/shared.module";
 @NgModule({
   imports: [
     SharedModule,
-    RegisterRoutingModule,
+    ForgotPasswordRoutingModule,
     ButtonModule
   ],
   declarations: [
-    RegisterComponent
-  ],
-  exports: [
-    RegisterComponent
+    ForgotPasswordComponent
   ]
 })
-export class RegisterModule {
+export class ForgotPasswordModule {
 
 }
