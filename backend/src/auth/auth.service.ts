@@ -7,6 +7,11 @@ import * as bcrypt from 'bcrypt';
 import * as admin from 'firebase-admin';
 import { User } from 'src/user/user.entity';
 
+export type Tokens = {
+  access_token: string;
+  refresh_token: string;
+};
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -19,17 +24,17 @@ export class AuthService {
     const user = await this.userService.getByEmail(email);
     if (user && (await bcrypt.compare(pass, user.password))) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password, ...result } = user;
+      const { password, rtHash, ...result } = user;
       return result;
     }
     return null;
   }
 
-  async login(user: any) {
-    const payload = { sub: user.id };
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
+  async login(user: any): Promise<Tokens> {
+    const userId = user.id;
+    const tokens = await this.getTokens(userId);
+    await this.updateRtHash(userId, tokens.refresh_token);
+    return tokens;
   }
 
   async register(createUserDTO: CreateUserDto) {
@@ -67,5 +72,29 @@ export class AuthService {
       user.displayName = name;
       return await this.userService.partialUpdate(user);
     }
+  }
+
+  async getTokens(userId: number): Promise<Tokens> {
+    const payload = { sub: userId };
+    const atPromise = this.jwtService.signAsync(payload, {
+      expiresIn: '60 * 15',
+      secret: process.env.JWT_SECRET,
+    });
+    const rtPromise = this.jwtService.signAsync(payload, {
+      expiresIn: '60 * 60 * 24 * 7',
+      secret: process.env.JWT_REFRESH_SECRET,
+    });
+    const [accessToken, refreshToken] = await Promise.all([
+      atPromise,
+      rtPromise,
+    ]);
+    return {
+      access_token: accessToken,
+      refresh_token: refreshToken,
+    };
+  }
+
+  async updateRtHash(userId: number, rtHash: string): Promise<void> {
+    await this.userService.updateRtHash(userId, rtHash);
   }
 }

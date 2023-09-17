@@ -126,4 +126,15 @@ export class UserService {
     await this.userRepository.save(user);
     return user.favoriteProducts.map((p) => ({ ...p, currentPrice }));
   }
+
+  async updateRtHash(userId: number, rtHash: string): Promise<void> {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+    });
+    if (!user) {
+      return;
+    }
+    user.rtHash = rtHash;
+    await this.userRepository.save(user);
+  }
 }
