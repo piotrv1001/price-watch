@@ -209,5 +209,10 @@
     "provideNewPassword": "Wprowadź nowe hasło",
     "resetSuccess": "Hasło zostało zresetowane pomyślnie",
     "continue": "Kontynuuj"
+  },
+  "notFound": {
+    "title": "Uups! Strona nie została znaleziona",
+    "desc": "Przepraszamy, ale strona, której szukasz, nie istnieje",
+    "home": "Strona główna"
   }
 }
