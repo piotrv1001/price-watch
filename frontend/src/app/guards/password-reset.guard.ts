@@ -7,9 +7,9 @@ import {
   UrlTree,
 } from '@angular/router';
 import { Observable, catchError, map, of } from 'rxjs';
-import { AuthService } from '../services/auth.service';
+import { PasswordResetService } from '../services/password-reset.service';
 
-export const authGuard: CanActivateFn = (
+export const passwordResetGuard: CanActivateFn = (
   route: ActivatedRouteSnapshot,
   state: RouterStateSnapshot
 ):
@@ -17,10 +17,11 @@ export const authGuard: CanActivateFn = (
   | Promise<boolean | UrlTree>
   | boolean
   | UrlTree => {
-  const authService = inject(AuthService);
+  const passwordResetService = inject(PasswordResetService);
   const router = inject(Router);
-  return authService.isAuthenticated().pipe(
+  const token = route.params['token'];
+  return passwordResetService.validateToken(token).pipe(
     map(() => true),
-    catchError(() => of(router.createUrlTree(['/login'])))
+    catchError(() => of(router.createUrlTree(['/not-found'])))
   );
 };

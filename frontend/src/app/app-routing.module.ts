@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { AppLayoutComponent } from './layout/app.layout.component';
 import { authGuard } from './guards/auth.guard';
+import { passwordResetGuard } from './guards/password-reset.guard';
 
 const routes: Routes = [
   {
@@ -45,7 +46,16 @@ const routes: Routes = [
   },
   {
     path: 'reset-password/:token',
-    loadChildren: () => import('./components/reset-password/reset-password.module').then(m => m.ResetPasswordModule)
+    loadChildren: () => import('./components/reset-password/reset-password.module').then(m => m.ResetPasswordModule),
+    canActivate: [passwordResetGuard]
+  },
+  {
+    path: 'not-found',
+    loadChildren: () => import('./components/page-not-found/page-not-found.module').then(m => m.PageNotFoundModule)
+  },
+  {
+    path: '**',
+    loadChildren: () => import('./components/page-not-found/page-not-found.module').then(m => m.PageNotFoundModule)
   }
 ];
 

@@ -18,4 +18,8 @@ export class PasswordResetService {
   resetPassword(token: string, password: string): Observable<void> {
     return this.http.post<void>(`${SERVER_API_URL}/${this.PASSWORD_RESET_ROUTE}/reset`, { token, password });
   }
+
+  validateToken(token: string): Observable<void> {
+    return this.http.get<void>(`${SERVER_API_URL}/${this.PASSWORD_RESET_ROUTE}/validate-token/${token}`);
+  }
 }

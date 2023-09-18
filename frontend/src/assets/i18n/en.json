@@ -209,5 +209,10 @@
     "provideNewPassword": "Please provide your new password",
     "resetSuccess": "Password reset successfully",
     "continue": "Continue"
+  },
+  "notFound": {
+    "title": "Oops! Page not found",
+    "desc": "We are sorry, but the page you requested was not found",
+    "home": "Home page"
   }
 }

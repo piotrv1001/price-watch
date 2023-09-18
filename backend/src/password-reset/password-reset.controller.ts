@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Res } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { PasswordResetService } from './password-reset.service';
 import { MailerService } from '@nestjs-modules/mailer';
@@ -55,6 +55,15 @@ export class PasswordResetController {
     user.password = hashedPassword;
     await this.userService.partialUpdate(user);
     await this.passwordResetService.delete(passwordReset.id);
+    return res.status(200).send();
+  }
+
+  @Get('validate-token/:token')
+  async validateToken(@Param('token') token: string, @Res() res) {
+    const passwordReset = await this.passwordResetService.findByToken(token);
+    if (!passwordReset) {
+      return res.status(404).send();
+    }
     return res.status(200).send();
   }
 
