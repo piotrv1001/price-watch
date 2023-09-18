@@ -216,5 +216,10 @@
     "title": "Oops! Page not found",
     "desc": "We are sorry, but the page you requested was not found",
     "home": "Home page"
+  },
+  "sellers": {
+    "general": "General",
+    "topProducts": "Top products",
+    "buyers": "buyers"
   }
 }

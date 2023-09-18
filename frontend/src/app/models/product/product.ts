@@ -9,5 +9,6 @@ export class Product {
   imgSrc?: string;
   promo?: boolean;
   status?: number;
+  numberOfPeople?: number;
   prices?: Price[];
 }

@@ -6,12 +6,18 @@ import { SellersComponent } from "./sellers.component";
 
 import { SharedModule } from "src/app/shared/shared.module";
 import { ChooseSellerModule } from "src/app/components/choose-seller/choose-seller.module";
+import { SpinnerModule } from "src/app/components/spinner/spinner.module";
+import { NoDataPlaceHolderModule } from "src/app/components/no-data-placeholder/no-data-placeholder.module";
+import { ProductNameWithSellerModule } from "src/app/components/product-name-with-seller/product-name-with-seller.module";
 
 @NgModule({
   imports: [
     SellersRoutingModule,
     SharedModule,
-    ChooseSellerModule
+    ChooseSellerModule,
+    SpinnerModule,
+    NoDataPlaceHolderModule,
+    ProductNameWithSellerModule
   ],
   declarations: [
     SellersComponent

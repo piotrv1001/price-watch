@@ -7,6 +7,7 @@ import { Price } from "../models/price/price";
 import { DateUtil } from "../utils/date/date.util";
 import { ProductWithPrice } from "../models/product/product-with-price";
 import { ProductFilterDTO } from "../models/dto/product-filter.dto";
+import { SellerInfo } from "../models/dto/seller-info";
 
 @Injectable({
   providedIn: 'root',
@@ -33,6 +34,10 @@ export class ProductService {
 
   getFilteredProducts(productFilter: ProductFilterDTO): Observable<ProductWithPrice[]> {
     return this.http.post<ProductWithPrice[]>(`${this.productResourceUrl}/filter`, productFilter);
+  }
+
+  getSellerInfo(seller: string): Observable<SellerInfo> {
+    return this.http.get<SellerInfo>(`${this.productResourceUrl}/seller-info/${seller}`);
   }
 
   private getCurrentPrice(prices: Price[] | undefined): number | undefined {

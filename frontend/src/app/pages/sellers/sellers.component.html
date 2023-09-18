@@ -1,3 +1,58 @@
-<div class="card">
-  <h1>Sellers</h1>
+<ng-container *ngIf="loading">
+  <app-spinner></app-spinner>
+</ng-container>
+<div class="grid">
+  <div class="col-12 xl:col-6 p-3">
+    <div class="card">
+      <h5>{{ 'dashboard.sellers' | translate }}</h5>
+      <div class="mt-6 flex align-items-end justify-content-between">
+        <div class="w-6">
+          <app-choose-seller (sellerChange)="handleSellerChange($event)"></app-choose-seller>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-container *ngIf="!loading && logo">
+    <div class="col-12 xl:col-6 p-3 flex justify-content-center align-items-center fadeinright animation-duration-200 animation-iteration-1">
+      <img [src]="'assets/img/' + logo" alt="Logo" width="300">
+    </div>
+  </ng-container>
 </div>
+<ng-container *ngIf="!loading">
+  <div class="grid scalein animation-duration-200 animation-iteration-1">
+    <div class="col-4 p-3">
+      <div class="card">
+        <h5>{{ 'sellers.general' | translate }}</h5>
+      </div>
+    </div>
+    <div class="col-8 p-3">
+      <div class="card">
+        <h5>{{ 'sellers.topProducts' | translate }}</h5>
+        <ng-container *ngIf="sellerInfo?.bestSellingProducts; else noTopProductsTemplate">
+          <div *ngFor="let product of sellerInfo?.bestSellingProducts; let i = index" class="grid my-2">
+            <div class="col-1">
+              <div class="flex align-items-center justify-content-center border-circle surface-ground text-lg font-bold w-3rem h-3rem">
+                {{i + 1}}
+              </div>
+            </div>
+            <div class="col-5 flex align-items-center">
+              <app-product-name-with-seller [product]="product"></app-product-name-with-seller>
+            </div>
+            <div class="col-2 flex justify-content-center align-items-center">
+              <img [src]="product.imgSrc" alt="Product image" width="80" height="60" class="shadow-4 pd-4 border-round">
+            </div>
+            <div class="col-2 flex justify-content-center align-items-center text-color-secondary text-lg">
+              <span class="font-bold mr-1">{{product.numberOfPeople}}</span>{{ 'sellers.buyers' | translate }}
+            </div>
+            <div class="col-2 flex justify-content-center align-items-center text-color-secondary text-lg">
+              {{product.currentPrice | number:'1.2-2'}} zł
+            </div>
+          </div>
+        </ng-container>
+        <ng-template #noTopProductsTemplate>
+          <app-no-data-placeholder [size]="'small'"></app-no-data-placeholder>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</ng-container>

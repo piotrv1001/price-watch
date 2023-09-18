@@ -30,21 +30,40 @@ export class ProductService {
   }
 
   async getSellerInfo(seller: string): Promise<SellerInfoDTO> {
-    const total = await this.getProductCountBySeller(seller);
-    const promoted = await this.getProductPromoCountBySeller(seller);
-    const dominantBucket = await this.getMostDominantBucketBySeller(seller);
-    const bestSellingProducts = await this.getBestSellingProductsBySeller(
-      seller,
-    );
-    const mostExpensiveProduct = await this.getMostExpensiveProductBySeller(
-      seller,
-    );
-    const leastExpensiveProduct = await this.getLeastExpensiveProductBySeller(
-      seller,
-    );
-    const averagePrice = await this.priceService.getAveragePriceBySeller(
-      seller,
-    );
+    const totalPromise = this.getProductCountBySeller(seller);
+    const promotedPromise = this.getProductPromoCountBySeller(seller);
+    const dominantBucketPromise = this.getMostDominantBucketBySeller(seller);
+    const bestSellingProductsPromise =
+      this.getBestSellingProductsBySeller(seller);
+    const mostExpensiveProductPromise =
+      this.getMostExpensiveProductBySeller(seller);
+    const leastExpensiveProductPromise =
+      this.getLeastExpensiveProductBySeller(seller);
+    const averagePricePromise =
+      this.priceService.getAveragePriceBySeller(seller);
+    const results = await Promise.allSettled([
+      totalPromise,
+      promotedPromise,
+      dominantBucketPromise,
+      bestSellingProductsPromise,
+      mostExpensiveProductPromise,
+      leastExpensiveProductPromise,
+      averagePricePromise,
+    ]);
+    const total =
+      results[0].status === 'fulfilled' ? results[0].value : undefined;
+    const promoted =
+      results[1].status === 'fulfilled' ? results[1].value : undefined;
+    const dominantBucket =
+      results[2].status === 'fulfilled' ? results[2].value : undefined;
+    const bestSellingProducts =
+      results[3].status === 'fulfilled' ? results[3].value : undefined;
+    const mostExpensiveProduct =
+      results[4].status === 'fulfilled' ? results[4].value : undefined;
+    const leastExpensiveProduct =
+      results[5].status === 'fulfilled' ? results[5].value : undefined;
+    const averagePrice =
+      results[6].status === 'fulfilled' ? results[6].value : undefined;
     return {
       total,
       promoted,
