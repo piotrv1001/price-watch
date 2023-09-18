@@ -9,8 +9,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { httpInterceptorProviders } from './interceptors';
 import { MessageService } from 'primeng/api';
 import { SharedModule } from './shared/shared.module';
-import { LoginModule } from './components/login/login.module';
-import { RegisterModule } from './components/register/register.module';
 import { ToastModule } from 'primeng/toast';
 import { HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
@@ -30,8 +28,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     SharedModule,
     AppRoutingModule,
     AppLayoutModule,
-    // LoginModule,
-    // RegisterModule,
     ToastModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),

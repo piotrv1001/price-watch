@@ -2,6 +2,7 @@ import { inject } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   CanActivateFn,
+  Router,
   RouterStateSnapshot,
   UrlTree,
 } from '@angular/router';
@@ -17,8 +18,10 @@ export const passwordResetGuard: CanActivateFn = (
   | boolean
   | UrlTree => {
   const passwordResetService = inject(PasswordResetService);
-  return passwordResetService.validateToken(route.params['token']).pipe(
+  const router = inject(Router);
+  const token = route.params['token'];
+  return passwordResetService.validateToken(token).pipe(
     map(() => true),
-    catchError(() => of(false))
+    catchError(() => of(router.createUrlTree(['/not-found'])))
   );
 };

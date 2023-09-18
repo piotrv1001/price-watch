@@ -2,6 +2,7 @@ import { inject } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   CanActivateFn,
+  Router,
   RouterStateSnapshot,
   UrlTree,
 } from '@angular/router';
@@ -17,8 +18,9 @@ export const authGuard: CanActivateFn = (
   | boolean
   | UrlTree => {
   const authService = inject(AuthService);
+  const router = inject(Router);
   return authService.isAuthenticated().pipe(
     map(() => true),
-    catchError(() => of(false))
+    catchError(() => of(router.createUrlTree(['/login'])))
   );
 };
