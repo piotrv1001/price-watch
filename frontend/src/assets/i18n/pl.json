@@ -60,6 +60,7 @@
   },
   "menu": {
     "home": "Strona główna",
+    "sellers": "Sprzedawcy",
     "dashboard": "Panel",
     "products": "Produkty",
     "newProducts": "Nowe produkty",
@@ -118,7 +119,8 @@
     "sellers": "Sprzedawcy",
     "priceBuckets": "Koszyki cenowe",
     "newProducts": "Nowe produkty",
-    "priceChanges": "Zmiany cen"
+    "priceChanges": "Zmiany cen",
+    "lastSevenDays": "Ostatnie 7 dni"
   },
   "productTable": {
     "name": "Nazwa",

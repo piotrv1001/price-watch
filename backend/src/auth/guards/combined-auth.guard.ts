@@ -10,7 +10,7 @@ import { jwtConstants } from '../constants';
 import * as admin from 'firebase-admin';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class CombinedAuthGuard implements CanActivate {
   constructor(private jwtService: JwtService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {

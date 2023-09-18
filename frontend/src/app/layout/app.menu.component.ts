@@ -24,6 +24,12 @@ export class AppMenuComponent implements OnInit {
         ]
       },
       {
+        label: 'menu.sellers',
+        items: [
+          { label: 'menu.sellers', icon: 'pi pi-users', routerLink: ['/sellers'] }
+        ]
+      },
+      {
         label: 'menu.products',
         items: [
           {
@@ -37,14 +43,14 @@ export class AppMenuComponent implements OnInit {
             routerLink: ['/products/new-products']
           },
           {
-            label: 'menu.priceBuckets',
-            icon: 'pi pi-chart-pie',
-            routerLink: ['/products/price-buckets']
-          },
-          {
             label: 'menu.priceChanges',
             icon: 'pi pi-chart-bar',
             routerLink: ['/products/price-changes']
+          },
+          {
+            label: 'menu.priceBuckets',
+            icon: 'pi pi-chart-pie',
+            routerLink: ['/products/price-buckets']
           },
           {
             label: 'menu.timeline',

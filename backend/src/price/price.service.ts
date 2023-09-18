@@ -66,6 +66,25 @@ export class PriceService {
     });
   }
 
+  async getAveragePriceBySeller(seller: string): Promise<number | undefined> {
+    const averagePrice = await this.priceRepository
+      .createQueryBuilder('price')
+      .select('AVG(price.price)', 'averagePrice')
+      .innerJoin('price.product', 'product')
+      .where('product.seller = :seller', { seller })
+      .getRawOne();
+
+    if (averagePrice && averagePrice.averagePrice !== null) {
+      try {
+        return parseFloat(averagePrice.averagePrice);
+      } catch {
+        return undefined;
+      }
+    } else {
+      return undefined;
+    }
+  }
+
   async findByProductIdAndDates(
     productId: string,
     fromDate: Date,

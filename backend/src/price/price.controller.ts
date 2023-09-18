@@ -7,6 +7,7 @@ import {
   Param,
   Body,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { PriceService } from './price.service';
 import { Price } from './price.entity';
@@ -14,26 +15,31 @@ import { NewProductDTO } from './dto/new-product.dto';
 import { PriceChangeDTO } from './dto/price-change.dto';
 import { CreatePriceDTO } from './dto/create-price.dto';
 import { ProductEventDTO } from './dto/product-event.dto';
+import { CombinedAuthGuard } from 'src/auth/guards/combined-auth.guard';
 
 @Controller('prices')
 export class PriceController {
   constructor(private readonly priceService: PriceService) {}
 
+  @UseGuards(CombinedAuthGuard)
   @Get()
   findAll(): Promise<Price[]> {
     return this.priceService.findAll();
   }
 
+  @UseGuards(CombinedAuthGuard)
   @Get('product/:productId')
   findByProductId(@Param('productId') productId: string): Promise<Price[]> {
     return this.priceService.findByProductId(productId);
   }
 
+  @UseGuards(CombinedAuthGuard)
   @Get(':id')
   findById(@Param('id') id: number): Promise<Price> {
     return this.priceService.findById(id);
   }
 
+  @UseGuards(CombinedAuthGuard)
   @Get('product-events/:productId')
   getProductEvents(
     @Param('productId') productId: string,
@@ -41,6 +47,7 @@ export class PriceController {
     return this.priceService.getProductEvents(productId);
   }
 
+  @UseGuards(CombinedAuthGuard)
   @Get('new-products/:seller')
   getNewProducts(
     @Param('seller') seller: string,
@@ -55,6 +62,7 @@ export class PriceController {
     );
   }
 
+  @UseGuards(CombinedAuthGuard)
   @Get('price-changes/:seller')
   getPriceChanges(
     @Param('seller') seller: string,
@@ -69,21 +77,25 @@ export class PriceController {
     );
   }
 
+  @UseGuards(CombinedAuthGuard)
   @Post()
   create(@Body() priceDto: Price): Promise<Price> {
     return this.priceService.create(priceDto);
   }
 
+  @UseGuards(CombinedAuthGuard)
   @Put()
   update(@Body() priceDto: Price): Promise<Price> {
     return this.priceService.update(priceDto);
   }
 
+  @UseGuards(CombinedAuthGuard)
   @Delete(':id')
   deleteById(@Param('id') id: number): Promise<void> {
     return this.priceService.deleteById(id);
   }
 
+  @UseGuards(CombinedAuthGuard)
   @Post('by-product-ids')
   async getPricesByProductIds(
     @Body() productIds: string[],

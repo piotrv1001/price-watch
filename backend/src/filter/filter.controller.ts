@@ -12,7 +12,7 @@ import {
 import { FilterService } from './filter.service';
 import { UserService } from 'src/user/user.service';
 import { Filter } from './filter.entity';
-import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { CombinedAuthGuard } from 'src/auth/guards/combined-auth.guard';
 import { CreateFilterDTO } from './dto/create-filter.dto';
 
 @Controller('filters')
@@ -22,7 +22,7 @@ export class FilterController {
     private readonly userService: UserService,
   ) {}
 
-  @UseGuards(AuthGuard)
+  @UseGuards(CombinedAuthGuard)
   @Post()
   async create(
     @Request() req,
@@ -38,7 +38,7 @@ export class FilterController {
     }
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(CombinedAuthGuard)
   @Get()
   async findByUserId(@Request() req, @Res() res): Promise<Filter[]> {
     const user = await this.userService.getUserFromRequest(req.user);
@@ -50,7 +50,7 @@ export class FilterController {
     }
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(CombinedAuthGuard)
   @Delete(':id')
   deleteById(@Param('id') id: string): Promise<void> {
     return this.filterService.deleteById(id);

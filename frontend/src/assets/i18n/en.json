@@ -61,6 +61,7 @@
   "menu": {
     "home": "Home",
     "dashboard": "Dashboard",
+    "sellers": "Sellers",
     "products": "Products",
     "newProducts": "New products",
     "prices": "Prices",
@@ -118,7 +119,8 @@
     "sellers": "Sellers",
     "priceBuckets": "Price buckets",
     "newProducts": "New products",
-    "priceChanges": "Price changes"
+    "priceChanges": "Price changes",
+    "lastSevenDays": "Last 7 days"
   },
   "productTable": {
     "name": "Name",
