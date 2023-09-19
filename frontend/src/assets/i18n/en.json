@@ -226,6 +226,7 @@
     "promoted": "Promoted",
     "dominantPriceRange": "Dominant price range",
     "details": "Details",
-    "recentActivity": "Recent activity"
+    "recentActivity": "Recent activity",
+    "topProductActivity": "Top product activity"
   }
 }

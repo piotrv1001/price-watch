@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subscription, catchError, forkJoin, of } from 'rxjs';
+import { Subscription, catchError, forkJoin, of, switchMap, tap } from 'rxjs';
 import { NewProductDTO } from 'src/app/models/dto/new-product.dto';
 import { PriceChangeDTO } from 'src/app/models/dto/price-change.dto';
 import { SellerInfo } from 'src/app/models/dto/seller-info';
+import { ProductEvent } from 'src/app/models/event/product-event';
 import { Seller } from 'src/app/models/seller/seller';
 import { PriceService } from 'src/app/services/price.service';
 import { ProductService } from 'src/app/services/product.service';
@@ -22,12 +23,14 @@ export class SellersComponent implements OnInit, OnDestroy {
   newProducts: NewProductDTO[] = [];
   sellerInfo?: SellerInfo;
   subs: Subscription[] = [];
+  events: ProductEvent[] = [];
   logo?: string;
   darkTheme = false;
   loading = false;
   currentPriceRangeTranslation: string = 'chart.buckets.unknown';
   startDate?: Date;
   endDate?: Date;
+  topProductId?: string;
 
   constructor(
     private productService: ProductService,
@@ -51,7 +54,7 @@ export class SellersComponent implements OnInit, OnDestroy {
     const darkTheme = themeStorage === Theme.DARK;
     this.updateColors(darkTheme);
     this.getThemeChange();
-    this.getSellerInfo();
+    this.getData();
   }
 
   ngOnDestroy(): void {
@@ -61,7 +64,7 @@ export class SellersComponent implements OnInit, OnDestroy {
   handleSellerChange(seller: Seller): void {
     this.currentSeller = seller;
     this.logo = this.darkTheme ? this.currentSeller?.logoDarkTheme : this.currentSeller?.logoLightTheme;
-    this.getSellerInfo();
+    this.getData();
   }
 
   getThemeChange(): void {
@@ -80,34 +83,51 @@ export class SellersComponent implements OnInit, OnDestroy {
     this.router.navigate(['/products/new-products']);
   }
 
+  goToTimeline(): void {
+    this.router.navigate(['/products/timeline']);
+  }
+
   private updateColors(darkTheme: boolean): void {
     this.darkTheme = darkTheme;
     this.logo = this.darkTheme ? this.currentSeller?.logoDarkTheme : this.currentSeller?.logoLightTheme;
   }
 
-  private getSellerInfo(): void {
+  private getData(): void {
     const name = this.currentSeller?.name;
     if(!name) {
       return;
     }
     const newProducts$ = this.priceService.getNewProducts(name, undefined, undefined, 5);
-    const priceChanges$ = this.priceService.getPriceChanges(name);
     const sellerInfo$ = this.productService.getSellerInfo(name);
     const sources$ = forkJoin([
-      newProducts$.pipe(catchError(() => of(null))),
-      priceChanges$.pipe(catchError(() => of(null))),
-      sellerInfo$.pipe(catchError(() => of(null)))]
-    );
+      newProducts$.pipe(catchError(() => of([]))),
+      sellerInfo$.pipe(catchError(() => of(undefined)))
+    ]);
     this.loading = true;
     this.subs.push(
-      sources$.subscribe(([newProducts, priceChanges, sellerInfo]) => {
+      sources$.pipe(
+        tap(([newProducts, sellerInfo]) => {
+          this.newProducts = newProducts;
+          this.sellerInfo = sellerInfo;
+          this.updateCurrentPriceRangeTranslation();
+        }),
+        switchMap(() => {
+          this.topProductId = this.sellerInfo?.bestSellingProducts?.[0]?.id;
+          return this.topProductId === undefined ? of([]) : this.priceService.getProductEvents(this.topProductId);
+        })
+      ).subscribe((events: ProductEvent[]) => {
         this.loading = false;
-        this.newProducts = newProducts ?? [];
-        this.priceChanges = priceChanges ?? [];
-        this.sellerInfo = sellerInfo ?? undefined;
-        this.updateCurrentPriceRangeTranslation();
+        this.events = events;
       })
     );
+    // this.subs.push(
+    //   sources$.subscribe(([newProducts, sellerInfo]) => {
+    //     this.loading = false;
+    //     this.newProducts = newProducts;
+    //     this.sellerInfo = sellerInfo;
+    //     this.updateCurrentPriceRangeTranslation();
+    //   })
+    // );
   }
 
   private updateCurrentPriceRangeTranslation(): void {

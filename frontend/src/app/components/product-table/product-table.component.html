@@ -10,8 +10,8 @@
     [rows]="paginatorRows"
     [showCurrentPageReport]="false"
     [globalFilterFields]="getFilterFields()">
-    <ng-template pTemplate="caption">
-      <div *ngIf="showCaption" class="flex">
+    <ng-template *ngIf="showCaption" pTemplate="caption">
+      <div class="flex">
         <span class="p-input-icon-left mr-auto">
           <i class="pi pi-search"></i>
           <input
