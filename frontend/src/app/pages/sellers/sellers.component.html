@@ -29,13 +29,13 @@
           </button>
         </div>
         <div class="grid mt-6">
-          <div class="col-6">
+          <div class="col-6 flex justify-content-center align-items-center">
             <div class="border-circle w-10rem h-10rem border-3 border-blue-500 flex flex-column align-items-center justify-content-center gap-2">
               <div class="font-bold text-3xl">{{sellerInfo?.total}}</div>
               <div class="text-color-secondary">{{ 'sellers.offers' | translate }}</div>
             </div>
           </div>
-          <div class="col-6">
+          <div class="col-6 flex justify-content-center align-items-center">
             <div class="border-circle w-10rem h-10rem border-3 border-pink-500 flex flex-column align-items-center justify-content-center gap-2">
               <div class="font-bold text-3xl">{{sellerInfo?.promoted}}</div>
               <div class="text-color-secondary">{{ 'sellers.promoted' | translate }}</div>
@@ -51,16 +51,16 @@
           <span *ngIf="sellerInfo?.bucketInfo?.dominantBucketProducts" class="text-color-secondary text-lg">{{ sellerInfo?.bucketInfo?.dominantBucketProducts }} / {{sellerInfo?.total}}</span>
           <span *ngIf="sellerInfo?.bucketInfo?.dominantBucketPercentage" class="text-color-secondary text-lg">{{ sellerInfo?.bucketInfo?.dominantBucketPercentage }} %</span>
         </div>
-        <!-- <div class="flex justify-content-end">
-          <button pbutton="" pripple="" class="p-element p-button p-button-link p-component text-right pr-0 mt-3" tabindex="0" type="button" (click)="goToPriceBuckets()">
-            <span class="p-button-label">{{ 'sellers.details' | translate }}</span>
-          </button>
-        </div> -->
       </div>
     </div>
     <div class="col-8 p-3">
       <div class="card">
-        <h5>{{ 'sellers.topProducts' | translate }}</h5>
+        <div class="flex flex-row justify-content-between">
+          <h5>{{ 'sellers.topProducts' | translate }}</h5>
+          <button pbutton="" pripple="" class="p-element p-button p-button-link p-component text-right pr-0 mt-3" tabindex="0" type="button" (click)="goToTopProducts()">
+            <span class="p-button-label">{{ 'sellers.details' | translate }}</span>
+          </button>
+        </div>
         <div class="mt-6">
           <ng-container *ngIf="sellerInfo?.bestSellingProducts; else noTopProductsTemplate">
             <div *ngFor="let product of sellerInfo?.bestSellingProducts; let i = index" class="grid my-3">

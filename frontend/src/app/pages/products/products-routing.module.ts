@@ -8,6 +8,7 @@ import { PriceChangesPageComponent } from './price-changes-page/price-changes-pa
 import { TimelinePageComponent } from './timeline-page/timeline-page.component';
 import { FavoriteProductsPageComponent } from './favorite-products-page/favorite-products-page.component';
 import { authGuard } from 'src/app/guards/auth.guard';
+import { TopProductsPageComponent } from './top-products-page/top-products-page.component';
 
 @NgModule({
   imports: [RouterModule.forChild([
@@ -15,6 +16,12 @@ import { authGuard } from 'src/app/guards/auth.guard';
       path: 'prices',
       component: PricePageComponent,
       loadChildren: () => import('./price-page/price-page.module').then(m => m.PricePageModule ),
+      canActivate: [authGuard]
+    },
+    {
+      path: 'top-products',
+      component: TopProductsPageComponent,
+      loadChildren: () => import('./top-products-page/top-products-page.module').then(m => m.TopProductsPageModule ),
       canActivate: [authGuard]
     },
     {

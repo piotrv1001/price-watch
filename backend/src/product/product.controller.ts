@@ -7,6 +7,7 @@ import {
   Put,
   Delete,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { Product } from './product.entity';
@@ -37,7 +38,16 @@ export class ProductController {
     return this.productService.getPriceBuckets(seller);
   }
 
-  // @UseGuards(CombinedAuthGuard)
+  @UseGuards(CombinedAuthGuard)
+  @Get('top-products/:seller')
+  getTopProducts(
+    @Param('seller') seller: string,
+    @Query('limit') limit?: number,
+  ): Promise<Product[]> {
+    return this.productService.getBestSellingProductsBySeller(seller, limit);
+  }
+
+  @UseGuards(CombinedAuthGuard)
   @Get('seller-info/:seller')
   getSellerInfo(@Param('seller') seller: string): Promise<SellerInfoDTO> {
     return this.productService.getSellerInfo(seller);
