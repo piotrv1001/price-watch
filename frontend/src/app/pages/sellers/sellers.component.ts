@@ -87,6 +87,10 @@ export class SellersComponent implements OnInit, OnDestroy {
     this.router.navigate(['/products/timeline']);
   }
 
+  goToTopProducts(): void {
+    this.router.navigate(['/products/top-products']);
+  }
+
   private updateColors(darkTheme: boolean): void {
     this.darkTheme = darkTheme;
     this.logo = this.darkTheme ? this.currentSeller?.logoDarkTheme : this.currentSeller?.logoLightTheme;
@@ -120,14 +124,6 @@ export class SellersComponent implements OnInit, OnDestroy {
         this.events = events;
       })
     );
-    // this.subs.push(
-    //   sources$.subscribe(([newProducts, sellerInfo]) => {
-    //     this.loading = false;
-    //     this.newProducts = newProducts;
-    //     this.sellerInfo = sellerInfo;
-    //     this.updateCurrentPriceRangeTranslation();
-    //   })
-    // );
   }
 
   private updateCurrentPriceRangeTranslation(): void {

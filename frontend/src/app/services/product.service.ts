@@ -40,6 +40,10 @@ export class ProductService {
     return this.http.get<SellerInfo>(`${this.productResourceUrl}/seller-info/${seller}`);
   }
 
+  getTopProducts(seller: string, limit: number): Observable<ProductWithPrice[]> {
+    return this.http.get<ProductWithPrice[]>(`${this.productResourceUrl}/top-products/${seller}?limit=${limit}`);
+  }
+
   private getCurrentPrice(prices: Price[] | undefined): number | undefined {
     if(!prices || prices.length === 0) {
       return undefined;
