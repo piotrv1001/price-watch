@@ -217,6 +217,7 @@ export class PriceService {
     seller: string,
     fromDate: Date,
     toDate: Date,
+    limit = 100,
   ): Promise<NewProductDTO[]> {
     const query = this.priceRepository
       .createQueryBuilder('p')
@@ -235,7 +236,6 @@ export class PriceService {
       .andHaving('maxDate <= :toDate', { toDate })
       .andHaving('minDate >= :fromDate', { fromDate });
 
-    const limit = 100;
     const newProducts: NewProductDTO[] = [];
     const results = await query.getRawMany();
     for (const result of results) {

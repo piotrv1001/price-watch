@@ -43,8 +43,8 @@
             <div class="text-color-secondary mb-2">{{ 'sellers.dominantPriceRange' | translate }}</div>
             <div class="font-bold">{{ currentPriceRangeTranslation | translate }}</div>
           </div>
-          <span class="text-color-secondary">{{ sellerInfo?.bucketInfo?.dominantBucketProducts }} / {{sellerInfo?.total}}</span>
-          <span class="text-color-secondary">{{ sellerInfo?.bucketInfo?.dominantBucketPercentage }} %</span>
+          <span *ngIf="sellerInfo?.bucketInfo?.dominantBucketProducts" class="text-color-secondary text-lg">{{ sellerInfo?.bucketInfo?.dominantBucketProducts }} / {{sellerInfo?.total}}</span>
+          <span *ngIf="sellerInfo?.bucketInfo?.dominantBucketPercentage" class="text-color-secondary text-lg">{{ sellerInfo?.bucketInfo?.dominantBucketPercentage }} %</span>
         </div>
         <button pbutton="" pripple="" class="p-element w-full p-button p-button-link p-component text-right pr-0 mt-3" tabindex="0" type="button" (click)="goToPriceBuckets()">
           <span class="p-button-label">{{ 'sellers.details' | translate }}</span>
@@ -78,6 +78,28 @@
         <ng-template #noTopProductsTemplate>
           <app-no-data-placeholder [size]="'small'"></app-no-data-placeholder>
         </ng-template>
+      </div>
+    </div>
+    <div class="col-6 p-3">
+      <div class="card">
+        <div class="flex flex-row justify-content-between">
+          <div class="w-6">
+            <h5>{{ 'dashboard.newProducts' | translate }}</h5>
+            <div class="text-color-secondary text-sm">{{ 'dashboard.lastSevenDays' | translate }} ({{ startDate | date: 'dd-MM' }} - {{ endDate | date: 'dd-MM' }})</div>
+          </div>
+          <button pbutton="" pripple="" class="p-element w-full p-button p-button-link p-component text-right pr-0 mt-3" tabindex="0" type="button" (click)="goToNewProducts()">
+            <span class="p-button-label">{{ 'sellers.details' | translate }}</span>
+          </button>
+        </div>
+        <div class="mt-6">
+          <app-product-table
+            [products]="newProducts"
+            [type]="'new-products-min'"
+            [showCaption]="false"
+            [paginatorRows]="5"
+            [showPaginator]="false">
+          </app-product-table>
+        </div>
       </div>
     </div>
   </div>

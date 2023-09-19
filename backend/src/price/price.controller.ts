@@ -53,12 +53,14 @@ export class PriceController {
     @Param('seller') seller: string,
     @Query('fromDate') fromDate?: string,
     @Query('toDate') toDate?: string,
+    @Query('limit') limit?: number,
   ): Promise<NewProductDTO[]> {
     const { fromDateParsed, toDateParsed } = this.parseDates(fromDate, toDate);
     return this.priceService.findNewProducts(
       seller,
       fromDateParsed,
       toDateParsed,
+      limit,
     );
   }
 

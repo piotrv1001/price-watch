@@ -11,7 +11,7 @@
     [showCurrentPageReport]="false"
     [globalFilterFields]="getFilterFields()">
     <ng-template pTemplate="caption">
-      <div class="flex">
+      <div *ngIf="showCaption" class="flex">
         <span class="p-input-icon-left mr-auto">
           <i class="pi pi-search"></i>
           <input

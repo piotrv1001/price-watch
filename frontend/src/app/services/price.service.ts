@@ -24,11 +24,11 @@ export class PriceService {
     return this.http.post<Record<string, CreatePriceDTO[]>>(`${this.priceResourceUrl}/by-product-ids?fromDate=${fromDate}&toDate=${toDate}`, productIds);
   }
 
-  getNewProducts(seller: string, fromDate?: string, toDate?: string): Observable<NewProductDTO[]> {
+  getNewProducts(seller: string, fromDate?: string, toDate?: string, limit = 100): Observable<NewProductDTO[]> {
     if(!fromDate || !toDate) {
-      return this.http.get<NewProductDTO[]>(`${this.priceResourceUrl}/new-products/${seller}`);
+      return this.http.get<NewProductDTO[]>(`${this.priceResourceUrl}/new-products/${seller}?limit=${limit}`);
     }
-    return this.http.get<NewProductDTO[]>(`${this.priceResourceUrl}/new-products/${seller}?fromDate=${fromDate}&toDate=${toDate}`);
+    return this.http.get<NewProductDTO[]>(`${this.priceResourceUrl}/new-products/${seller}?fromDate=${fromDate}&toDate=${toDate}&limit=${limit}`);
   }
 
   getPriceChanges(seller: string, fromDate?: string, toDate?: string): Observable<PriceChangeDTO[]> {
