@@ -7,7 +7,7 @@
       <h5>{{ 'dashboard.sellers' | translate }}</h5>
       <div class="mt-6 flex align-items-end justify-content-between">
         <div class="w-6">
-          <app-choose-seller (sellerChange)="handleSellerChange($event)"></app-choose-seller>
+          <app-choose-seller (currentSellerChange)="handleSellerChange($event)"></app-choose-seller>
         </div>
       </div>
     </div>
@@ -23,14 +23,40 @@
     <div class="col-4 p-3">
       <div class="card">
         <h5>{{ 'sellers.general' | translate }}</h5>
+        <div class="grid">
+          <div class="col-6">
+            <div class="border-circle w-10rem h-10rem border-3 border-blue-500 flex flex-column align-items-center justify-content-center gap-2">
+              <div class="font-bold text-3xl">{{sellerInfo?.total}}</div>
+              <div class="text-color-secondary">{{ 'sellers.offers' | translate }}</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="border-circle w-10rem h-10rem border-3 border-pink-500 flex flex-column align-items-center justify-content-center gap-2">
+              <div class="font-bold text-3xl">{{sellerInfo?.promoted}}</div>
+              <div class="text-color-secondary">{{ 'sellers.promoted' | translate }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="flex flex-row justify-content-between align-items-center">
+          <div class="flex flex-column">
+            <div class="text-color-secondary mb-2">{{ 'sellers.dominantPriceRange' | translate }}</div>
+            <div class="font-bold">{{ currentPriceRangeTranslation | translate }}</div>
+          </div>
+          <span class="text-color-secondary">{{ sellerInfo?.bucketInfo?.dominantBucketProducts }} / {{sellerInfo?.total}}</span>
+          <span class="text-color-secondary">{{ sellerInfo?.bucketInfo?.dominantBucketPercentage }} %</span>
+        </div>
+        <button pbutton="" pripple="" class="p-element w-full p-button p-button-link p-component text-right pr-0 mt-3" tabindex="0" type="button" (click)="goToPriceBuckets()">
+          <span class="p-button-label">{{ 'sellers.details' | translate }}</span>
+        </button>
       </div>
     </div>
     <div class="col-8 p-3">
       <div class="card">
         <h5>{{ 'sellers.topProducts' | translate }}</h5>
         <ng-container *ngIf="sellerInfo?.bestSellingProducts; else noTopProductsTemplate">
-          <div *ngFor="let product of sellerInfo?.bestSellingProducts; let i = index" class="grid my-2">
-            <div class="col-1">
+          <div *ngFor="let product of sellerInfo?.bestSellingProducts; let i = index" class="grid my-3">
+            <div class="col-1 flex align-items-center">
               <div class="flex align-items-center justify-content-center border-circle surface-ground text-lg font-bold w-3rem h-3rem">
                 {{i + 1}}
               </div>
@@ -41,8 +67,8 @@
             <div class="col-2 flex justify-content-center align-items-center">
               <img [src]="product.imgSrc" alt="Product image" width="80" height="60" class="shadow-4 pd-4 border-round">
             </div>
-            <div class="col-2 flex justify-content-center align-items-center text-color-secondary text-lg">
-              <span class="font-bold mr-1">{{product.numberOfPeople}}</span>{{ 'sellers.buyers' | translate }}
+            <div class="col-2 flex justify-content-center align-items-center text-lg">
+              <span class="font-bold mr-1">{{product.numberOfPeople}}</span><span class="text-sm text-color-secondary">{{ 'sellers.buyers' | translate }}</span>
             </div>
             <div class="col-2 flex justify-content-center align-items-center text-color-secondary text-lg">
               {{product.currentPrice | number:'1.2-2'}} zł

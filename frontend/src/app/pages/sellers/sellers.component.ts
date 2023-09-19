@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { SellerInfo } from 'src/app/models/dto/seller-info';
 import { Seller } from 'src/app/models/seller/seller';
@@ -6,6 +7,7 @@ import { ProductService } from 'src/app/services/product.service';
 import { ThemeService } from 'src/app/services/theme.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { Theme } from 'src/app/types/common/theme';
+import { Bucket } from 'src/app/types/histogram/bucket';
 
 @Component({
   selector: 'app-sellers',
@@ -19,11 +21,13 @@ export class SellersComponent implements OnInit, OnDestroy {
   logo?: string;
   darkTheme = false;
   loading = false;
+  currentPriceRangeTranslation: string = 'chart.buckets.unknown';
 
   constructor(
     private productService: ProductService,
     private toastService: ToastService,
-    private themeService: ThemeService
+    private themeService: ThemeService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -59,6 +63,10 @@ export class SellersComponent implements OnInit, OnDestroy {
     );
   }
 
+  goToPriceBuckets(): void {
+    this.router.navigate(['/products/price-buckets']);
+  }
+
   private updateColors(darkTheme: boolean): void {
     this.darkTheme = darkTheme;
     this.logo = this.darkTheme ? this.currentSeller?.logoDarkTheme : this.currentSeller?.logoLightTheme;
@@ -74,6 +82,7 @@ export class SellersComponent implements OnInit, OnDestroy {
         next: (sellerInfo: SellerInfo) => {
           this.loading = false;
           this.sellerInfo = sellerInfo;
+          this.updateCurrentPriceRangeTranslation();
         },
         error: (error: any) => {
           this.loading = false;
@@ -81,5 +90,25 @@ export class SellersComponent implements OnInit, OnDestroy {
         }
       })
     );
+  }
+
+  private updateCurrentPriceRangeTranslation(): void {
+    if(this.sellerInfo?.bucketInfo?.dominantBucket == null) {
+      return;
+    }
+    switch(this.sellerInfo.bucketInfo.dominantBucket) {
+      case Bucket.CHEAP:
+        this.currentPriceRangeTranslation = 'chart.buckets.cheap';
+        break;
+      case 1:
+        this.currentPriceRangeTranslation = 'chart.buckets.medium';
+        break;
+      case 2:
+        this.currentPriceRangeTranslation = 'chart.buckets.expensive';
+        break;
+      case 3:
+        this.currentPriceRangeTranslation = 'chart.buckets.veryExpensive';
+        break;
+    }
   }
 }

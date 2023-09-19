@@ -136,7 +136,8 @@
       "cheap": "Tanie (0 - 20 zł)",
       "medium": "Średnie (20 - 50 zł)",
       "expensive": "Drogie (50 - 100 zł)",
-      "veryExpensive": "Bardzo drogie (100+ zł)"
+      "veryExpensive": "Bardzo drogie (100+ zł)",
+      "unknown": "Nieznany"
     },
     "format": {
       "value": "Wartość"
@@ -220,6 +221,10 @@
   "sellers": {
     "general": "Ogólne",
     "topProducts": "Najlepsze produkty",
-    "buyers": "kupujących"
+    "buyers": "kupujących",
+    "offers": "Oferty",
+    "promoted": "Promowane",
+    "dominantPriceRange": "Dominujący przedział cenowy",
+    "details": "Szczegóły"
   }
 }

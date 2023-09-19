@@ -12,7 +12,7 @@ export class ChooseSellerComponent implements OnInit {
   @Input() disabled = false;
   sellers: Seller[] = [];
   currentSeller: Seller | null = null;
-  @Output() sellerChange = new EventEmitter<Seller>();
+  @Output() currentSellerChange = new EventEmitter<Seller>();
 
   constructor(private chosenSellerService: ChosenSellerService) {}
 
@@ -51,7 +51,7 @@ export class ChooseSellerComponent implements OnInit {
     if (!this.currentSeller) {
       return;
     }
-    this.sellerChange.emit(this.currentSeller);
+    this.currentSellerChange.emit(this.currentSeller);
     if (this.currentSeller?.name) {
       this.chosenSellerService.setCurrentSeller(this.currentSeller.name);
     }

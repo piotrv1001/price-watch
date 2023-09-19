@@ -9,6 +9,7 @@ import { ProductFilterDTO } from './dto/product-filter';
 import { SellerInfoDTO } from 'src/price/dto/seller-info.dto';
 import { ProductWithPrice } from 'src/price/dto/product-with-price';
 import { PriceService } from 'src/price/price.service';
+import { BucketInfoDTO } from 'src/price/dto/bucket-info.dto';
 
 @Injectable()
 export class ProductService {
@@ -32,46 +33,34 @@ export class ProductService {
   async getSellerInfo(seller: string): Promise<SellerInfoDTO> {
     const totalPromise = this.getProductCountBySeller(seller);
     const promotedPromise = this.getProductPromoCountBySeller(seller);
-    const dominantBucketPromise = this.getMostDominantBucketBySeller(seller);
-    const bestSellingProductsPromise =
-      this.getBestSellingProductsBySeller(seller);
-    const mostExpensiveProductPromise =
-      this.getMostExpensiveProductBySeller(seller);
-    const leastExpensiveProductPromise =
-      this.getLeastExpensiveProductBySeller(seller);
     const averagePricePromise =
       this.priceService.getAveragePriceBySeller(seller);
+    const bestSellingProductsPromise =
+      this.getBestSellingProductsBySeller(seller);
+    const dominantBucketPromise = this.getMostDominantBucketBySeller(seller);
     const results = await Promise.allSettled([
       totalPromise,
       promotedPromise,
-      dominantBucketPromise,
-      bestSellingProductsPromise,
-      mostExpensiveProductPromise,
-      leastExpensiveProductPromise,
       averagePricePromise,
+      bestSellingProductsPromise,
+      dominantBucketPromise,
     ]);
     const total =
       results[0].status === 'fulfilled' ? results[0].value : undefined;
     const promoted =
       results[1].status === 'fulfilled' ? results[1].value : undefined;
-    const dominantBucket =
+    const averagePrice =
       results[2].status === 'fulfilled' ? results[2].value : undefined;
     const bestSellingProducts =
       results[3].status === 'fulfilled' ? results[3].value : undefined;
-    const mostExpensiveProduct =
+    const bucketInfo =
       results[4].status === 'fulfilled' ? results[4].value : undefined;
-    const leastExpensiveProduct =
-      results[5].status === 'fulfilled' ? results[5].value : undefined;
-    const averagePrice =
-      results[6].status === 'fulfilled' ? results[6].value : undefined;
     return {
       total,
       promoted,
-      dominantBucket,
       averagePrice,
       bestSellingProducts,
-      mostExpensiveProduct,
-      leastExpensiveProduct,
+      bucketInfo,
     };
   }
 
@@ -125,14 +114,28 @@ export class ProductService {
       .getCount();
   }
 
-  async getMostDominantBucketBySeller(seller: string): Promise<Bucket> {
+  async getMostDominantBucketBySeller(seller: string): Promise<BucketInfoDTO> {
     const products = await this.findBySeller(seller);
     const productWithCurrentPrice = products.map((product) => ({
       currentPrice: this.getCurrentPrice(product.prices),
     }));
     const grouppedProducts = this.groupProducts(productWithCurrentPrice);
-    const max = Math.max(...grouppedProducts);
-    return grouppedProducts.indexOf(max);
+    let max = grouppedProducts.length > 0 ? grouppedProducts[0] : undefined;
+    let sum = 0;
+    for (const product of grouppedProducts) {
+      sum += product;
+      if (product > max) {
+        max = product;
+      }
+    }
+    const dominantBucket = grouppedProducts.indexOf(max);
+    const dominantBucketProducts = max;
+    const dominantBucketPercentage = Math.round((max / sum) * 100);
+    return {
+      dominantBucket,
+      dominantBucketProducts,
+      dominantBucketPercentage,
+    };
   }
 
   async getBestSellingProductsBySeller(
@@ -154,44 +157,6 @@ export class ProductService {
         currentPrice: this.getCurrentPrice(productWithPrices.prices),
       });
     }
-    return result;
-  }
-
-  async getMostExpensiveProductBySeller(
-    seller: string,
-  ): Promise<ProductWithPrice> {
-    const product = await this.productRepository
-      .createQueryBuilder('product')
-      .innerJoin('product.prices', 'price')
-      .where('product.seller = :seller', { seller })
-      .orderBy('price.price', 'DESC')
-      .limit(1)
-      .getOne();
-
-    const productWithPrices = await this.findById(product.id);
-    const result = {
-      ...product,
-      currentPrice: this.getCurrentPrice(productWithPrices.prices),
-    };
-    return result;
-  }
-
-  async getLeastExpensiveProductBySeller(
-    seller: string,
-  ): Promise<ProductWithPrice> {
-    const product = await this.productRepository
-      .createQueryBuilder('product')
-      .innerJoin('product.prices', 'price')
-      .where('product.seller = :seller', { seller })
-      .orderBy('price.price', 'ASC')
-      .limit(1)
-      .getOne();
-
-    const productWithPrices = await this.findById(product.id);
-    const result = {
-      ...product,
-      currentPrice: this.getCurrentPrice(productWithPrices.prices),
-    };
     return result;
   }
 

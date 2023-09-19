@@ -4,6 +4,8 @@ import { SellersRoutingModule } from "./sellers-routing.module";
 
 import { SellersComponent } from "./sellers.component";
 
+import { ButtonModule } from "primeng/button";
+
 import { SharedModule } from "src/app/shared/shared.module";
 import { ChooseSellerModule } from "src/app/components/choose-seller/choose-seller.module";
 import { SpinnerModule } from "src/app/components/spinner/spinner.module";
@@ -17,7 +19,8 @@ import { ProductNameWithSellerModule } from "src/app/components/product-name-wit
     ChooseSellerModule,
     SpinnerModule,
     NoDataPlaceHolderModule,
-    ProductNameWithSellerModule
+    ProductNameWithSellerModule,
+    ButtonModule
   ],
   declarations: [
     SellersComponent
