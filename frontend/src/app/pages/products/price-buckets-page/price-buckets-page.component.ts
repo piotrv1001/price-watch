@@ -7,6 +7,7 @@ import { ThemeService } from "src/app/services/theme.service";
 import { ToastService } from "src/app/services/toast.service";
 import { HistogramData, HistogramOptions } from "src/app/types/histogram/histogram";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { Router } from '@angular/router';
 
 export type FormatType = 'value' | 'percentage';
 export interface FormatOption {

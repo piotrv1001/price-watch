@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth/auth.service';
 import { LocalAuthGuard } from './auth/guards/local-auth.guard';
-import { AuthGuard } from './auth/guards/auth.guard';
+import { CombinedAuthGuard } from './auth/guards/combined-auth.guard';
 import { RtAuthGuard } from './auth/guards/rt-auth.guard';
 
 @Controller()
@@ -27,7 +27,7 @@ export class AppController {
     return this.authService.login(req.user);
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(CombinedAuthGuard)
   @Post('auth/logout')
   async logout(@Request() req) {
     return this.authService.logout(req.user.sub);
@@ -39,7 +39,7 @@ export class AppController {
     return this.authService.refreshTokens(req.user.sub, req.user.refreshToken);
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(CombinedAuthGuard)
   @Get('authenticate')
   authenticate(@Request() req) {
     return req.user;

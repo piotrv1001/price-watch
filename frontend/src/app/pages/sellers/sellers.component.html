@@ -1,0 +1,135 @@
+<ng-container *ngIf="loading">
+  <app-spinner></app-spinner>
+</ng-container>
+<div class="grid">
+  <div class="col-12 xl:col-6 p-3">
+    <div class="card">
+      <h5>{{ 'dashboard.sellers' | translate }}</h5>
+      <div class="mt-6 flex align-items-end justify-content-between">
+        <div class="w-6">
+          <app-choose-seller (currentSellerChange)="handleSellerChange($event)"></app-choose-seller>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-container *ngIf="!loading && logo">
+    <div class="col-12 xl:col-6 p-3 flex justify-content-center align-items-center fadeinright animation-duration-200 animation-iteration-1">
+      <img [src]="'assets/img/' + logo" alt="Logo" width="300">
+    </div>
+  </ng-container>
+</div>
+<ng-container *ngIf="!loading">
+  <div class="grid scalein animation-duration-200 animation-iteration-1">
+    <div class="col-4 p-3">
+      <div class="card">
+        <div class="flex flex-row justify-content-between">
+          <h5>{{ 'sellers.general' | translate }}</h5>
+          <button pbutton="" pripple="" class="p-element p-button p-button-link p-component text-right pr-0 mt-3" tabindex="0" type="button" (click)="goToTimeline()">
+            <span class="p-button-label">{{ 'sellers.details' | translate }}</span>
+          </button>
+        </div>
+        <div class="grid mt-6">
+          <div class="col-6">
+            <div class="border-circle w-10rem h-10rem border-3 border-blue-500 flex flex-column align-items-center justify-content-center gap-2">
+              <div class="font-bold text-3xl">{{sellerInfo?.total}}</div>
+              <div class="text-color-secondary">{{ 'sellers.offers' | translate }}</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="border-circle w-10rem h-10rem border-3 border-pink-500 flex flex-column align-items-center justify-content-center gap-2">
+              <div class="font-bold text-3xl">{{sellerInfo?.promoted}}</div>
+              <div class="text-color-secondary">{{ 'sellers.promoted' | translate }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="flex flex-row justify-content-between align-items-center">
+          <div class="flex flex-column">
+            <div class="text-color-secondary mb-2">{{ 'sellers.dominantPriceRange' | translate }}</div>
+            <div class="font-bold">{{ currentPriceRangeTranslation | translate }}</div>
+          </div>
+          <span *ngIf="sellerInfo?.bucketInfo?.dominantBucketProducts" class="text-color-secondary text-lg">{{ sellerInfo?.bucketInfo?.dominantBucketProducts }} / {{sellerInfo?.total}}</span>
+          <span *ngIf="sellerInfo?.bucketInfo?.dominantBucketPercentage" class="text-color-secondary text-lg">{{ sellerInfo?.bucketInfo?.dominantBucketPercentage }} %</span>
+        </div>
+        <!-- <div class="flex justify-content-end">
+          <button pbutton="" pripple="" class="p-element p-button p-button-link p-component text-right pr-0 mt-3" tabindex="0" type="button" (click)="goToPriceBuckets()">
+            <span class="p-button-label">{{ 'sellers.details' | translate }}</span>
+          </button>
+        </div> -->
+      </div>
+    </div>
+    <div class="col-8 p-3">
+      <div class="card">
+        <h5>{{ 'sellers.topProducts' | translate }}</h5>
+        <div class="mt-6">
+          <ng-container *ngIf="sellerInfo?.bestSellingProducts; else noTopProductsTemplate">
+            <div *ngFor="let product of sellerInfo?.bestSellingProducts; let i = index" class="grid my-3">
+              <div class="col-1 flex align-items-center">
+                <div class="flex align-items-center justify-content-center border-circle surface-ground text-lg font-bold w-3rem h-3rem">
+                  {{i + 1}}
+                </div>
+              </div>
+              <div class="col-5 flex align-items-center">
+                <app-product-name-with-seller [product]="product"></app-product-name-with-seller>
+              </div>
+              <div class="col-2 flex justify-content-center align-items-center">
+                <img [src]="product.imgSrc" alt="Product image" width="80" height="60" class="shadow-4 pd-4 border-round">
+              </div>
+              <div class="col-2 flex justify-content-center align-items-center text-lg">
+                <span class="font-bold mr-1">{{product.numberOfPeople}}</span><span class="text-sm text-color-secondary">{{ 'sellers.buyers' | translate }}</span>
+              </div>
+              <div class="col-2 flex justify-content-center align-items-center text-color-secondary text-lg">
+                {{product.currentPrice | number:'1.2-2'}} zł
+              </div>
+            </div>
+          </ng-container>
+          <ng-template #noTopProductsTemplate>
+            <app-no-data-placeholder [size]="'small'"></app-no-data-placeholder>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 p-3">
+      <div class="card">
+        <div class="flex flex-row justify-content-between">
+          <div>
+            <h5>{{ 'dashboard.newProducts' | translate }}</h5>
+            <div class="text-color-secondary text-sm">{{ 'dashboard.lastSevenDays' | translate }} ({{ startDate | date: 'dd-MM' }} - {{ endDate | date: 'dd-MM' }})</div>
+          </div>
+          <button pbutton="" pripple="" class="p-element p-button p-button-link p-component text-right pr-0 mt-3" tabindex="0" type="button" (click)="goToNewProducts()">
+            <span class="p-button-label">{{ 'sellers.details' | translate }}</span>
+          </button>
+        </div>
+        <div class="mt-6">
+          <app-product-table
+            [products]="newProducts"
+            [type]="'new-products-min'"
+            [showCaption]="false"
+            [paginatorRows]="5"
+            [showPaginator]="false">
+          </app-product-table>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 p-3">
+      <div class="card">
+        <div class="flex flex-row justify-content-between">
+          <h5>{{ 'sellers.topProductActivity' | translate }}</h5>
+          <button pbutton="" pripple="" class="p-element p-button p-button-link p-component text-right pr-0 mt-3" tabindex="0" type="button" (click)="goToTimeline()">
+            <span class="p-button-label">{{ 'sellers.details' | translate }}</span>
+          </button>
+        </div>
+        <div class="mt-6">
+          <ng-container *ngIf="events.length > 0; else noProductEventsTemplate">
+            <p-scrollPanel [style]="{ width: '100%', maxHeight: '500px' }">
+              <app-product-timeline [events]="events" [size]="'small'"></app-product-timeline>
+            </p-scrollPanel>
+          </ng-container>
+          <ng-template #noProductEventsTemplate>
+            <app-no-data-placeholder></app-no-data-placeholder>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

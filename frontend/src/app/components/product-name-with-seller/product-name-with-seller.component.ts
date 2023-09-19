@@ -8,4 +8,5 @@ import { Product } from "src/app/models/product/product";
 })
 export class ProductNameWithSellerComponent {
   @Input() product?: Product;
+  @Input() showSeller = true;
 }

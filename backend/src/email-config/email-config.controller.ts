@@ -9,7 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { EmailConfigService } from './email-config.service';
-import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { CombinedAuthGuard } from 'src/auth/guards/combined-auth.guard';
 import { UserService } from 'src/user/user.service';
 import { CreateEmailConfigDTO } from './dto/create-email-config.dto';
 
@@ -20,7 +20,7 @@ export class EmailConfigController {
     private readonly userService: UserService,
   ) {}
 
-  @UseGuards(AuthGuard)
+  @UseGuards(CombinedAuthGuard)
   @Post()
   async createNewConfig(
     @Body() createEmailConfigDTO: CreateEmailConfigDTO,
@@ -35,7 +35,7 @@ export class EmailConfigController {
     return emailConfig;
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(CombinedAuthGuard)
   @Get('user')
   async getByUserId(@Req() req: any) {
     const user = await this.userService.getUserFromRequest(req.user);
@@ -48,7 +48,7 @@ export class EmailConfigController {
     return emailConfig;
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(CombinedAuthGuard)
   @Put()
   async update(
     @Body() emailConfig: CreateEmailConfigDTO,

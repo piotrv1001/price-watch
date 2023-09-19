@@ -66,6 +66,25 @@ export class PriceService {
     });
   }
 
+  async getAveragePriceBySeller(seller: string): Promise<number | undefined> {
+    const averagePrice = await this.priceRepository
+      .createQueryBuilder('price')
+      .select('AVG(price.price)', 'averagePrice')
+      .innerJoin('price.product', 'product')
+      .where('product.seller = :seller', { seller })
+      .getRawOne();
+
+    if (averagePrice && averagePrice.averagePrice !== null) {
+      try {
+        return parseFloat(averagePrice.averagePrice);
+      } catch {
+        return undefined;
+      }
+    } else {
+      return undefined;
+    }
+  }
+
   async findByProductIdAndDates(
     productId: string,
     fromDate: Date,
@@ -198,6 +217,7 @@ export class PriceService {
     seller: string,
     fromDate: Date,
     toDate: Date,
+    limit = 100,
   ): Promise<NewProductDTO[]> {
     const query = this.priceRepository
       .createQueryBuilder('p')
@@ -216,7 +236,6 @@ export class PriceService {
       .andHaving('maxDate <= :toDate', { toDate })
       .andHaving('minDate >= :fromDate', { fromDate });
 
-    const limit = 100;
     const newProducts: NewProductDTO[] = [];
     const results = await query.getRawMany();
     for (const result of results) {

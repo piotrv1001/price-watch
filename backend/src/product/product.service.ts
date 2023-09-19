@@ -6,12 +6,17 @@ import { CreateProductDTO } from './dto/create-product.dto';
 import { Price } from 'src/price/price.entity';
 import { Bucket } from 'src/bucket';
 import { ProductFilterDTO } from './dto/product-filter';
+import { SellerInfoDTO } from 'src/price/dto/seller-info.dto';
+import { ProductWithPrice } from 'src/price/dto/product-with-price';
+import { PriceService } from 'src/price/price.service';
+import { BucketInfoDTO } from 'src/price/dto/bucket-info.dto';
 
 @Injectable()
 export class ProductService {
   constructor(
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
+    private readonly priceService: PriceService,
   ) {}
 
   async findAll(): Promise<Product[]> {
@@ -23,6 +28,40 @@ export class ProductService {
       where: { id: id },
       relations: ['prices'],
     });
+  }
+
+  async getSellerInfo(seller: string): Promise<SellerInfoDTO> {
+    const totalPromise = this.getProductCountBySeller(seller);
+    const promotedPromise = this.getProductPromoCountBySeller(seller);
+    const averagePricePromise =
+      this.priceService.getAveragePriceBySeller(seller);
+    const bestSellingProductsPromise =
+      this.getBestSellingProductsBySeller(seller);
+    const dominantBucketPromise = this.getMostDominantBucketBySeller(seller);
+    const results = await Promise.allSettled([
+      totalPromise,
+      promotedPromise,
+      averagePricePromise,
+      bestSellingProductsPromise,
+      dominantBucketPromise,
+    ]);
+    const total =
+      results[0].status === 'fulfilled' ? results[0].value : undefined;
+    const promoted =
+      results[1].status === 'fulfilled' ? results[1].value : undefined;
+    const averagePrice =
+      results[2].status === 'fulfilled' ? results[2].value : undefined;
+    const bestSellingProducts =
+      results[3].status === 'fulfilled' ? results[3].value : undefined;
+    const bucketInfo =
+      results[4].status === 'fulfilled' ? results[4].value : undefined;
+    return {
+      total,
+      promoted,
+      averagePrice,
+      bestSellingProducts,
+      bucketInfo,
+    };
   }
 
   async create(createProductDTO: CreateProductDTO): Promise<Product> {
@@ -58,6 +97,67 @@ export class ProductService {
       where: { seller },
       relations: ['prices'],
     });
+  }
+
+  async getProductCountBySeller(seller: string): Promise<number> {
+    return this.productRepository
+      .createQueryBuilder('product')
+      .where('product.seller = :seller', { seller })
+      .getCount();
+  }
+
+  async getProductPromoCountBySeller(seller: string): Promise<number> {
+    return this.productRepository
+      .createQueryBuilder('product')
+      .where('product.seller = :seller', { seller })
+      .andWhere('product.promo = 1')
+      .getCount();
+  }
+
+  async getMostDominantBucketBySeller(seller: string): Promise<BucketInfoDTO> {
+    const products = await this.findBySeller(seller);
+    const productWithCurrentPrice = products.map((product) => ({
+      currentPrice: this.getCurrentPrice(product.prices),
+    }));
+    const grouppedProducts = this.groupProducts(productWithCurrentPrice);
+    let max = grouppedProducts.length > 0 ? grouppedProducts[0] : undefined;
+    let sum = 0;
+    for (const product of grouppedProducts) {
+      sum += product;
+      if (product > max) {
+        max = product;
+      }
+    }
+    const dominantBucket = grouppedProducts.indexOf(max);
+    const dominantBucketProducts = max;
+    const dominantBucketPercentage = Math.round((max / sum) * 100);
+    return {
+      dominantBucket,
+      dominantBucketProducts,
+      dominantBucketPercentage,
+    };
+  }
+
+  async getBestSellingProductsBySeller(
+    seller: string,
+    limit = 3,
+  ): Promise<ProductWithPrice[]> {
+    const products = await this.productRepository
+      .createQueryBuilder('product')
+      .where('product.seller = :seller', { seller })
+      .orderBy('product.numberOfPeople', 'DESC')
+      .limit(limit)
+      .getMany();
+
+    const result: ProductWithPrice[] = [];
+    for (const product of products) {
+      const productWithPrices = await this.findById(product.id);
+      result.push({
+        ...product,
+        currentPrice: this.getCurrentPrice(productWithPrices.prices),
+      });
+    }
+    return result;
   }
 
   async filter(productFilter: ProductFilterDTO): Promise<any[]> {
@@ -119,7 +219,6 @@ export class ProductService {
   async getPriceBuckets(seller: string): Promise<number[]> {
     const products = await this.findBySeller(seller);
     const productWithCurrentPrice = products.map((product) => ({
-      ...product,
       currentPrice: this.getCurrentPrice(product.prices),
     }));
     return this.groupProducts(productWithCurrentPrice);

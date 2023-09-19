@@ -96,7 +96,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       name: 'SmartLED',
       logoLightTheme: 'smart_led_logo_light_theme.png',
       logoDarkTheme: 'smart_led_logo_dark_theme.png',
-    },
+    };
     this.logo = this.currentSeller?.logoLightTheme;
     this.startDate = new Date();
     this.startDate.setDate(this.startDate.getDate() - 6);

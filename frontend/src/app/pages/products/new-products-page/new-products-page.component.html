@@ -7,7 +7,7 @@
       <h5>{{ 'menu.newProducts' | translate }}</h5>
       <div class="mt-6 mb-6 flex flex-row justify-content-between align-items-center">
         <div class="w-3">
-          <app-choose-seller (sellerChange)="handleSellerChange($event)" [disabled]="loading"></app-choose-seller>
+          <app-choose-seller (currentSellerChange)="handleSellerChange($event)" [disabled]="loading"></app-choose-seller>
         </div>
         <app-date-range-with-options
           [disabled]="loading"

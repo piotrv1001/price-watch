@@ -61,6 +61,7 @@
   "menu": {
     "home": "Home",
     "dashboard": "Dashboard",
+    "sellers": "Sellers",
     "products": "Products",
     "newProducts": "New products",
     "prices": "Prices",
@@ -118,7 +119,8 @@
     "sellers": "Sellers",
     "priceBuckets": "Price buckets",
     "newProducts": "New products",
-    "priceChanges": "Price changes"
+    "priceChanges": "Price changes",
+    "lastSevenDays": "Last 7 days"
   },
   "productTable": {
     "name": "Name",
@@ -134,7 +136,8 @@
       "cheap": "Cheap (0 - 20 zł)",
       "medium": "Medium (20 - 50 zł)",
       "expensive": "Expensive (50 - 100 zł)",
-      "veryExpensive": "Very expensive (100+ zł)"
+      "veryExpensive": "Very expensive (100+ zł)",
+      "unknown": "Unknown"
     },
     "format": {
       "value": "Value"
@@ -214,5 +217,16 @@
     "title": "Oops! Page not found",
     "desc": "We are sorry, but the page you requested was not found",
     "home": "Home page"
+  },
+  "sellers": {
+    "general": "General",
+    "topProducts": "Top products",
+    "buyers": "buyers",
+    "offers": "Offers",
+    "promoted": "Promoted",
+    "dominantPriceRange": "Dominant price range",
+    "details": "Details",
+    "recentActivity": "Recent activity",
+    "topProductActivity": "Top product activity"
   }
 }

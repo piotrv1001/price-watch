@@ -25,6 +25,7 @@ export class ProductTableComponent implements OnInit, OnChanges, OnDestroy {
   @Input() showPaginator = true;
   @Input() paginatorRows = 10;
   @Input() placeholderSize: 'small' | 'big' = 'small';
+  @Input() showCaption = true;
   favoriteProductIds: string[] = [];
   columns: TableColumn[] = [];
   exportData: ExportDataDTO | null = null;
@@ -204,6 +205,23 @@ export class ProductTableComponent implements OnInit, OnChanges, OnDestroy {
           ],
           data: this.products.map(product => ({...product, status: this.getStatusTranslation(product.status)}))
         };
+        break;
+      case 'new-products-min':
+        columns = [
+          { header: 'name', field: 'name', ngStyle: { width: '60%' }, filter: true },
+          { header: 'image', field: 'imgSrc', ngStyle: { width: '20%' }, filter: false },
+          { header: 'price', field: 'currentPrice', ngStyle: { width: '20%' }, filter: false, formatOptions: { suffix: ' zł' } },
+        ];
+        this.exportData = null;
+        break;
+      case 'price-changes-min':
+        columns = [
+          { header: 'name', field: 'name', ngStyle: { width: '40%' }, filter: true },
+          { header: 'image', field: 'imgSrc', ngStyle: { width: '20%' }, filter: false },
+          { header: 'oldPrice', field: 'prevPrice', ngStyle: { width: '20%' }, filter: false },
+          { header: 'currentPrice', field: 'currentPrice', ngStyle: { width: '20%' }, filter: false },
+        ];
+        this.exportData = null;
         break;
     }
     return columns;

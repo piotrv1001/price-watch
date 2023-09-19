@@ -60,6 +60,7 @@
   },
   "menu": {
     "home": "Strona główna",
+    "sellers": "Sprzedawcy",
     "dashboard": "Panel",
     "products": "Produkty",
     "newProducts": "Nowe produkty",
@@ -118,7 +119,8 @@
     "sellers": "Sprzedawcy",
     "priceBuckets": "Koszyki cenowe",
     "newProducts": "Nowe produkty",
-    "priceChanges": "Zmiany cen"
+    "priceChanges": "Zmiany cen",
+    "lastSevenDays": "Ostatnie 7 dni"
   },
   "productTable": {
     "name": "Nazwa",
@@ -134,7 +136,8 @@
       "cheap": "Tanie (0 - 20 zł)",
       "medium": "Średnie (20 - 50 zł)",
       "expensive": "Drogie (50 - 100 zł)",
-      "veryExpensive": "Bardzo drogie (100+ zł)"
+      "veryExpensive": "Bardzo drogie (100+ zł)",
+      "unknown": "Nieznany"
     },
     "format": {
       "value": "Wartość"
@@ -214,5 +217,16 @@
     "title": "Uups! Strona nie została znaleziona",
     "desc": "Przepraszamy, ale strona, której szukasz, nie istnieje",
     "home": "Strona główna"
+  },
+  "sellers": {
+    "general": "Ogólne",
+    "topProducts": "Najlepsze produkty",
+    "buyers": "kupujących",
+    "offers": "Oferty",
+    "promoted": "Promowane",
+    "dominantPriceRange": "Dominujący przedział cenowy",
+    "details": "Szczegóły",
+    "recentActivity": "Ostatnia aktywność",
+    "topProductActivity": "Aktywność najlepszego produktu"
   }
 }

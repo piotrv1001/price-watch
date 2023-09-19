@@ -10,13 +10,13 @@ import {
   Delete,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { CombinedAuthGuard } from 'src/auth/guards/combined-auth.guard';
 
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @UseGuards(AuthGuard)
+  @UseGuards(CombinedAuthGuard)
   @Get('id')
   async getId(@Request() req, @Res() res) {
     const user = await this.userService.getUserFromRequest(req.user);
@@ -27,7 +27,7 @@ export class UserController {
     }
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(CombinedAuthGuard)
   @Get('profile')
   async getProfile(@Request() req, @Res() res) {
     const user = await this.userService.getUserFromRequest(req.user);
@@ -45,7 +45,7 @@ export class UserController {
     }
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(CombinedAuthGuard)
   @Get('profile-picture')
   async getProfilePicture(@Request() req, @Res() res) {
     const user = await this.userService.getUserFromRequest(req.user);
@@ -61,7 +61,7 @@ export class UserController {
     }
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(CombinedAuthGuard)
   @Put('profile')
   async updateProfile(@Request() req, @Res() res) {
     const user = await this.userService.getUserFromRequest(req.user);
@@ -77,7 +77,7 @@ export class UserController {
     }
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(CombinedAuthGuard)
   @Get('favorite-products')
   async getFavoriteProducts(@Request() req, @Res() res) {
     const user = await this.userService.getUserFromRequest(req.user);
@@ -90,7 +90,7 @@ export class UserController {
     }
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(CombinedAuthGuard)
   @Post('favorite-products/:productId')
   async addFavoriteProduct(
     @Request() req,
@@ -112,7 +112,7 @@ export class UserController {
     }
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(CombinedAuthGuard)
   @Delete('favorite-products/:productId')
   async deleteFavoriteProduct(
     @Request() req,
