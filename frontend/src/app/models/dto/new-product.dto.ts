@@ -7,4 +7,5 @@ export class NewProductDTO {
   status?: number;
   currentPrice?: number;
   seller?: string;
+  numberOfPeople?: number;
 }

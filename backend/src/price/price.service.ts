@@ -272,6 +272,7 @@ export class PriceService {
       .addSelect('pr.promo as promo')
       .addSelect('pr.status as status')
       .addSelect('pr.link as link')
+      .addSelect('pr.numberOfPeople as numberOfPeople')
       .innerJoin('p.product', 'pr')
       .where('pr.seller = :seller', { seller })
       .andWhere('p.date >= :fromDate', { fromDate })
@@ -293,6 +294,7 @@ export class PriceService {
           promo: curr.promo,
           status: curr.status,
           link: curr.link,
+          numberOfPeople: curr.numberOfPeople,
           seller,
           prices: [curr],
         });
@@ -313,6 +315,7 @@ export class PriceService {
         prevPrice: prices[lastIndex].price,
         currentPrice: prices[0].price,
         priceChange,
+        numberOfPeople: product.numberOfPeople,
         seller,
         priceChangePercentage: Math.round(
           (priceChange / prices[lastIndex].price) * 100,
