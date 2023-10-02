@@ -175,6 +175,7 @@ export class ProductTableComponent implements OnInit, OnChanges, OnDestroy {
             { header: this.translateService.instant('productTable.name'), key: 'name', width: 64 },
             { header: this.translateService.instant('productTable.currentPrice'), key: 'currentPrice', width: 16 },
             { header: 'Link', key: 'link', width: 10, isLink: true },
+            { header: this.translateService.instant('productTable.numberOfPeople'), key: 'numberOfPeople', width: 10 },
             { header: 'Status', key: 'status', width: 16 }
           ],
           data: this.products.map(product => ({...product, status: this.getStatusTranslation(product.status)}))
@@ -201,6 +202,7 @@ export class ProductTableComponent implements OnInit, OnChanges, OnDestroy {
             { header: this.translateService.instant('productTable.currentPrice'), key: 'currentPrice', width: 16, formatOptions: { suffix: ' zł' } },
             { header: '+/- [%]', key: 'priceChangePercentage', width: 12, formatOptions: { suffix: ' %' }, customTemplate: CustomTemplate.PriceChange },
             { header: 'Link', key: 'link', width: 10, isLink: true },
+            { header: this.translateService.instant('productTable.numberOfPeople'), key: 'numberOfPeople', width: 10 },
             { header: 'Status', key: 'status', width: 16 }
           ],
           data: this.products.map(product => ({...product, status: this.getStatusTranslation(product.status)}))
