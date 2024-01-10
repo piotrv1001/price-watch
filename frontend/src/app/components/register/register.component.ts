@@ -74,6 +74,24 @@ export class RegisterComponent implements OnInit, OnDestroy {
     );
   }
 
+  loginAsGuest(): void {
+    const user: User = { email: 'guest', password: 'guest' };
+    this.subs.push(
+      this.authService.login(user).subscribe({
+        next: () => {
+          this.router.navigate(['/']);
+        },
+        error: (error) => {
+          if(error.status === 400) {
+            this.toastService.errorMessage('error.invalidUsernameOrPassword');
+          } else {
+            this.toastService.handleError(error);
+          }
+        }
+      })
+    );
+  }
+
   async signInWithGoogle(): Promise<void> {
     try {
       const provider = new GoogleAuthProvider();

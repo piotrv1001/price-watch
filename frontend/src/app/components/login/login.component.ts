@@ -43,8 +43,14 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.subs.forEach(sub => sub.unsubscribe());
   }
 
-  login(): void {
-    const user: User = { email: this.email, password: this.password };
+  loginAsGuest(): void {
+    const email = 'guest';
+    const password = 'guest';
+    this.login(email, password);
+  }
+
+  login(email = this.email, password = this.password): void {
+    const user: User = { email, password};
     this.subs.push(
       this.authService.login(user).subscribe({
         next: () => {

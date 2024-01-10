@@ -20,6 +20,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   subs: Subscription[] = [];
   loading = false;
   saving = false;
+  isGuest = false;
 
   constructor(
     private userService: UserService,
@@ -68,6 +69,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.subs.push(
       this.userService.getProfile().subscribe({
         next: user => {
+          this.isGuest = user.email === 'guest';
           this.isGoogleAccount = user.isGoogleAccount ?? false;
           this.initialEmail = user.email;
           this.initialUsername = user.displayName;

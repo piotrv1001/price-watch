@@ -1,0 +1,15 @@
+.guest-btn {
+  width: 100%;
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+  font-weight: bold;
+  transition: background-color 0.2s;
+  background: linear-gradient(to right, #8c0f1a, #2e2b5e);
+}
+
+.guest-btn:hover {
+  background: linear-gradient(to right, #6a0a15, #1f1d45);
+}

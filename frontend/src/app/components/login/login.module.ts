@@ -6,12 +6,14 @@ import { LoginComponent } from "./login.component";
 
 import { ButtonModule } from "primeng/button";
 import { SharedModule } from "src/app/shared/shared.module";
+import { GuestBtnModule } from "../guest-btn/guest-btn.module";
 
 @NgModule({
   imports: [
     SharedModule,
     LoginRoutingModule,
-    ButtonModule
+    ButtonModule,
+    GuestBtnModule
   ],
   declarations: [
     LoginComponent

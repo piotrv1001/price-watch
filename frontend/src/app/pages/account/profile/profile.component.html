@@ -42,7 +42,7 @@
               <p-button
                 (onClick)="updateProfile()"
                 label="{{ 'profile.updateProfile' | translate }}"
-                [disabled]="!changesMade() || !isValidData()"
+                [disabled]="isGuest || !changesMade() || !isValidData()"
                 [loading]="saving">
               </p-button>
             </div>

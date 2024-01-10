@@ -7,12 +7,14 @@ import { RegisterComponent } from "./register.component";
 import { ButtonModule } from "primeng/button";
 
 import { SharedModule } from "src/app/shared/shared.module";
+import { GuestBtnModule } from "../guest-btn/guest-btn.module";
 
 @NgModule({
   imports: [
     SharedModule,
     RegisterRoutingModule,
-    ButtonModule
+    ButtonModule,
+    GuestBtnModule
   ],
   declarations: [
     RegisterComponent
