@@ -44,8 +44,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   loginAsGuest(): void {
-    const email = 'guest';
-    const password = 'guest';
+    const email = 'test';
+    const password = 'test';
     this.login(email, password);
   }
 
